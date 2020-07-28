@@ -1,0 +1,198 @@
+{
+ "creation": "2020-07-27 15:31:38.588062",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "name_and_description_section",
+  "item_code",
+  "item_name",
+  "item_group",
+  "stock_uom",
+  "sales_uom",
+  "disabled",
+  "standard_rate",
+  "description",
+  "item_name_conversion_sb",
+  "product_id",
+  "ql_item_name",
+  "ppg_item_code",
+  "ppg_item_name",
+  "tsj_item_code",
+  "tsj_item_name",
+  "apl_item_code",
+  "apl_item_name",
+  "udc_item_code",
+  "udc_item_name",
+  "sub_category_sb",
+  "sub_category_1",
+  "sub_category_2",
+  "sub_category_3"
+ ],
+ "fields": [
+  {
+   "fieldname": "name_and_description_section",
+   "fieldtype": "Section Break",
+   "options": "fa fa-flag"
+  },
+  {
+   "bold": 1,
+   "fieldname": "item_code",
+   "fieldtype": "Data",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "label": "Item Code",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "bold": 1,
+   "fieldname": "item_name",
+   "fieldtype": "Data",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "label": "Item Name",
+   "reqd": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "item_group",
+   "fieldtype": "Data",
+   "in_standard_filter": 1,
+   "label": "Item Group",
+   "options": "item_group",
+   "search_index": 1
+  },
+  {
+   "default": "Box",
+   "fieldname": "stock_uom",
+   "fieldtype": "Data",
+   "label": "Default Unit of Measure"
+  },
+  {
+   "default": "0",
+   "fieldname": "disabled",
+   "fieldtype": "Check",
+   "label": "Disabled"
+  },
+  {
+   "bold": 1,
+   "depends_on": "eval:doc.__islocal",
+   "fieldname": "standard_rate",
+   "fieldtype": "Currency",
+   "label": "Standard Selling Rate"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Text Editor",
+   "in_preview": 1,
+   "label": "Description"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "item_name_conversion_sb",
+   "fieldtype": "Section Break",
+   "label": "Item Name Conversion"
+  },
+  {
+   "fieldname": "product_id",
+   "fieldtype": "Data",
+   "label": "Product Id"
+  },
+  {
+   "fieldname": "ql_item_name",
+   "fieldtype": "Data",
+   "label": "QL Item Name"
+  },
+  {
+   "fieldname": "ppg_item_code",
+   "fieldtype": "Data",
+   "label": "PPG Item Code"
+  },
+  {
+   "fieldname": "ppg_item_name",
+   "fieldtype": "Data",
+   "label": "PPG Item Name"
+  },
+  {
+   "fieldname": "tsj_item_code",
+   "fieldtype": "Data",
+   "label": "TSJ Item Code"
+  },
+  {
+   "fieldname": "tsj_item_name",
+   "fieldtype": "Data",
+   "label": "TSJ Item Name"
+  },
+  {
+   "fieldname": "apl_item_code",
+   "fieldtype": "Data",
+   "label": "APL Item Code"
+  },
+  {
+   "fieldname": "apl_item_name",
+   "fieldtype": "Data",
+   "label": "APL Item Name"
+  },
+  {
+   "fieldname": "udc_item_code",
+   "fieldtype": "Data",
+   "label": "UDC Item Code"
+  },
+  {
+   "fieldname": "udc_item_name",
+   "fieldtype": "Data",
+   "label": "UDC Item Name"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "sub_category_sb",
+   "fieldtype": "Section Break",
+   "label": "Sub Category"
+  },
+  {
+   "fieldname": "sub_category_1",
+   "fieldtype": "Data",
+   "label": "Sub Category 1"
+  },
+  {
+   "fieldname": "sub_category_2",
+   "fieldtype": "Data",
+   "label": "Sub Category 2"
+  },
+  {
+   "fieldname": "sub_category_3",
+   "fieldtype": "Data",
+   "label": "Sub Category 3"
+  },
+  {
+   "default": "Box",
+   "fieldname": "sales_uom",
+   "fieldtype": "Data",
+   "label": "Default Sales Unit of Measure"
+  }
+ ],
+ "modified": "2020-07-27 15:43:03.955074",
+ "modified_by": "Administrator",
+ "module": "BO",
+ "name": "Item",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

@@ -1,0 +1,142 @@
+{
+ "autoname": "field:dx_name",
+ "creation": "2020-07-20 14:25:24.557305",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "dx_name",
+  "territory",
+  "saldo",
+  "cash_transfer",
+  "no_rek",
+  "nama_rek",
+  "bank",
+  "is_id",
+  "saldo_history",
+  "loan"
+ ],
+ "fields": [
+  {
+   "fieldname": "dx_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Dx Name",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "territory",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Territory",
+   "options": "Territory",
+   "reqd": 1
+  },
+  {
+   "fieldname": "no_rek",
+   "fieldtype": "Data",
+   "label": "NrR"
+  },
+  {
+   "fieldname": "saldo",
+   "fieldtype": "Int",
+   "label": "Sal"
+  },
+  {
+   "default": "{}",
+   "fieldname": "saldo_history",
+   "fieldtype": "Long Text",
+   "label": "History"
+  },
+  {
+   "fieldname": "nama_rek",
+   "fieldtype": "Data",
+   "label": "NR"
+  },
+  {
+   "fieldname": "bank",
+   "fieldtype": "Data",
+   "label": "Cab"
+  },
+  {
+   "fieldname": "loan",
+   "fieldtype": "Table",
+   "label": "Acc",
+   "options": "SP"
+  },
+  {
+   "fieldname": "cash_transfer",
+   "fieldtype": "Select",
+   "label": "Type",
+   "options": "\nCash\nTransfer"
+  },
+  {
+   "fieldname": "is_id",
+   "fieldtype": "Data",
+   "label": "IS ID"
+  }
+ ],
+ "modified": "2020-07-27 09:28:16.768286",
+ "modified_by": "Administrator",
+ "module": "BO",
+ "name": "Dx",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "DM",
+   "share": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "SM",
+   "share": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "GSM",
+   "share": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "MSD",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

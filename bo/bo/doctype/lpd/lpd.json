@@ -1,0 +1,96 @@
+{
+ "creation": "2020-07-27 16:14:43.465071",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "outid",
+  "year",
+  "month",
+  "outlet_name",
+  "line",
+  "dx_id",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "year",
+   "fieldtype": "Data",
+   "label": "Tahun"
+  },
+  {
+   "fieldname": "month",
+   "fieldtype": "Select",
+   "label": "Bulan",
+   "options": "\nJan\nFeb\nMar\nApr\nMei\nJun\nJul\nAug\nSept\nOkt\nNov\nDes"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "LPD",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "outid",
+   "fieldtype": "Link",
+   "label": "Outid",
+   "options": "Outlet"
+  },
+  {
+   "fieldname": "line",
+   "fieldtype": "Data",
+   "label": "Line",
+   "options": "\n1\n2"
+  },
+  {
+   "fieldname": "outlet_name",
+   "fieldtype": "Data",
+   "label": "Nama Outlet"
+  },
+  {
+   "fieldname": "dx_id",
+   "fieldtype": "Data",
+   "label": "Dx",
+   "options": "Dx"
+  }
+ ],
+ "is_submittable": 1,
+ "modified": "2020-07-27 16:35:23.477822",
+ "modified_by": "Administrator",
+ "module": "BO",
+ "name": "LPD",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "DM",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

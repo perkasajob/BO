@@ -1,0 +1,15 @@
+
+{% block content %}
+
+<ul class="list-unstyled">
+    te4st
+	{% for d in dppus %}	
+	
+		<li>
+			
+			<span class="text-muted">{{ d.dm_user }} - {{ d.workflow_state }}</span>
+		</li>
+	</a>
+	{% endfor %}
+</ul>
+{% endblock %}

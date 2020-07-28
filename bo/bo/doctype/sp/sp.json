@@ -1,0 +1,62 @@
+{
+ "creation": "2020-07-23 00:34:40.099440",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "date",
+  "number",
+  "saldo",
+  "ref_nr",
+  "note"
+ ],
+ "fields": [
+  {
+   "default": "Today",
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Date",
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "saldo",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Sal",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "number",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Number",
+   "reqd": 1
+  },
+  {
+   "fieldname": "ref_nr",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "RefNr"
+  },
+  {
+   "fieldname": "note",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Note"
+  }
+ ],
+ "istable": 1,
+ "modified": "2020-07-23 16:09:11.980605",
+ "modified_by": "Administrator",
+ "module": "BO",
+ "name": "SP",
+ "owner": "Administrator",
+ "permissions": [],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
