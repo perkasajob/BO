@@ -10,6 +10,7 @@ app_icon = "octicon octicon-dashboard"
 app_color = "grey"
 app_email = "perkasajob@gmail.com"
 app_license = "MIT"
+# app_logo_url = '/assets/bo/images/erp-icon.svg'
 
 # Includes in <head>
 # ------------------
@@ -89,14 +90,17 @@ app_license = "MIT"
 
 # Scheduled Tasks
 # ---------------
-
+scheduler_events = {
+	# "all": [
+	# 	"bo.bo.tasks.hourly"
+	# ]
 # scheduler_events = {
 # 	"all": [
 # 		"bo.tasks.all"
 # 	],
-# 	"daily": [
-# 		"bo.tasks.daily"
-# 	],
+	"daily": [
+		"bo.bo.tasks.daily"
+	],
 # 	"hourly": [
 # 		"bo.tasks.hourly"
 # 	],
@@ -106,7 +110,7 @@ app_license = "MIT"
 # 	"monthly": [
 # 		"bo.tasks.monthly"
 # 	]
-# }
+}
 
 # Testing
 # -------

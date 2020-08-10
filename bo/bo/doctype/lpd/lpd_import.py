@@ -1,67 +1,30 @@
-# -*- coding: utf-8 -*-
-# Copyright (c) 2020, Quantum Labs and contributors
-# For license information, please see license.txt
+# Copyright (c) 2020 Quantum Labs
 
 from __future__ import unicode_literals
-# import frappe
+import os
+import frappe
 from frappe.model.document import Document
-from frappe import _, scrub, ValidationError
-import frappe, json, os
-from six import iteritems, string_types
-from frappe.desk.form.load import get_attachments
-from frappe.utils import get_hook_method, get_files_path
-# from bo.bo.doctype.lpd.exporter import Importer
-from bo.bo.utils.exporter import Exporter
+
+from frappe.core.doctype.data_import.importer import Importer
+from frappe.core.doctype.data_import.exporter import Exporter
 from frappe.utils.background_jobs import enqueue
 from frappe.utils.csvutils import validate_google_sheets_url
 from frappe import _
-import re
 
 
-class LPD(Document):
+class LpdImport(Document):
 	def validate(self):
-		pass
+		doc_before_save = self.get_doc_before_save()
+		if (
+			not (self.import_file or self.google_sheets_url)
+			or (doc_before_save and doc_before_save.import_file != self.import_file)
+			or (doc_before_save and doc_before_save.google_sheets_url != self.google_sheets_url)
+		):
+			self.template_options = ""
+			self.template_warnings = ""
 
-	def parseXLS(self):
-		file_url = self.get_full_path() # file attachment only the first one attached
-		fname = os.path.basename(file_url)
-		fxlsx = re.search("^{}.*\.xlsx".format(self.doctype), fname)
-
-		if(fxlsx): # match
-			with open( file_url , "rb") as upfile:
-				fcontent = upfile.read()
-			if frappe.safe_encode(fname).lower().endswith("xlsx".encode('utf-8')):
-				from frappe.utils.xlsxutils import read_xlsx_file_from_attached_file
-				rows = read_xlsx_file_from_attached_file(fcontent=fcontent)
-			columns = rows[0]
-			rows.pop(0)
-			data = rows
-			return {"columns": columns, "data": data}
-		else:
-			return {"status" : "Error", "filename": fname}	
-
-
-	def get_full_path(self):
-			"""Returns file path from given file name"""
-			att = get_attachments(self.doctype, self.name)
-			if att:
-				file_path = att[0].file_url or att[0].file_name
-			else:
-				frappe.throw("No Attachment found")	
-
-			if "/" not in file_path:
-				file_path = "/files/" + file_path
-
-			if file_path.startswith("/private/files/"):
-				file_path = get_files_path(*file_path.split("/private/files/", 1)[1].split("/"), is_private=1)
-
-			elif file_path.startswith("/files/"):
-				file_path = get_files_path(*file_path.split("/files/", 1)[1].split("/"))
-
-			else:
-				frappe.throw(_("There is some problem with the file url: {0}").format(file_path))
-
-			return file_path
+		self.validate_import_file()
+		self.validate_google_sheets_url()
 
 	def validate_import_file(self):
 		if self.import_file:
@@ -115,32 +78,9 @@ class LPD(Document):
 		return self.get_importer().export_errored_rows()
 
 	def get_importer(self):
-		return Importer(self.reference_doctype, data_import=self)		
+		return Importer(self.reference_doctype, data_import=self)
 
 
-def get_mop_query(doctype, txt, searchfield, start, page_len, filters):
-	return frappe.db.sql(""" select mode_of_payment from `tabPayment Order Reference`
-		where parent = %(parent)s and mode_of_payment like %(txt)s
-		limit %(start)s, %(page_len)s""", {
-			'parent': filters.get("parent"),
-			'start': start,
-			'page_len': page_len,
-			'txt': "%%%s%%" % txt
-		})
-
-def get_supplier_query(doctype, txt, searchfield, start, page_len, filters):
-	return frappe.db.sql(""" select supplier from `tabPayment Order Reference`
-		where parent = %(parent)s and supplier like %(txt)s and
-		(payment_reference is null or payment_reference='')
-		limit %(start)s, %(page_len)s""", {
-			'parent': filters.get("parent"),
-			'start': start,
-			'page_len': page_len,
-			'txt': "%%%s%%" % txt
-		})
-
-
-###############################
 @frappe.whitelist()
 def get_preview_from_template(data_import, import_file=None, google_sheets_url=None):
 	return frappe.get_doc("Data Import", data_import).get_preview_from_template(
@@ -171,7 +111,7 @@ def start_import(data_import):
 
 @frappe.whitelist()
 def download_template(
-	doctype="LPD", export_fields=None, export_records=None, export_filters=None, export_protect_area=None, file_type="Excel"
+	doctype, export_fields=None, export_records=None, export_filters=None, file_type="CSV"
 ):
 	"""
 	Download template from Exporter
@@ -185,7 +125,6 @@ def download_template(
 	export_fields = frappe.parse_json(export_fields)
 	export_filters = frappe.parse_json(export_filters)
 	export_data = export_records != "blank_template"
-	export_protect_area = frappe.parse_json(export_protect_area)
 
 	e = Exporter(
 		doctype,
@@ -193,10 +132,8 @@ def download_template(
 		export_data=export_data,
 		export_filters=export_filters,
 		file_type=file_type,
-		export_protect_area=export_protect_area,
 		export_page_length=5 if export_records == "5_records" else None,
 	)
-	
 	e.build_response()
 
 
@@ -331,4 +268,3 @@ def export_csv(doctype, path):
 	with open(path, "wb") as csvfile:
 		export_data(doctype=doctype, all_doctypes=True, template=True, with_data=True)
 		csvfile.write(frappe.response.result.encode("utf-8"))
-	

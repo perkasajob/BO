@@ -1,6 +1,6 @@
 {
  "autoname": "format:{month_code}{distributor}-{is_outlet_id}",
- "creation": "2020-07-27 16:14:43.465071",
+ "creation": "2020-08-07 09:11:44.234354",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
@@ -16,35 +16,13 @@
   "outlet_name",
   "distributor",
   "line",
-  "dx_sb",
-  "d1",
-  "d2",
-  "d3",
-  "d4",
-  "d5",
-  "dx_cb",
-  "d6",
-  "d7",
-  "d8",
-  "d9",
-  "d10",
-  "dx_end_sb",
   "items",
-  "amended_from",
   "month_code",
   "is_outlet_id",
-  "territory"
+  "territory",
+  "amended_from"
  ],
  "fields": [
-  {
-   "fieldname": "amended_from",
-   "fieldtype": "Link",
-   "label": "Amended From",
-   "no_copy": 1,
-   "options": "LPD",
-   "print_hide": 1,
-   "read_only": 1
-  },
   {
    "fieldname": "outid",
    "fieldtype": "Link",
@@ -53,11 +31,14 @@
    "reqd": 1
   },
   {
-   "fieldname": "line",
-   "fieldtype": "Select",
-   "label": "Line",
-   "options": "\n1\n2",
-   "reqd": 1
+   "fieldname": "start_date",
+   "fieldtype": "Date",
+   "label": "Start Date"
+  },
+  {
+   "fieldname": "end_date",
+   "fieldtype": "Date",
+   "label": "End Date"
   },
   {
    "columns": 6,
@@ -75,20 +56,57 @@
    "reqd": 1
   },
   {
+   "fieldname": "line",
+   "fieldtype": "Select",
+   "label": "Line",
+   "options": "\n1\n2",
+   "reqd": 1
+  },
+  {
    "fieldname": "items",
    "fieldtype": "Table",
    "label": "Items",
-   "options": "LPD Item"
+   "options": "DPL Item"
   },
   {
-   "fieldname": "start_date",
-   "fieldtype": "Date",
-   "label": "Start Date"
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "DPL",
+   "print_hide": 1,
+   "read_only": 1
   },
   {
-   "fieldname": "end_date",
-   "fieldtype": "Date",
-   "label": "End Date"
+   "fieldname": "month_code",
+   "fieldtype": "Read Only",
+   "hidden": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Month Code"
+  },
+  {
+   "fieldname": "is_outlet_id",
+   "fieldtype": "Read Only",
+   "label": "IS Outlet ID "
+  },
+  {
+   "fieldname": "territory",
+   "fieldtype": "Read Only",
+   "label": "Territory"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "DPL",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "sb_2",
+   "fieldtype": "Section Break"
   },
   {
    "fieldname": "month",
@@ -98,119 +116,25 @@
    "reqd": 1
   },
   {
-   "fieldname": "year",
-   "fieldtype": "Select",
-   "label": "Year",
-   "options": "2020\n2021\n2022\n2023\n2024\n2025",
-   "reqd": 1
-  },
-  {
    "fieldname": "date_cb",
    "fieldtype": "Column Break"
   },
   {
+   "fieldname": "year",
+   "fieldtype": "Select",
+   "label": "Year",
+   "options": "2020\n2021\n2022\n2023\n2024\n2025"
+  },
+  {
    "fieldname": "sb_1",
    "fieldtype": "Section Break"
-  },
-  {
-   "fieldname": "sb_2",
-   "fieldtype": "Section Break"
-  },
-  {
-   "fieldname": "month_code",
-   "fieldtype": "Read Only",
-   "hidden": 1,
-   "label": "Month Code"
-  },
-  {
-   "fieldname": "is_outlet_id",
-   "fieldtype": "Read Only",
-   "label": "IS Outlet ID "
-  },
-  {
-   "fieldname": "dx_sb",
-   "fieldtype": "Section Break",
-   "label": "Dx"
-  },
-  {
-   "fieldname": "d1",
-   "fieldtype": "Link",
-   "label": "D1",
-   "options": "Dx"
-  },
-  {
-   "fieldname": "d2",
-   "fieldtype": "Link",
-   "label": "D2",
-   "options": "Dx"
-  },
-  {
-   "fieldname": "d3",
-   "fieldtype": "Link",
-   "label": "D3",
-   "options": "Dx"
-  },
-  {
-   "fieldname": "d4",
-   "fieldtype": "Link",
-   "label": "D4",
-   "options": "Dx"
-  },
-  {
-   "fieldname": "d5",
-   "fieldtype": "Link",
-   "label": "D5",
-   "options": "Dx"
-  },
-  {
-   "fieldname": "dx_cb",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "d6",
-   "fieldtype": "Link",
-   "label": "D6",
-   "options": "Dx"
-  },
-  {
-   "fieldname": "d7",
-   "fieldtype": "Link",
-   "label": "D7",
-   "options": "Dx"
-  },
-  {
-   "fieldname": "d8",
-   "fieldtype": "Link",
-   "label": "D8",
-   "options": "Dx"
-  },
-  {
-   "fieldname": "d9",
-   "fieldtype": "Link",
-   "label": "D9",
-   "options": "Dx"
-  },
-  {
-   "fieldname": "d10",
-   "fieldtype": "Link",
-   "label": "D10",
-   "options": "Dx"
-  },
-  {
-   "fieldname": "dx_end_sb",
-   "fieldtype": "Section Break"
-  },
-  {
-   "fieldname": "territory",
-   "fieldtype": "Read Only",
-   "label": "Territory"
   }
  ],
  "is_submittable": 1,
- "modified": "2020-08-06 14:45:11.132122",
+ "modified": "2020-08-07 19:53:39.038756",
  "modified_by": "Administrator",
  "module": "BO",
- "name": "LPD",
+ "name": "DPL",
  "owner": "Administrator",
  "permissions": [
   {

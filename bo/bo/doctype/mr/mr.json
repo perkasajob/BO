@@ -47,7 +47,7 @@
    "label": "Territory"
   }
  ],
- "modified": "2020-07-22 20:45:17.396313",
+ "modified": "2020-08-10 10:31:42.756850",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "MR",
@@ -101,6 +101,18 @@
    "read": 1,
    "report": 1,
    "role": "MSD",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "CSD",
    "share": 1,
    "write": 1
   }

@@ -1,6 +1,7 @@
 {
  "allow_import": 1,
  "autoname": "field:blanko_nr",
+ "color": "green",
  "creation": "2020-07-20 13:56:36.056017",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -31,11 +32,12 @@
   },
   {
    "fieldname": "dm_user",
-   "fieldtype": "Link",
+   "fieldtype": "Read Only",
    "in_list_view": 1,
    "label": "DM",
    "options": "DM",
-   "reqd": 1
+   "reqd": 1,
+   "set_only_once": 1
   },
   {
    "fieldname": "mr_user",
@@ -63,6 +65,7 @@
    "in_list_view": 1,
    "label": "Dx",
    "options": "Dx",
+   "permlevel": 1,
    "reqd": 1
   },
   {
@@ -97,19 +100,19 @@
    "fieldname": "cash_transfer",
    "fieldtype": "Select",
    "label": "C/T",
-   "options": "\nCash\nTransfer",
-   "reqd": 1
+   "options": "\nCash\nTransfer"
   },
   {
    "fetch_from": "dx_user.saldo",
    "fieldname": "saldo",
    "fieldtype": "Read Only",
-   "label": "Sal"
+   "label": "Sal",
+   "read_only": 1
   }
  ],
  "has_web_view": 1,
  "is_submittable": 1,
- "modified": "2020-07-24 11:29:25.305689",
+ "modified": "2020-08-10 10:30:49.548802",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "DPPU",
@@ -132,6 +135,7 @@
    "delete": 1,
    "email": 1,
    "export": 1,
+   "if_owner": 1,
    "print": 1,
    "read": 1,
    "report": 1,
@@ -174,6 +178,18 @@
    "read": 1,
    "report": 1,
    "role": "MSD",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "CSD",
    "share": 1,
    "write": 1
   }

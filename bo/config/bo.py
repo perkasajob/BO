@@ -13,6 +13,16 @@ def get_data():
 				},
 				{
 					"type": "doctype",
+					"name": "DPL",
+					"onboard": 1,
+				},
+				{
+					"type": "doctype",
+					"name": "LPD",
+					"onboard": 1,
+				},
+				{
+					"type": "doctype",
 					"name": "DM"
 				},
 				{
@@ -22,6 +32,10 @@ def get_data():
 				{
 					"type": "doctype",
 					"name": "Dx"
+				},
+				{
+					"type": "doctype",
+					"name": "Outlet"
 				},
 				{
 					"type": "doctype",

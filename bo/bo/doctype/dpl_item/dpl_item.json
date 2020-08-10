@@ -1,0 +1,60 @@
+{
+ "creation": "2020-08-07 11:51:16.502087",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "item_code",
+  "item_name",
+  "hna",
+  "dpl_disc"
+ ],
+ "fields": [
+  {
+   "fieldname": "item_code",
+   "fieldtype": "Link",
+   "in_filter": 1,
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "label": "Item Code",
+   "options": "Item",
+   "print_width": "50px",
+   "reqd": 1,
+   "width": "250px"
+  },
+  {
+   "fieldname": "item_name",
+   "fieldtype": "Data",
+   "in_global_search": 1,
+   "label": "Item Name",
+   "print_hide": 1,
+   "reqd": 1
+  },
+  {
+   "columns": 1,
+   "fieldname": "hna",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "HNA",
+   "precision": "0"
+  },
+  {
+   "columns": 1,
+   "fieldname": "dpl_disc",
+   "fieldtype": "Percent",
+   "in_list_view": 1,
+   "label": "DPL"
+  }
+ ],
+ "istable": 1,
+ "modified": "2020-08-07 11:51:16.502087",
+ "modified_by": "Administrator",
+ "module": "BO",
+ "name": "DPL Item",
+ "owner": "Administrator",
+ "permissions": [],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

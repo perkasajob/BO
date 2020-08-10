@@ -18,7 +18,7 @@ from frappe import _
 import re
 
 
-class LPD(Document):
+class DPL(Document):
 	def validate(self):
 		pass
 
@@ -38,7 +38,7 @@ class LPD(Document):
 			data = rows
 			return {"columns": columns, "data": data}
 		else:
-			return {"status" : "Error", "filename": fname}	
+			return {"status" : "Error", "filename": fname, "doctype": self.doctype}	
 
 
 	def get_full_path(self):
@@ -181,12 +181,12 @@ def download_template(
 		:param export_filters: Filter dict
 		:param file_type: File type to export into
 	"""
-
+	
 	export_fields = frappe.parse_json(export_fields)
 	export_filters = frappe.parse_json(export_filters)
 	export_data = export_records != "blank_template"
 	export_protect_area = frappe.parse_json(export_protect_area)
-
+		
 	e = Exporter(
 		doctype,
 		export_fields=export_fields,

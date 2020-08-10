@@ -1,46 +1,40 @@
 {
- "autoname": "Prompt",
+ "autoname": "format:{outlet_id}-{outlet_name}",
  "creation": "2020-07-27 16:21:53.560780",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
   "outlet_id",
-  "is_id",
   "outlet_name",
-  "address",
   "territory"
  ],
  "fields": [
   {
    "fieldname": "outlet_id",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Outlet ID",
-   "search_index": 1
-  },
-  {
-   "fieldname": "is_id",
-   "fieldtype": "Data",
-   "label": "IS ID"
+   "reqd": 1,
+   "unique": 1
   },
   {
    "fieldname": "outlet_name",
    "fieldtype": "Data",
-   "label": "Nama Outlet"
-  },
-  {
-   "fieldname": "address",
-   "fieldtype": "Data",
-   "label": "Alamat"
+   "in_list_view": 1,
+   "label": "Nama Outlet",
+   "reqd": 1
   },
   {
    "fieldname": "territory",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Territory",
-   "options": "Territory"
+   "options": "Territory",
+   "reqd": 1
   }
  ],
- "modified": "2020-07-27 16:21:53.560780",
+ "modified": "2020-08-06 14:55:33.633323",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "Outlet",
@@ -57,6 +51,42 @@
    "role": "System Manager",
    "share": 1,
    "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "DM",
+   "share": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "SM",
+   "share": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "GSM",
+   "share": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "MSD",
+   "share": 1
   }
  ],
  "quick_entry": 1,

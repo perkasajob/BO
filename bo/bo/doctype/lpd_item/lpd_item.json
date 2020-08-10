@@ -7,50 +7,127 @@
   "item_code",
   "item_name",
   "hna",
-  "disc",
-  "ofaktur"
+  "dpl_disc",
+  "d1",
+  "d2",
+  "d3",
+  "d4",
+  "d5",
+  "d6",
+  "d7",
+  "d8",
+  "d9",
+  "d10"
  ],
  "fields": [
   {
-   "bold": 1,
-   "columns": 3,
    "fieldname": "item_code",
    "fieldtype": "Link",
+   "in_filter": 1,
    "in_global_search": 1,
    "in_list_view": 1,
    "label": "Item Code",
    "options": "Item",
    "print_width": "50px",
    "reqd": 1,
-   "width": "150px"
+   "width": "250px"
   },
   {
    "fieldname": "item_name",
    "fieldtype": "Data",
    "in_global_search": 1,
-   "in_list_view": 1,
    "label": "Item Name",
    "print_hide": 1,
    "reqd": 1
   },
   {
+   "columns": 1,
    "fieldname": "hna",
-   "fieldtype": "Data",
-   "label": "HNA"
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "HNA",
+   "precision": "0"
   },
   {
-   "fieldname": "disc",
-   "fieldtype": "Data",
-   "label": "Disc"
+   "columns": 1,
+   "fieldname": "dpl_disc",
+   "fieldtype": "Percent",
+   "in_list_view": 1,
+   "label": "DPL"
   },
   {
-   "fieldname": "ofaktur",
-   "fieldtype": "Data",
-   "label": "Ofak"
+   "columns": 1,
+   "fieldname": "d1",
+   "fieldtype": "Percent",
+   "in_list_view": 1,
+   "label": "D1"
+  },
+  {
+   "columns": 1,
+   "fieldname": "d2",
+   "fieldtype": "Percent",
+   "in_list_view": 1,
+   "label": "D2"
+  },
+  {
+   "columns": 1,
+   "fieldname": "d3",
+   "fieldtype": "Percent",
+   "in_list_view": 1,
+   "label": "D3"
+  },
+  {
+   "columns": 1,
+   "fieldname": "d4",
+   "fieldtype": "Percent",
+   "in_list_view": 1,
+   "label": "D4"
+  },
+  {
+   "columns": 1,
+   "fieldname": "d5",
+   "fieldtype": "Percent",
+   "in_list_view": 1,
+   "label": "D5"
+  },
+  {
+   "columns": 1,
+   "fieldname": "d6",
+   "fieldtype": "Percent",
+   "in_list_view": 1,
+   "label": "D6"
+  },
+  {
+   "columns": 1,
+   "fieldname": "d7",
+   "fieldtype": "Percent",
+   "in_list_view": 1,
+   "label": "D7"
+  },
+  {
+   "columns": 1,
+   "fieldname": "d8",
+   "fieldtype": "Percent",
+   "in_list_view": 1,
+   "label": "D8"
+  },
+  {
+   "columns": 1,
+   "fieldname": "d9",
+   "fieldtype": "Percent",
+   "in_list_view": 1,
+   "label": "D9"
+  },
+  {
+   "columns": 1,
+   "fieldname": "d10",
+   "fieldtype": "Percent",
+   "in_list_view": 1,
+   "label": "D10"
   }
  ],
  "istable": 1,
- "modified": "2020-07-27 16:00:33.362693",
+ "modified": "2020-08-04 15:13:36.459235",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "LPD Item",
