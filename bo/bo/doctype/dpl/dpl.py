@@ -199,6 +199,36 @@ def download_template(
 	
 	e.build_response()
 
+@frappe.whitelist()
+def download_list(
+	doctype="LPD", export_fields=None, export_records=None, names=None, export_protect_area=None, file_type="Excel"
+):
+	"""
+	Download template from Exporter
+		:param doctype: Document Type
+		:param export_fields=None: Fields to export as dict {'Sales Invoice': ['name', 'customer'], 'Sales Invoice Item': ['item_code']}
+		:param export_records=None: One of 'all', 'by_filter', 'blank_template'
+		:param export_filters: Filter dict
+		:param file_type: File type to export into
+	"""
+	
+	export_fields = frappe.parse_json(export_fields)
+	export_filters = {"name": ["in", names]}
+	export_data = export_records != "blank_template"
+	export_protect_area = frappe.parse_json(export_protect_area)
+		
+	e = Exporter(
+		doctype,
+		export_fields=export_fields,
+		export_data=export_data,
+		export_filters=export_filters,
+		file_type=file_type,
+		export_protect_area=export_protect_area,
+		export_page_length=5 if export_records == "5_records" else None,
+	)
+	
+	e.build_response()
+
 
 @frappe.whitelist()
 def download_errored_template(data_import_name):

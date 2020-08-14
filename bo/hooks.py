@@ -10,7 +10,7 @@ app_icon = "octicon octicon-dashboard"
 app_color = "grey"
 app_email = "perkasajob@gmail.com"
 app_license = "MIT"
-# app_logo_url = '/assets/bo/images/erp-icon.svg'
+app_logo_url = '/assets/bo/images/logo.png'
 
 # Includes in <head>
 # ------------------
@@ -46,6 +46,11 @@ app_license = "MIT"
 # Website user home page (by function)
 # get_website_user_home_page = "bo.utils.get_home_page"
 
+website_context = {
+    "favicon": "/assets/bo/images/favicon.png",
+    "splash_image": "/assets/bo/images/logo.png"
+}
+
 # Generators
 # ----------
 
@@ -75,7 +80,13 @@ app_license = "MIT"
 # has_permission = {
 # 	"Event": "frappe.desk.doctype.event.event.has_permission",
 # }
+permission_query_conditions = {
+	"DPPU": "bo.bo.permission.dppu_get_permission_query_conditions"	
+}
 
+# has_permission = {
+# 	"DPPU": "bo.bo.dppu_has_permission"
+# }
 # Document Events
 # ---------------
 # Hook on document methods and events

@@ -4,13 +4,11 @@ import frappe
 from frappe.utils.background_jobs import enqueue
 
 def daily():	
-	# frappe.log_error(message="I Am on the background" , title="test background")
-	set_DPPU_overdue(14) # 10 days
+	set_DPPU_overdue(14) # 14 days
 
 def set_DPPU_overdue(period):
 	from frappe.desk.doctype.event.event import get_events
 	from frappe.utils import nowdate
-	# check for overdue
 	# today = nowdate()
-	frappe.db.sql("""update `tabDPPU` set workflow_state = 'Overdue Refund' where DATEDIFF(NOW(),date)>{} and workflow_state = 'Refund'""".format(period))
+	frappe.db.sql("""update `tabDPPU` set workflow_state = 'Overdue Refund' where DATEDIFF(NOW(),date)>{} and (workflow_state = 'Refund' or workflow_state = 'DM Received')""".format(period))
 	frappe.db.commit()

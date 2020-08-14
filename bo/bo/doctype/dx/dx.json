@@ -40,6 +40,7 @@
    "label": "NrR"
   },
   {
+   "default": "0",
    "fieldname": "saldo",
    "fieldtype": "Int",
    "label": "Sal"
@@ -78,7 +79,7 @@
    "label": "IS ID"
   }
  ],
- "modified": "2020-08-10 10:31:18.575291",
+ "modified": "2020-08-12 23:47:53.585902",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "Dx",
@@ -143,6 +144,18 @@
    "read": 1,
    "report": 1,
    "role": "CSD",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts Manager",
    "share": 1,
    "write": 1
   }

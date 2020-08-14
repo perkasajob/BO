@@ -91,6 +91,7 @@
    "label": "IS Outlet ID "
   },
   {
+   "fetch_from": "outid.territory",
    "fieldname": "territory",
    "fieldtype": "Read Only",
    "label": "Territory"
@@ -123,7 +124,7 @@
    "fieldname": "year",
    "fieldtype": "Select",
    "label": "Year",
-   "options": "2020\n2021\n2022\n2023\n2024\n2025"
+   "options": "2020\n2021\n2022\n2023\n2024\n2025\n2026\n2027\n2028\n2029\n2030"
   },
   {
    "fieldname": "sb_1",
@@ -131,7 +132,7 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2020-08-07 19:53:39.038756",
+ "modified": "2020-08-12 18:29:44.333290",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "DPL",

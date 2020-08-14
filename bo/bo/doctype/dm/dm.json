@@ -8,7 +8,8 @@
   "territory",
   "dm_name",
   "full_name",
-  "berno_id"
+  "berno_id",
+  "sm_user"
  ],
  "fields": [
   {
@@ -40,9 +41,15 @@
    "options": "Territory",
    "reqd": 1,
    "search_index": 1
+  },
+  {
+   "fieldname": "sm_user",
+   "fieldtype": "Link",
+   "label": "SM",
+   "options": "User"
   }
  ],
- "modified": "2020-08-10 10:32:05.013650",
+ "modified": "2020-08-12 23:47:34.664445",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "DM",
@@ -109,6 +116,18 @@
    "read": 1,
    "report": 1,
    "role": "CSD",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts Manager",
    "share": 1,
    "write": 1
   }

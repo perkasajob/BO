@@ -31,7 +31,7 @@
    "reqd": 1
   },
   {
-   "columns": 1,
+   "columns": 2,
    "fieldname": "hna",
    "fieldtype": "Float",
    "in_list_view": 1,
@@ -39,7 +39,7 @@
    "precision": "0"
   },
   {
-   "columns": 1,
+   "columns": 2,
    "fieldname": "dpl_disc",
    "fieldtype": "Percent",
    "in_list_view": 1,
@@ -47,7 +47,7 @@
   }
  ],
  "istable": 1,
- "modified": "2020-08-07 11:51:16.502087",
+ "modified": "2020-08-11 11:48:18.303818",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "DPL Item",

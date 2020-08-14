@@ -10,6 +10,7 @@
   "blanko_nr",
   "dm_user",
   "territory",
+  "sm_user",
   "mr_user",
   "dx_user",
   "saldo",
@@ -100,7 +101,7 @@
    "fieldname": "cash_transfer",
    "fieldtype": "Select",
    "label": "C/T",
-   "options": "\nCash\nTransfer"
+   "options": "\nCash\nTransfer\nSPP"
   },
   {
    "fetch_from": "dx_user.saldo",
@@ -108,11 +109,18 @@
    "fieldtype": "Read Only",
    "label": "Sal",
    "read_only": 1
+  },
+  {
+   "fetch_from": "dm_user.sm_user",
+   "fieldname": "sm_user",
+   "fieldtype": "Read Only",
+   "label": "SM",
+   "options": "User"
   }
  ],
  "has_web_view": 1,
  "is_submittable": 1,
- "modified": "2020-08-10 10:30:49.548802",
+ "modified": "2020-08-12 23:48:23.253095",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "DPPU",
@@ -191,6 +199,20 @@
    "report": 1,
    "role": "CSD",
    "share": 1,
+   "write": 1
+  },
+  {
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts Manager",
+   "share": 1,
+   "submit": 1,
    "write": 1
   }
  ],

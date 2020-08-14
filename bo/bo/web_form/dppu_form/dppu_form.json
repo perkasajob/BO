@@ -9,7 +9,7 @@
  "amount": 0.0,
  "amount_based_on_field": 0,
  "button_label": "Save",
- "client_script": "frappe.web_form.validate = () =>{\r\n    if (frappe.web_form.get_value(\"date\") < frappe.datetime.get_today()){\r\n        frappe.msgprint(\"Date cannot be in the past!\")\r\n        return 0\r\n    }\r\n    return 1\r\n}\r\n\r\nfrappe.web_form.after_load = () =>{\r\n    user_id = \"DM-\" + frappe.user_id.toUpperCase().replace(/@.*/g,\"\")\r\n    frappe.web_form.set_value(\"dm_user\", user_id)\r\n    $('[data-fieldname=\"dm_user\"]').prop( \"disabled\", true )\r\n    $('[data-fieldname=\"saldo\"]').prop( \"disabled\", true )\r\n    $('[data-fieldname=\"territory\"]').prop( \"disabled\", true )\r\n    $.ajax({\r\n        url: '/api/resource/DM/DM-' + frappe.user_id.replace(/@.*/g,\"\"),\r\n        success: function(res) {\r\n          //isDm = res.data.roles.some((e)=>{return e.role==\"DM\"})\r\n          \r\n          if(res.data){\r\n            frappe.web_form.set_value(\"territory\", res.data.territory)\r\n            //frappe.web_form.on('mr_user', (field, value) => {\r\n                \r\n              $.ajax({\r\n                url: '/api/resource/MR?filters=[[\"territory\",\"=\",\"'+ res.data.territory+ '\"]]',\r\n                success: function(res) {\r\n                     var options = []\r\n                      for (var i = 0; i < res.data.length; i++) {\r\n                        options.push({\r\n                          'label': res.data[i].name,\r\n                          'value': res.data[i].name\r\n                        })\r\n                \r\n                      }\r\n                      //var field = frappe.web_form.field_group.get_field('mr_user');\r\n                      var field = frappe.web_form.get_field(\"mr_user\")\r\n                      field._data = options;\r\n                      field.refresh();\r\n                  }\r\n              });\r\n           // })\r\n          }\r\n      }\r\n  })\r\n}\r\n\r\n\r\n$.getScript( \"/assets/bo/js/jquery.autocomplete.js\", function( data, textStatus, jqxhr ) {\r\n    $('[data-fieldname=\"dx_user\"]').autocomplete({\r\n        lookup: function (query, done) {\r\n                $.ajax({\r\n                    url: '/api/resource/Dx?filters=[[\"territory\",\"=\",\"'+ frappe.web_form.get_value(\"territory\") +'\"],[\"name\",\"like\",\"'+ query +'%\"]]',\r\n                    success: function(res) {\r\n                      var options = []\r\n                      var result = {suggestions: []};\r\n                      for (var i = 0; i < res.data.length; i++) {\r\n                        result.suggestions.push({\r\n                          'data': res.data[i].name,\r\n                          'value': res.data[i].name\r\n                        })\r\n                \r\n                      }\r\n                      done(result);\r\n                    }\r\n                });\r\n        },\r\n        onSelect: function (suggestion) {\r\n            frappe.web_form.set_value(\"dx_user\", suggestion.value);\r\n            $.ajax({\r\n                url: '/api/resource/Dx?filters=[[\"name\",\"=\",\"' + suggestion.value + '\"]]&fields=[\"saldo\"]',\r\n                success: function(res) {\r\n                    if(res.data.length)\r\n                        frappe.web_form.set_value(\"saldo\", res.data[0].saldo);\r\n                }\r\n            });\r\n            \r\n            \r\n        }\r\n    });\r\n});\r\n\r\n$('<link>')\r\n  .appendTo($('head'))\r\n  .attr({type : 'text/css', rel : 'stylesheet'})\r\n  .attr('href', '/assets/bo/css/dppu_webform.css');\r\n",
+ "client_script": "frappe.web_form.validate = () =>{\r\n    if (frappe.web_form.get_value(\"date\") < frappe.datetime.get_today()){\r\n        frappe.msgprint(\"Date cannot be in the past!\")\r\n        return 0\r\n    }\r\n    return 1\r\n}\r\n\r\nfrappe.web_form.after_load = () =>{\r\n    user_id = \"DM-\" + frappe.user_id.toUpperCase().replace(/@.*/g,\"\")\r\n    frappe.web_form.set_value(\"dm_user\", user_id)\r\n    $('[data-fieldname=\"dm_user\"]').prop( \"disabled\", true )\r\n    $('[data-fieldname=\"sm_user\"]').prop( \"disabled\", true )\r\n    $('[data-fieldname=\"saldo\"]').prop( \"disabled\", true )\r\n    $('[data-fieldname=\"territory\"]').prop( \"disabled\", true )\r\n    $.ajax({\r\n        url: '/api/resource/DM/DM-' + frappe.user_id.replace(/@.*/g,\"\"),\r\n        success: function(res) {\r\n          //isDm = res.data.roles.some((e)=>{return e.role==\"DM\"})\r\n          \r\n          if(res.data){\r\n            frappe.web_form.set_value(\"territory\", res.data.territory)\r\n            frappe.web_form.set_value(\"sm_user\", res.data.sm_user)\r\n            //frappe.web_form.on('mr_user', (field, value) => {\r\n                \r\n              $.ajax({\r\n                url: '/api/resource/MR?filters=[[\"territory\",\"=\",\"'+ res.data.territory+ '\"]]',\r\n                success: function(res) {\r\n                     var options = []\r\n                      for (var i = 0; i < res.data.length; i++) {\r\n                        options.push({\r\n                          'label': res.data[i].name,\r\n                          'value': res.data[i].name\r\n                        })\r\n                \r\n                      }\r\n                      //var field = frappe.web_form.field_group.get_field('mr_user');\r\n                      var field = frappe.web_form.get_field(\"mr_user\")\r\n                      field._data = options;\r\n                      field.refresh();\r\n                  }\r\n              });\r\n           // })\r\n          }\r\n      }\r\n  })\r\n}\r\n\r\n\r\n$.getScript( \"/assets/bo/js/jquery.autocomplete.js\", function( data, textStatus, jqxhr ) {\r\n    $('[data-fieldname=\"dx_user\"]').autocomplete({\r\n        lookup: function (query, done) {\r\n                $.ajax({\r\n                    url: '/api/resource/Dx?filters=[[\"territory\",\"=\",\"'+ frappe.web_form.get_value(\"territory\") +'\"],[\"name\",\"like\",\"'+ query +'%\"]]',\r\n                    success: function(res) {\r\n                      var options = []\r\n                      var result = {suggestions: []};\r\n                      for (var i = 0; i < res.data.length; i++) {\r\n                        result.suggestions.push({\r\n                          'data': res.data[i].name,\r\n                          'value': res.data[i].name\r\n                        })\r\n                \r\n                      }\r\n                      done(result);\r\n                    }\r\n                });\r\n        },\r\n        onSelect: function (suggestion) {\r\n            frappe.web_form.set_value(\"dx_user\", suggestion.value);\r\n            $.ajax({\r\n                url: '/api/resource/Dx?filters=[[\"name\",\"=\",\"' + suggestion.value + '\"]]&fields=[\"saldo\"]',\r\n                success: function(res) {\r\n                    if(res.data.length)\r\n                        frappe.web_form.set_value(\"saldo\", res.data[0].saldo);\r\n                }\r\n            });\r\n            \r\n            \r\n        }\r\n    });\r\n});\r\n\r\n$('<link>')\r\n  .appendTo($('head'))\r\n  .attr({type : 'text/css', rel : 'stylesheet'})\r\n  .attr('href', '/assets/bo/css/dppu_webform.css');\r\n",
  "creation": "2020-07-29 12:02:19.057241",
  "currency": "IDR",
  "doc_type": "DPPU",
@@ -19,7 +19,7 @@
  "is_standard": 1,
  "login_required": 1,
  "max_attachment_size": 0,
- "modified": "2020-08-03 14:11:45.698897",
+ "modified": "2020-08-13 00:09:52.630160",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "dppu-form",
@@ -59,6 +59,19 @@
    "options": "DM",
    "read_only": 0,
    "reqd": 1,
+   "show_in_filter": 0
+  },
+  {
+   "allow_read_on_all_link_options": 0,
+   "fieldname": "sm_user",
+   "fieldtype": "Data",
+   "hidden": 0,
+   "label": "SM",
+   "max_length": 0,
+   "max_value": 0,
+   "options": "User",
+   "read_only": 0,
+   "reqd": 0,
    "show_in_filter": 0
   },
   {
@@ -108,7 +121,7 @@
    "label": "C/T",
    "max_length": 0,
    "max_value": 0,
-   "options": "Cash\nTransfer",
+   "options": "Cash\nTransfer\nSPP",
    "read_only": 0,
    "reqd": 0,
    "show_in_filter": 0
