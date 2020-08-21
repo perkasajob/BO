@@ -1,0 +1,48 @@
+{
+ "creation": "2020-08-18 11:22:44.852346",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "no_rek",
+  "nama_rek",
+  "bank",
+  "note"
+ ],
+ "fields": [
+  {
+   "fieldname": "no_rek",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "NrR"
+  },
+  {
+   "fieldname": "nama_rek",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "NR"
+  },
+  {
+   "fieldname": "bank",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Cab"
+  },
+  {
+   "fieldname": "note",
+   "fieldtype": "Data",
+   "label": "Note"
+  }
+ ],
+ "istable": 1,
+ "modified": "2020-08-18 13:56:27.180886",
+ "modified_by": "Administrator",
+ "module": "BO",
+ "name": "DxRek",
+ "owner": "Administrator",
+ "permissions": [],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

@@ -9,12 +9,12 @@
   "territory",
   "saldo",
   "cash_transfer",
-  "no_rek",
-  "nama_rek",
-  "bank",
-  "is_id",
+  "rek",
   "saldo_history",
-  "loan"
+  "loan",
+  "saldo_history2",
+  "loan2",
+  "dppu"
  ],
  "fields": [
   {
@@ -35,14 +35,9 @@
    "reqd": 1
   },
   {
-   "fieldname": "no_rek",
-   "fieldtype": "Data",
-   "label": "NrR"
-  },
-  {
    "default": "0",
    "fieldname": "saldo",
-   "fieldtype": "Int",
+   "fieldtype": "Read Only",
    "label": "Sal"
   },
   {
@@ -52,19 +47,9 @@
    "label": "History"
   },
   {
-   "fieldname": "nama_rek",
-   "fieldtype": "Data",
-   "label": "NR"
-  },
-  {
-   "fieldname": "bank",
-   "fieldtype": "Data",
-   "label": "Cab"
-  },
-  {
    "fieldname": "loan",
    "fieldtype": "Table",
-   "label": "Acc",
+   "label": "Acc 1",
    "options": "SP"
   },
   {
@@ -74,12 +59,30 @@
    "options": "\nCash\nTransfer"
   },
   {
-   "fieldname": "is_id",
-   "fieldtype": "Data",
-   "label": "IS ID"
+   "fieldname": "loan2",
+   "fieldtype": "Table",
+   "label": "Acc 2",
+   "options": "SP"
+  },
+  {
+   "fieldname": "saldo_history2",
+   "fieldtype": "Long Text",
+   "label": "History 2"
+  },
+  {
+   "fieldname": "rek",
+   "fieldtype": "Table",
+   "label": "NRx",
+   "options": "DxRek"
+  },
+  {
+   "fieldname": "dppu",
+   "fieldtype": "Table",
+   "label": "DPPU",
+   "options": "SP DPPU"
   }
  ],
- "modified": "2020-08-12 23:47:53.585902",
+ "modified": "2020-08-19 16:36:05.958165",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "Dx",
@@ -158,9 +161,20 @@
    "role": "Accounts Manager",
    "share": 1,
    "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "ARCO",
+   "share": 1,
+   "write": 1
   }
  ],
- "quick_entry": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
  "track_changes": 1

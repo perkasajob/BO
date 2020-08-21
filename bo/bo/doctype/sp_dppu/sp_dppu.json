@@ -1,5 +1,5 @@
 {
- "creation": "2020-07-23 00:34:40.099440",
+ "creation": "2020-08-19 16:34:21.000298",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
@@ -9,10 +9,8 @@
   "saldo",
   "ref_nr",
   "type",
-  "note",
-  "lpd",
   "dppu",
-  "line"
+  "note"
  ],
  "fields": [
   {
@@ -25,14 +23,6 @@
    "reqd": 1
   },
   {
-   "default": "0",
-   "fieldname": "saldo",
-   "fieldtype": "Int",
-   "in_list_view": 1,
-   "label": "Sal",
-   "read_only": 1
-  },
-  {
    "columns": 1,
    "default": "0",
    "fieldname": "number",
@@ -42,21 +32,18 @@
    "reqd": 1
   },
   {
+   "default": "0",
+   "fieldname": "saldo",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Sal",
+   "read_only": 1
+  },
+  {
    "fieldname": "ref_nr",
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "RefNr"
-  },
-  {
-   "fieldname": "note",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Note"
-  },
-  {
-   "fieldname": "line",
-   "fieldtype": "Data",
-   "label": "Line"
   },
   {
    "columns": 1,
@@ -65,26 +52,28 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Type",
-   "options": "C\nT\nLPD\nDPPU\n*"
+   "options": "C\nT\n*"
   },
   {
-   "fieldname": "lpd",
-   "fieldtype": "Link",
-   "label": "LPD",
-   "options": "LPD"
-  },
-  {
+   "columns": 1,
    "fieldname": "dppu",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "DPPU",
    "options": "DPPU"
+  },
+  {
+   "fieldname": "note",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Note"
   }
  ],
  "istable": 1,
- "modified": "2020-08-19 16:17:35.700756",
+ "modified": "2020-08-19 16:34:21.000298",
  "modified_by": "Administrator",
  "module": "BO",
- "name": "SP",
+ "name": "SP DPPU",
  "owner": "Administrator",
  "permissions": [],
  "quick_entry": 1,

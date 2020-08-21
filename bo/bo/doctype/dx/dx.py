@@ -12,15 +12,30 @@ from six import iteritems, string_types
 class Dx(Document):
 	def validate(self):
 		# frappe.msgprint("Dx validated")
-		saldo = 0
-		history =""
+		saldo = saldo2 = dppu_saldo= 0
+		history = history2 =""
 		for l in self.loan:
-			saldo = saldo + l.number
-			history = history + l.date + "\t\t " + str(l.number) + "\t\t " + str(l.saldo) + "\n"
-			l.saldo = saldo
-		self.saldo = saldo
+			saldo = saldo + int(l.number)
+			history = history + str(l.date) + "\t\t " + str(l.number) + "\t\t " + str(l.saldo) + "\t\t 1"  + "\n"
+			l.saldo = saldo		
 		self.saldo_history = history
-		frappe.msgprint(("{0} history validated").format(self.saldo_history))
+
+		for l2 in self.loan2:
+			saldo2 = saldo2 + int(l2.number)
+			history2 = history2 + str(l2.date) + "\t\t " + str(l2.number) + "\t\t " + str(l2.saldo) + "\t\t 2"  + "\n"
+			l2.saldo = saldo2
+
+		for l3 in self.dppu:
+			dppu_saldo = dppu_saldo - int(l3.number)
+			history2 = history2 + str(l3.date) + "\t\t " + str(l3.number) + "\t\t " + str(l3.saldo) + "\t\t -"  + "\n"
+			l3.saldo = dppu_saldo
+
+		self.saldo = saldo + saldo2 + dppu_saldo
+		self.saldo_history2 = history2
+		# frappe.msgprint(("{0} history validated").format(self.saldo_history))
+
+	def onload(self):
+		pass	
 
 	def on_submit(self):
 		frappe.msgprint("Dx submitted")

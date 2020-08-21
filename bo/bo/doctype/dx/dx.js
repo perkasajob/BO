@@ -6,3 +6,15 @@ frappe.ui.form.on('Dx', {
 
 	// }
 });
+
+frappe.ui.form.on('SP', {
+	number: function(frm, cdt, cdn) {
+		if(frappe.user != "Administrator"){
+		    var o = locals[cdt][cdn]
+		    if(frm.doc[o.parentfield][o.idx-1].number > 0){
+		        frm.doc[o.parentfield][o.idx-1].number *= -1
+		        frm.refresh_field(o.parentfield)
+		    }
+		}
+	}
+})

@@ -6,39 +6,48 @@
  "field_order": [
   "item_code",
   "item_name",
+  "cb1",
   "hna",
   "dpl_disc",
+  "dx_sb1",
   "d1",
   "d2",
   "d3",
   "d4",
   "d5",
+  "dx_cb1",
   "d6",
   "d7",
   "d8",
   "d9",
   "d10",
+  "t_sb",
   "t1",
   "t2",
   "t3",
   "t4",
   "t5",
+  "t_cb",
   "t6",
   "t7",
   "t8",
   "t9",
   "t10",
-  "dpl",
+  "dt_sb",
   "dt1",
   "dt2",
   "dt3",
   "dt4",
   "dt5",
+  "dt_cb",
   "dt6",
   "dt7",
   "dt8",
   "dt9",
   "dt10",
+  "dpldt_sb",
+  "dpl",
+  "dpl_cb",
   "dpl_dt"
  ],
  "fields": [
@@ -200,66 +209,102 @@
   {
    "fieldname": "dpl",
    "fieldtype": "Percent",
-   "label": "DPL R"
+   "label": "DPL T"
   },
   {
    "fieldname": "dt1",
-   "fieldtype": "Percent",
+   "fieldtype": "Read Only",
    "label": "Dt1"
   },
   {
    "fieldname": "dt2",
-   "fieldtype": "Percent",
+   "fieldtype": "Read Only",
    "label": "Dt2"
   },
   {
    "fieldname": "dt3",
-   "fieldtype": "Percent",
+   "fieldtype": "Read Only",
    "label": "Dt3"
   },
   {
    "fieldname": "dt4",
-   "fieldtype": "Percent",
+   "fieldtype": "Read Only",
    "label": "Dt4"
   },
   {
    "fieldname": "dt5",
-   "fieldtype": "Percent",
+   "fieldtype": "Read Only",
    "label": "Dt5"
   },
   {
    "fieldname": "dt6",
-   "fieldtype": "Percent",
+   "fieldtype": "Read Only",
    "label": "Dt6"
   },
   {
    "fieldname": "dt7",
-   "fieldtype": "Percent",
+   "fieldtype": "Read Only",
    "label": "Dt7"
   },
   {
    "fieldname": "dt8",
-   "fieldtype": "Percent",
+   "fieldtype": "Read Only",
    "label": "Dt8"
   },
   {
    "fieldname": "dt9",
-   "fieldtype": "Percent",
+   "fieldtype": "Read Only",
    "label": "Dt9"
   },
   {
    "fieldname": "dt10",
-   "fieldtype": "Percent",
+   "fieldtype": "Read Only",
    "label": "Dt10"
   },
   {
    "fieldname": "dpl_dt",
-   "fieldtype": "Percent",
+   "fieldtype": "Read Only",
    "label": " DPL Dt"
+  },
+  {
+   "fieldname": "dx_cb1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "t_sb",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "t_cb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "dt_sb",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "dx_sb1",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "dt_cb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "dpldt_sb",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "dpl_cb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "cb1",
+   "fieldtype": "Column Break"
   }
  ],
  "istable": 1,
- "modified": "2020-08-14 17:03:24.012262",
+ "modified": "2020-08-15 11:38:17.673214",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "LPD Item",

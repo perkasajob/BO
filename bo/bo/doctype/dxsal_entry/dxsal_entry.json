@@ -1,0 +1,122 @@
+{
+ "creation": "2020-08-18 10:49:30.442848",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "dx_user",
+  "date",
+  "number",
+  "ref_nr",
+  "line",
+  "note",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "default": "Today",
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Date",
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "number",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Number",
+   "reqd": 1
+  },
+  {
+   "fieldname": "ref_nr",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "RefNr"
+  },
+  {
+   "default": "2",
+   "fieldname": "line",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Line",
+   "options": "\n1\n2",
+   "reqd": 1
+  },
+  {
+   "fieldname": "note",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Note"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "DxSal Entry",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "dx_user",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Dx",
+   "options": "Dx",
+   "reqd": 1
+  }
+ ],
+ "is_submittable": 1,
+ "modified": "2020-08-18 11:11:37.277425",
+ "modified_by": "Administrator",
+ "module": "BO",
+ "name": "DxSal Entry",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "CSD",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

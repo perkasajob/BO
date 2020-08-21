@@ -17,6 +17,7 @@
   "cash_transfer",
   "number",
   "date",
+  "amount_refund",
   "comment",
   "amended_from",
   "route"
@@ -89,12 +90,8 @@
   {
    "fieldname": "route",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "Route"
-  },
-  {
-   "fieldname": "comment",
-   "fieldtype": "Small Text",
-   "label": "Keterangan"
   },
   {
    "default": "Cash",
@@ -116,11 +113,22 @@
    "fieldtype": "Read Only",
    "label": "SM",
    "options": "User"
+  },
+  {
+   "fieldname": "amount_refund",
+   "fieldtype": "Data",
+   "label": "AMnt Ref",
+   "permlevel": 2
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "comment",
+   "fieldtype": "Small Text",
+   "label": "Keterangan"
   }
  ],
- "has_web_view": 1,
  "is_submittable": 1,
- "modified": "2020-08-12 23:48:23.253095",
+ "modified": "2020-08-19 12:07:50.308178",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "DPPU",
@@ -213,6 +221,18 @@
    "role": "Accounts Manager",
    "share": 1,
    "submit": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "ARCO",
+   "share": 1,
    "write": 1
   }
  ],
