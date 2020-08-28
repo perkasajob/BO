@@ -22,33 +22,46 @@
   "d9",
   "d10",
   "t_sb",
-  "t1",
-  "t2",
-  "t3",
-  "t4",
-  "t5",
+  "a1",
+  "g1",
+  "a2",
+  "g2",
+  "a3",
+  "g3",
+  "a4",
+  "g4",
+  "a5",
+  "g5",
   "t_cb",
-  "t6",
-  "t7",
-  "t8",
-  "t9",
-  "t10",
+  "a6",
+  "g6",
+  "a7",
+  "g7",
+  "a8",
+  "g8",
+  "a9",
+  "g9",
+  "a10",
+  "g10",
   "dt_sb",
-  "dt1",
-  "dt2",
-  "dt3",
-  "dt4",
-  "dt5",
+  "p1",
+  "p2",
+  "p3",
+  "p4",
+  "p5",
   "dt_cb",
-  "dt6",
-  "dt7",
-  "dt8",
-  "dt9",
-  "dt10",
+  "p6",
+  "p7",
+  "p8",
+  "p9",
+  "p10",
   "dpldt_sb",
   "dpl",
   "dpl_cb",
-  "dpl_dt"
+  "dpl_dt",
+  "hjm_sm",
+  "hjm_gsm",
+  "hjm_fin"
  ],
  "fields": [
   {
@@ -64,6 +77,7 @@
    "width": "250px"
   },
   {
+   "fetch_from": "item_code.item_name",
    "fieldname": "item_name",
    "fieldtype": "Data",
    "in_global_search": 1,
@@ -157,109 +171,9 @@
    "label": "D10"
   },
   {
-   "fieldname": "t1",
-   "fieldtype": "Percent",
-   "label": "T1"
-  },
-  {
-   "fieldname": "t2",
-   "fieldtype": "Percent",
-   "label": "T2"
-  },
-  {
-   "fieldname": "t3",
-   "fieldtype": "Percent",
-   "label": "T3"
-  },
-  {
-   "fieldname": "t4",
-   "fieldtype": "Percent",
-   "label": "T4"
-  },
-  {
-   "fieldname": "t5",
-   "fieldtype": "Percent",
-   "label": "T5"
-  },
-  {
-   "fieldname": "t6",
-   "fieldtype": "Percent",
-   "label": "T6"
-  },
-  {
-   "fieldname": "t7",
-   "fieldtype": "Percent",
-   "label": "T7"
-  },
-  {
-   "fieldname": "t8",
-   "fieldtype": "Percent",
-   "label": "T8"
-  },
-  {
-   "fieldname": "t9",
-   "fieldtype": "Percent",
-   "label": "T9"
-  },
-  {
-   "fieldname": "t10",
-   "fieldtype": "Percent",
-   "label": "T10"
-  },
-  {
    "fieldname": "dpl",
    "fieldtype": "Percent",
    "label": "DPL T"
-  },
-  {
-   "fieldname": "dt1",
-   "fieldtype": "Read Only",
-   "label": "Dt1"
-  },
-  {
-   "fieldname": "dt2",
-   "fieldtype": "Read Only",
-   "label": "Dt2"
-  },
-  {
-   "fieldname": "dt3",
-   "fieldtype": "Read Only",
-   "label": "Dt3"
-  },
-  {
-   "fieldname": "dt4",
-   "fieldtype": "Read Only",
-   "label": "Dt4"
-  },
-  {
-   "fieldname": "dt5",
-   "fieldtype": "Read Only",
-   "label": "Dt5"
-  },
-  {
-   "fieldname": "dt6",
-   "fieldtype": "Read Only",
-   "label": "Dt6"
-  },
-  {
-   "fieldname": "dt7",
-   "fieldtype": "Read Only",
-   "label": "Dt7"
-  },
-  {
-   "fieldname": "dt8",
-   "fieldtype": "Read Only",
-   "label": "Dt8"
-  },
-  {
-   "fieldname": "dt9",
-   "fieldtype": "Read Only",
-   "label": "Dt9"
-  },
-  {
-   "fieldname": "dt10",
-   "fieldtype": "Read Only",
-   "label": "Dt10"
   },
   {
    "fieldname": "dpl_dt",
@@ -301,10 +215,181 @@
   {
    "fieldname": "cb1",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "a1",
+   "fieldtype": "Percent",
+   "label": "A1"
+  },
+  {
+   "fieldname": "g1",
+   "fieldtype": "Percent",
+   "label": "G1"
+  },
+  {
+   "fieldname": "a2",
+   "fieldtype": "Percent",
+   "label": "A2"
+  },
+  {
+   "fieldname": "g2",
+   "fieldtype": "Percent",
+   "label": "G2"
+  },
+  {
+   "fieldname": "a3",
+   "fieldtype": "Percent",
+   "label": "A3"
+  },
+  {
+   "fieldname": "g3",
+   "fieldtype": "Percent",
+   "label": "G3"
+  },
+  {
+   "fieldname": "a4",
+   "fieldtype": "Percent",
+   "label": "A4"
+  },
+  {
+   "fieldname": "g4",
+   "fieldtype": "Percent",
+   "label": "G4"
+  },
+  {
+   "fieldname": "a5",
+   "fieldtype": "Percent",
+   "label": "A5"
+  },
+  {
+   "fieldname": "g5",
+   "fieldtype": "Percent",
+   "label": "G5"
+  },
+  {
+   "fieldname": "a6",
+   "fieldtype": "Percent",
+   "label": "A6"
+  },
+  {
+   "fieldname": "g6",
+   "fieldtype": "Percent",
+   "label": "G6"
+  },
+  {
+   "fieldname": "a7",
+   "fieldtype": "Percent",
+   "label": "A7"
+  },
+  {
+   "fieldname": "g7",
+   "fieldtype": "Percent",
+   "label": "G7"
+  },
+  {
+   "fieldname": "a8",
+   "fieldtype": "Percent",
+   "label": "A8"
+  },
+  {
+   "fieldname": "g8",
+   "fieldtype": "Percent",
+   "label": "G8"
+  },
+  {
+   "fieldname": "a9",
+   "fieldtype": "Percent",
+   "label": "A9"
+  },
+  {
+   "fieldname": "g9",
+   "fieldtype": "Percent",
+   "label": "G9"
+  },
+  {
+   "fieldname": "a10",
+   "fieldtype": "Percent",
+   "label": "A10"
+  },
+  {
+   "fieldname": "g10",
+   "fieldtype": "Percent",
+   "label": "G10"
+  },
+  {
+   "fieldname": "p1",
+   "fieldtype": "Read Only",
+   "label": "P1"
+  },
+  {
+   "fieldname": "p2",
+   "fieldtype": "Read Only",
+   "label": "P2"
+  },
+  {
+   "fieldname": "p3",
+   "fieldtype": "Read Only",
+   "label": "P3"
+  },
+  {
+   "fieldname": "p4",
+   "fieldtype": "Read Only",
+   "label": "P4"
+  },
+  {
+   "fieldname": "p5",
+   "fieldtype": "Read Only",
+   "label": "P5"
+  },
+  {
+   "fieldname": "p6",
+   "fieldtype": "Read Only",
+   "label": "P6"
+  },
+  {
+   "fieldname": "p7",
+   "fieldtype": "Read Only",
+   "label": "P7"
+  },
+  {
+   "fieldname": "p8",
+   "fieldtype": "Read Only",
+   "label": "P8"
+  },
+  {
+   "fieldname": "p9",
+   "fieldtype": "Read Only",
+   "label": "P9"
+  },
+  {
+   "fieldname": "p10",
+   "fieldtype": "Read Only",
+   "label": "P10"
+  },
+  {
+   "fetch_from": "item_code.hjm_sm",
+   "fieldname": "hjm_sm",
+   "fieldtype": "Read Only",
+   "label": "HJM SM",
+   "permlevel": 1
+  },
+  {
+   "fetch_from": "item_code.hjm_gsm",
+   "fieldname": "hjm_gsm",
+   "fieldtype": "Read Only",
+   "label": "HJM GSM",
+   "permlevel": 1
+  },
+  {
+   "fetch_from": "item_code.hjm_fin",
+   "fieldname": "hjm_fin",
+   "fieldtype": "Read Only",
+   "label": "HJM FIN",
+   "permlevel": 1
   }
  ],
  "istable": 1,
- "modified": "2020-08-15 11:38:17.673214",
+ "modified": "2020-08-22 10:49:40.800426",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "LPD Item",

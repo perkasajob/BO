@@ -16,18 +16,18 @@ class Dx(Document):
 		history = history2 =""
 		for l in self.loan:
 			saldo = saldo + int(l.number)
-			history = history + str(l.date) + "\t\t " + str(l.number) + "\t\t " + str(l.saldo) + "\t\t 1"  + "\n"
+			history = history + str(l.date) + "\t\t " + str(l.number) + "\t\t " + str(l.saldo) + "\t\t 1"  + ",\n"
 			l.saldo = saldo		
 		self.saldo_history = history
 
 		for l2 in self.loan2:
 			saldo2 = saldo2 + int(l2.number)
-			history2 = history2 + str(l2.date) + "\t\t " + str(l2.number) + "\t\t " + str(l2.saldo) + "\t\t 2"  + "\n"
+			history2 = history2 + str(l2.date) + "\t\t " + str(l2.number) + "\t\t " + str(l2.saldo) + "\t\t 2"  + ",\n"
 			l2.saldo = saldo2
 
 		for l3 in self.dppu:
 			dppu_saldo = dppu_saldo - int(l3.number)
-			history2 = history2 + str(l3.date) + "\t\t " + str(l3.number) + "\t\t " + str(l3.saldo) + "\t\t -"  + "\n"
+			history2 = history2 + str(l3.date) + "\t\t " + str(l3.number) + "\t\t " + str(l3.saldo) + "\t\t -"  + ",\n"
 			l3.saldo = dppu_saldo
 
 		self.saldo = saldo + saldo2 + dppu_saldo

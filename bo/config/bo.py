@@ -28,11 +28,7 @@ def get_data():
 				{
 					"type": "doctype",
 					"name": "MR"
-				},
-				{
-					"type": "doctype",
-					"name": "Dx"
-				},
+				},				
 				{
 					"type": "doctype",
 					"name": "Outlet"

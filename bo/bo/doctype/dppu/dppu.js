@@ -5,6 +5,7 @@ frappe.ui.form.on('DPPU', {
     onload: function(frm){
 		set_filter(frm)
 		set_color_saldo(frm)
+		check_state_warning(frm)
     },
     refresh: function(frm){
 		set_norek_btn(frm)
@@ -53,7 +54,7 @@ function set_norek_btn(frm){
         frm.add_custom_button(__('Go Dx'), function(){
             frappe.set_route("Form", "Dx", frm.doc.dx_user)
 		});
-		if(frm.doc.cash_transfer == "Transfer"){
+		if(frm.doc.workflow_state == "FIN Approved" && (frappe.user.has_role("CSD")||frappe.user.has_role("Account Manager"))){
 			frm.add_custom_button(__('Book'), function(){				
 				frappe.call({
 					method: "bo.bo.doctype.dppu.dppu.book_transfer",
@@ -79,7 +80,7 @@ function set_norek_btn(frm){
 }
 
 function set_refund_btn(frm){
-    //if((frappe.user.has_role("ARCO") || frappe.user.has_role("Account Manager")) && frm.doc.amount_refund ){
+    if((frappe.user.has_role("ARCO") || frappe.user.has_role("Account Manager")) && frm.doc.amount_refund ){
         frm.add_custom_button(__('R fun'), function(){			
 			frappe.call({
 				method: 'bo.bo.doctype.dppu.dppu.refund',
@@ -99,7 +100,7 @@ function set_refund_btn(frm){
 				}
 			});
         });
-    // }
+    }
 }
 
 function set_filter(frm){
@@ -130,6 +131,36 @@ function set_filter(frm){
             };
         });
     }
+}
+
+function check_state_warning(frm){	
+	if(frappe.user.has_role("CSD") || frappe.user.has_role("Account Manager")|| frappe.user.has_role("Account User")){
+		frappe.db.get_list("DPPU", {filters:{"dm_user":frm.doc.dm_user,"workflow_state" : ['in',["DM Received","Refund"]]},fields: ["workflow_state","name","number"], limit: 20}).then((d)=>{
+			if(d.length > 0){
+				var str = ''
+				var sum = 0
+				d.forEach(e => {
+					str += '<tr><td>'+e.name+'</td><td>'+e.workflow_state+'</td><td>'+e.number+'</td></tr>'
+					sum += e.number
+				});
+				if (d.length > 3){
+					// <thead><tr><th>Name</th><th>State</th><th>Number</th></tr></thead>
+					str = '<table class="table" id="dppu-records" style="color:red"><tbody>'+str+ '<tr><td></td><td>Sum:</td><td>'+sum+'</td></tr></tbody></table>'
+					frappe.msgprint({
+						"title": "Not Eligible",
+						"message": str,
+						"indicator": "red"
+					})
+				}else{				
+					str = '<table class="table" id="dppu-records"><tbody>'+str+ '<tr><td></td><td>Sum:</td><td>'+sum+'</td></tr></tbody></table>'
+					frappe.msgprint(str, "Active DPPU")
+				}
+				// $(".form-page").prepend(str)
+			} else{
+				$("#dppu-records").remove()
+			}
+		})
+	}	
 }
 
 

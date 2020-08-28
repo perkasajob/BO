@@ -6,8 +6,6 @@
  "engine": "InnoDB",
  "field_order": [
   "outid",
-  "start_date",
-  "end_date",
   "sb_2",
   "month",
   "date_cb",
@@ -16,6 +14,7 @@
   "outlet_name",
   "distributor",
   "line",
+  "tattoo",
   "dx_sb",
   "d1",
   "d2",
@@ -79,16 +78,6 @@
    "fieldtype": "Table",
    "label": "Items",
    "options": "LPD Item"
-  },
-  {
-   "fieldname": "start_date",
-   "fieldtype": "Date",
-   "label": "Start Date"
-  },
-  {
-   "fieldname": "end_date",
-   "fieldtype": "Date",
-   "label": "End Date"
   },
   {
    "fieldname": "month",
@@ -204,10 +193,16 @@
    "fieldname": "territory",
    "fieldtype": "Read Only",
    "label": "Territory"
+  },
+  {
+   "default": "0",
+   "fieldname": "tattoo",
+   "fieldtype": "Check",
+   "label": "Tattoo"
   }
  ],
  "is_submittable": 1,
- "modified": "2020-08-12 18:29:30.281340",
+ "modified": "2020-08-26 09:23:38.613565",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "LPD",

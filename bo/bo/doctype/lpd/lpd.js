@@ -39,7 +39,7 @@ frappe.ui.form.on('LPD', {
 	line: function(frm){
 	    if(frm.doc.line == "")
 	        return
-		var items = frappe.db.get_list("Item", {filters:{"line":frm.doc.line},fields: ["item_code","item_name","standard_rate"], limit: 20})
+		var items = frappe.db.get_list("Item", {filters:{"line":frm.doc.line},fields: ["item_code","item_name","standard_rate","hjm_sm","hjm_gsm","hjm_fin"], limit: 20})
 		
 		items.then((list)=>{
 		    list.forEach((o,i)=>{
@@ -47,8 +47,11 @@ frappe.ui.form.on('LPD', {
 		        ch.item_code = o.item_code
 		        ch.item_name = o.item_name
 		        ch.hna = o.standard_rate
-		        ch.line = frm.doc.line
-		    })
+				ch.line = frm.doc.line
+				ch.hjm_sm = o.hjm_sm
+				ch.hjm_gsm = o.hjm_gsm
+				ch.hjm_fin = o.hjm_fin
+			})
 		    frm.refresh_field('items');
 		})
 	}
@@ -60,7 +63,37 @@ frappe.ui.form.on('LPD Item', {
 	},
 	item_code: function(frm) {
 		
-	}
+	},
+	d1: function(frm){
+
+	},
+	d2: function(frm){
+
+	},
+	d3: function(frm){
+
+	},
+	d4: function(frm){
+
+	},
+	d5: function(frm){
+
+	},
+	d6: function(frm){
+
+	},
+	d7: function(frm){
+
+	},
+	d8: function(frm){
+
+	},
+	d9: function(frm){
+
+	},
+	d10: function(frm){
+
+	},
 })
 function set_filter_by_territory(frm, territory){
     for(var i=1;i<=10;i++){
