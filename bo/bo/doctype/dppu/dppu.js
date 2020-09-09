@@ -1,4 +1,4 @@
-// Copyright (c) 2020, Quantum Labs and contributors
+// Copyright (c) 2020, Sistem Koperasi and contributors
 // For license information, please see license.txt
 
 frappe.ui.form.on('DPPU', {
@@ -6,7 +6,11 @@ frappe.ui.form.on('DPPU', {
 		set_filter(frm)
 		set_color_saldo(frm)
 		check_state_warning(frm)
-    },
+		// check_booked(frm)
+	},
+	onload_post_render: function(frm){
+		check_booked(frm)
+	},
     refresh: function(frm){
 		set_norek_btn(frm)
 		set_color_saldo(frm)
@@ -16,7 +20,20 @@ frappe.ui.form.on('DPPU', {
         if (frm.doc.date < frappe.datetime.get_today()) {
             frappe.msgprint(__("You can not select past date in From Date"));
             frappe.validated = false;
-        }
+		}				
+	},
+	before_workflow_action: function(frm){ //before_workflow_action		
+		// if((frm.doc.workflow_state == "FIN Approved") 
+		// 	&& (frappe.user.has_role("CSD")||frappe.user.has_role("Accounts Manager"))){
+		// 	var status = bookDx(frm, 1)
+		// 	if(!status){
+		// 		frappe.validated = false;
+		// 		frappe.throw("Not yet Booked")
+		// 		frm.disable_save();
+		// 	}else{
+		// 		frm.enable_save();
+		// 	};
+		// }
 	},
 	amount_refund: function(frm){
 		if(frm.doc.amount_refund > frm.doc.number){
@@ -26,6 +43,13 @@ frappe.ui.form.on('DPPU', {
 		set_refund_btn(frm)
 	}
 })
+
+function check_booked(frm){
+	if((frm.doc.workflow_state == "FIN Approved") 
+		&& (frappe.user.has_role("CSD")||frappe.user.has_role("Accounts Manager"))){
+		bookDx(frm, 1)		
+	}
+}
 
 function set_norek_btn(frm){
     if(frappe.user.has_role("CSD")){
@@ -54,33 +78,45 @@ function set_norek_btn(frm){
         frm.add_custom_button(__('Go Dx'), function(){
             frappe.set_route("Form", "Dx", frm.doc.dx_user)
 		});
-		if(frm.doc.workflow_state == "FIN Approved" && (frappe.user.has_role("CSD")||frappe.user.has_role("Account Manager"))){
+		if((frm.doc.workflow_state == "FIN Approved" || frm.doc.workflow_state == "CSD Transferred" || frm.doc.workflow_state == "DM Received" ) 
+			&& (frappe.user.has_role("CSD")||frappe.user.has_role("Accounts Manager"))){
 			frm.add_custom_button(__('Book'), function(){				
-				frappe.call({
-					method: "bo.bo.doctype.dppu.dppu.book_transfer",
-					args: {						
-						"docname": frm.doc.name
-					},
-					callback: function(r) {
-						if (r.message) {							
-							if(r.message.status == "Success"){
-								frappe.set_route("Form", "Dx", frm.doc.dx_user)
-							} else if(r.message.status == "Booked"){
-								frappe.msgprint("already book on : " + r.message.date, "Booked")
-							}
-							// if (r.message[party_field]) frm.set_value(party_field, r.message[party_field]);
-							// if (r.message.project) frm.set_value("project", r.message.project);
-							// if (r.message.grand_total) frm.set_value("amount", r.message.grand_total);
-						}
-					}
-				});
+				bookDx(frm, 0)		
 			});
 		}
     }
 }
 
+function bookDx(frm, check){
+	frm.enable_save();
+	$("[data-label='Approve']").parent().show()
+	$("[data-label='Send']").parent().show()
+	frappe.call({
+		method: "bo.bo.doctype.dppu.dppu.book_transfer",
+		args: {						
+			"docname": frm.doc.name,
+			"check": check
+		},
+		callback: function(r) {
+			if (r.message) {							
+				if(r.message.status == "Success"){
+					frappe.set_route("Form", "Dx", frm.doc.dx_user)
+				} else if(r.message.status == "Booked"){
+					frappe.msgprint("already book on : " + r.message.date, "Booked")
+				} else if(r.message.status == "No Book Record"){
+					frappe.msgprint("No Book Record !, click Book", "Not Booked")
+					frappe.validated = false;					 
+					frm.disable_save();
+					$("[data-label='Approve']").parent().hide()
+					$("[data-label='Send']").parent().hide()
+				}
+			}
+		}
+	});
+}
+
 function set_refund_btn(frm){
-    if((frappe.user.has_role("ARCO") || frappe.user.has_role("Account Manager")) && frm.doc.amount_refund ){
+    if((frappe.user.has_role("ARCO") || frappe.user.has_role("Accounts Manager")) && frm.doc.amount_refund ){
         frm.add_custom_button(__('R fun'), function(){			
 			frappe.call({
 				method: 'bo.bo.doctype.dppu.dppu.refund',
@@ -134,7 +170,7 @@ function set_filter(frm){
 }
 
 function check_state_warning(frm){	
-	if(frappe.user.has_role("CSD") || frappe.user.has_role("Account Manager")|| frappe.user.has_role("Account User")){
+	if(frappe.user.has_role("CSD") || frappe.user.has_role("Accounts Manager")|| frappe.user.has_role("Accounts User")){
 		frappe.db.get_list("DPPU", {filters:{"dm_user":frm.doc.dm_user,"workflow_state" : ['in',["DM Received","Refund"]]},fields: ["workflow_state","name","number"], limit: 20}).then((d)=>{
 			if(d.length > 0){
 				var str = ''

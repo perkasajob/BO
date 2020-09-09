@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2020, Quantum Labs and contributors
+# Copyright (c) 2020, Sistem Koperasi and contributors
 # For license information, please see license.txt
 
 from __future__ import unicode_literals
@@ -12,26 +12,29 @@ from six import iteritems, string_types
 class Dx(Document):
 	def validate(self):
 		# frappe.msgprint("Dx validated")
-		saldo = saldo2 = dppu_saldo= 0
+		t_roles = ["Account Manager", "System Manager"]
+		user_match_role = [x for x in t_roles if x in frappe.get_roles(frappe.session.user)]
+		# How to find the new added Acc Row?
+		frappe.msgprint(user_match_role)
+		saldo = saldo2 = 0
 		history = history2 =""
+		acc1name = acc2name = ""
 		for l in self.loan:
 			saldo = saldo + int(l.number)
 			history = history + str(l.date) + "\t\t " + str(l.number) + "\t\t " + str(l.saldo) + "\t\t 1"  + ",\n"
-			l.saldo = saldo		
+			l.saldo = saldo
+			acc1name = acc1name + "ACC1 :"+ l.name + " -- " + str(l.number) + ",\n"
 		self.saldo_history = history
 
 		for l2 in self.loan2:
 			saldo2 = saldo2 + int(l2.number)
 			history2 = history2 + str(l2.date) + "\t\t " + str(l2.number) + "\t\t " + str(l2.saldo) + "\t\t 2"  + ",\n"
 			l2.saldo = saldo2
+			acc2name = acc2name + "ACC2 :"+ l2.name +" -- " +str(l2.number) + ",\n"
 
-		for l3 in self.dppu:
-			dppu_saldo = dppu_saldo - int(l3.number)
-			history2 = history2 + str(l3.date) + "\t\t " + str(l3.number) + "\t\t " + str(l3.saldo) + "\t\t -"  + ",\n"
-			l3.saldo = dppu_saldo
-
-		self.saldo = saldo + saldo2 + dppu_saldo
+		self.saldo = saldo + saldo2
 		self.saldo_history2 = history2
+		frappe.msgprint(acc1name+",\n"+acc2name)
 		# frappe.msgprint(("{0} history validated").format(self.saldo_history))
 
 	def onload(self):

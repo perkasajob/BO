@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2020, Quantum Labs
+# Copyright (c) 2020, Sistem Koperasi
 
 import frappe
 from frappe.utils import today, flt

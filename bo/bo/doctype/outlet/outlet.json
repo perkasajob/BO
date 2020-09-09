@@ -7,7 +7,8 @@
  "field_order": [
   "outlet_id",
   "outlet_name",
-  "territory"
+  "territory",
+  "ppg_outid"
  ],
  "fields": [
   {
@@ -32,9 +33,14 @@
    "label": "Territory",
    "options": "Territory",
    "reqd": 1
+  },
+  {
+   "fieldname": "ppg_outid",
+   "fieldtype": "Data",
+   "label": "PPG Outlet ID"
   }
  ],
- "modified": "2020-08-06 14:55:33.633323",
+ "modified": "2020-09-07 14:34:33.311775",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "Outlet",

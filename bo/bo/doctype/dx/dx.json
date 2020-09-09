@@ -13,8 +13,7 @@
   "saldo_history",
   "loan",
   "saldo_history2",
-  "loan2",
-  "dppu"
+  "loan2"
  ],
  "fields": [
   {
@@ -44,13 +43,15 @@
    "default": "{}",
    "fieldname": "saldo_history",
    "fieldtype": "Long Text",
-   "label": "History"
+   "label": "History",
+   "permlevel": 1
   },
   {
    "fieldname": "loan",
    "fieldtype": "Table",
    "label": "Acc 1",
-   "options": "SP"
+   "options": "SP",
+   "permlevel": 1
   },
   {
    "fieldname": "cash_transfer",
@@ -62,27 +63,24 @@
    "fieldname": "loan2",
    "fieldtype": "Table",
    "label": "Acc 2",
-   "options": "SP"
+   "options": "SP",
+   "permlevel": 1
   },
   {
    "fieldname": "saldo_history2",
    "fieldtype": "Long Text",
-   "label": "History 2"
+   "label": "History 2",
+   "permlevel": 1
   },
   {
    "fieldname": "rek",
    "fieldtype": "Table",
    "label": "NRx",
-   "options": "DxRek"
-  },
-  {
-   "fieldname": "dppu",
-   "fieldtype": "Table",
-   "label": "DPPU",
-   "options": "SP DPPU"
+   "options": "DxRek",
+   "permlevel": 1
   }
  ],
- "modified": "2020-08-19 16:36:05.958165",
+ "modified": "2020-09-03 10:14:10.149926",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "Dx",

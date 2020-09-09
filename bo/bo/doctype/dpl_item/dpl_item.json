@@ -7,7 +7,10 @@
   "item_code",
   "item_name",
   "hna",
-  "dpl_disc"
+  "dpl_disc",
+  "inc_sb",
+  "ppg_item_code",
+  "ppg_item_name"
  ],
  "fields": [
   {
@@ -44,10 +47,25 @@
    "fieldtype": "Percent",
    "in_list_view": 1,
    "label": "DPL"
+  },
+  {
+   "fieldname": "inc_sb",
+   "fieldtype": "Section Break",
+   "label": "Item Name Conversion"
+  },
+  {
+   "fieldname": "ppg_item_code",
+   "fieldtype": "Data",
+   "label": "PPG Item Code"
+  },
+  {
+   "fieldname": "ppg_item_name",
+   "fieldtype": "Data",
+   "label": "PPG Item Name"
   }
  ],
  "istable": 1,
- "modified": "2020-08-11 11:48:18.303818",
+ "modified": "2020-09-07 14:32:19.177431",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "DPL Item",

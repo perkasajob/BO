@@ -4,7 +4,7 @@ from . import __version__ as app_version
 
 app_name = "bo"
 app_title = "BO"
-app_publisher = "Quantum Labs"
+app_publisher = "Sistem Koperasi"
 app_description = "-"
 app_icon = "octicon octicon-dashboard"
 app_color = "grey"

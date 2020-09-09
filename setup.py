@@ -11,7 +11,7 @@ setup(
 	name='bo',
 	version=version,
 	description='-',
-	author='Quantum Labs',
+	author='Sistem Koperasi',
 	author_email='perkasajob@gmail.com',
 	packages=find_packages(),
 	zip_safe=False,

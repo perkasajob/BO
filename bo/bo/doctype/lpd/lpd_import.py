@@ -1,4 +1,4 @@
-# Copyright (c) 2020 Quantum Labs
+# Copyright (c) 2020 Sistem Koperasi
 
 from __future__ import unicode_literals
 import os
