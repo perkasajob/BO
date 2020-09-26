@@ -41,13 +41,22 @@ frappe.ui.form.on('DPPU', {
 			frappe.msgprint(__("Cannot input the amount greater than Number !"), "Error");
 		}
 		set_refund_btn(frm)
+	},
+	number: function(frm){
+		var delta = frm.doc.saldo - frm.doc.number
+		if(delta < 0){
+			console.log("Exceeding saldo")
+		}
 	}
 })
 
 function check_booked(frm){
 	if((frm.doc.workflow_state == "FIN Approved") 
 		&& (frappe.user.has_role("CSD")||frappe.user.has_role("Accounts Manager"))){
-		bookDx(frm, 1)		
+		if(frm.doc.month)
+			bookAdvDx(frm, 1)
+		else	
+			bookDx(frm, 1)
 	}
 }
 
@@ -80,12 +89,18 @@ function set_norek_btn(frm){
 		});
 		if((frm.doc.workflow_state == "FIN Approved" || frm.doc.workflow_state == "CSD Transferred" || frm.doc.workflow_state == "DM Received" ) 
 			&& (frappe.user.has_role("CSD")||frappe.user.has_role("Accounts Manager"))){
-			frm.add_custom_button(__('Book'), function(){				
-				bookDx(frm, 0)		
-			});
+			if(frm.doc.month){
+				frm.add_custom_button(__('Adv Book'), function(){				
+					bookAdvDx(frm, 0)		
+				});
+			} else {
+				frm.add_custom_button(__('Book'), function(){				
+					bookDx(frm, 0)		
+				});
+			}			
 		}
     }
-}
+}	
 
 function bookDx(frm, check){
 	frm.enable_save();
@@ -106,6 +121,38 @@ function bookDx(frm, check){
 				} else if(r.message.status == "No Book Record"){
 					frappe.msgprint("No Book Record !, click Book", "Not Booked")
 					frappe.validated = false;					 
+					frm.disable_save();
+					$("[data-label='Approve']").parent().hide()
+					$("[data-label='Send']").parent().hide()
+				}
+			}
+		}
+	});
+}
+
+function bookAdvDx(frm, check){
+	frm.enable_save();
+	$("[data-label='Approve']").parent().show()
+	$("[data-label='Send']").parent().show()
+	frappe.call({
+		method: "bo.bo.doctype.dppu.dppu.adv_transfer",
+		args: {						
+			"docname": frm.doc.name,
+			"check": check
+		},
+		callback: function(r) {
+			if (r.message) {							
+				if(r.message.status == "Success"){
+					frappe.set_route("Form", "Dx", frm.doc.dx_user)
+				} else if(r.message.status == "Booked"){
+					frappe.msgprint("already book on : " + r.message.date, "Adv")
+				} else if(r.message.status == "Saldo is sufficient"){
+					frappe.msgprint("Sal is sufficcient, no need Adv", "Adv")
+				} else if(r.message.status == "Month is empty, No Adv DPPU"){
+					frappe.msgprint("Month is empty, No Adv DPPU", "Adv")		
+				} else if(r.message.status == "No Book Record"){
+					frappe.msgprint("No Adv Book Record !, click Adv Book", "Adv Not Booked")
+					frappe.validated = false;
 					frm.disable_save();
 					$("[data-label='Approve']").parent().hide()
 					$("[data-label='Send']").parent().hide()

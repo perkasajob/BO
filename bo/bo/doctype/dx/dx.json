@@ -12,8 +12,10 @@
   "rek",
   "saldo_history",
   "loan",
+  "adv",
   "saldo_history2",
-  "loan2"
+  "loan2",
+  "adv2"
  ],
  "fields": [
   {
@@ -78,9 +80,21 @@
    "label": "NRx",
    "options": "DxRek",
    "permlevel": 1
+  },
+  {
+   "fieldname": "adv",
+   "fieldtype": "Table",
+   "label": "Adv 1",
+   "options": "SP"
+  },
+  {
+   "fieldname": "adv2",
+   "fieldtype": "Table",
+   "label": "Adv 2",
+   "options": "SP"
   }
  ],
- "modified": "2020-09-03 10:14:10.149926",
+ "modified": "2020-09-22 12:08:52.616859",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "Dx",

@@ -10,9 +10,9 @@ import frappe
 
 class SP(Document):
 	def validate(self):
-		frappe.msgprint(("SP validated"))
+		pass
 		# frappe.msgprint(_("{0} {1} validated").format(self.saldo , self.name))
 
 	def on_submit(self):
-		frappe.msgprint(("SP submitted"))
+		pass
 		# frappe.msgprint(_("{0} {1} submitted").format(self.saldo , self.name))

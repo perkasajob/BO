@@ -2,7 +2,7 @@
  "allow_import": 1,
  "autoname": "field:blanko_nr",
  "color": "green",
- "creation": "2020-07-20 13:56:36.056017",
+ "creation": "2020-09-21 10:32:36.800386",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
@@ -17,12 +17,12 @@
   "cash_transfer",
   "number",
   "date",
-  "month",
-  "advance",
-  "amount_refund",
+  "duration",
+  "avg_sales",
+  "estimated_sales",
   "comment",
-  "amended_from",
-  "route"
+  "route",
+  "amended_from"
  ],
  "fields": [
   {
@@ -44,12 +44,51 @@
    "set_only_once": 1
   },
   {
+   "fetch_from": "dm_user.territory",
+   "fieldname": "territory",
+   "fieldtype": "Read Only",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Territory"
+  },
+  {
+   "fetch_from": "dm_user.sm_user",
+   "fieldname": "sm_user",
+   "fieldtype": "Read Only",
+   "label": "SM",
+   "options": "User"
+  },
+  {
    "fieldname": "mr_user",
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "MR",
    "options": "MR",
    "reqd": 1
+  },
+  {
+   "fieldname": "dx_user",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Dx",
+   "options": "Dx",
+   "permlevel": 1,
+   "reqd": 1
+  },
+  {
+   "fetch_from": "dx_user.saldo",
+   "fieldname": "saldo",
+   "fieldtype": "Read Only",
+   "label": "Sal",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "default": "Cash",
+   "fieldname": "cash_transfer",
+   "fieldtype": "Select",
+   "label": "C/T",
+   "options": "\nCash\nTransfer\nSPP"
   },
   {
    "fieldname": "number",
@@ -65,28 +104,24 @@
    "label": "Date"
   },
   {
-   "fieldname": "dx_user",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "Dx",
-   "options": "Dx",
-   "permlevel": 1,
-   "reqd": 1
+   "allow_on_submit": 1,
+   "fieldname": "duration",
+   "fieldtype": "Int",
+   "label": "Months",
+   "permlevel": 3
   },
   {
-   "fetch_from": "dm_user.territory",
-   "fieldname": "territory",
-   "fieldtype": "Read Only",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Territory"
+   "allow_on_submit": 1,
+   "fieldname": "comment",
+   "fieldtype": "Small Text",
+   "label": "Keterangan"
   },
   {
    "fieldname": "amended_from",
    "fieldtype": "Link",
    "label": "Amended From",
    "no_copy": 1,
-   "options": "DPPU",
+   "options": "ADV MOU",
    "print_hide": 1,
    "read_only": 1
   },
@@ -97,58 +132,30 @@
    "label": "Route"
   },
   {
-   "allow_on_submit": 1,
-   "default": "Cash",
-   "fieldname": "cash_transfer",
-   "fieldtype": "Select",
-   "label": "C/T",
-   "options": "\nCash\nTransfer\nSPP"
-  },
-  {
-   "fetch_from": "dx_user.saldo",
-   "fieldname": "saldo",
-   "fieldtype": "Read Only",
-   "label": "Sal",
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "ADV MOU",
+   "print_hide": 1,
    "read_only": 1
   },
   {
-   "fetch_from": "dm_user.sm_user",
-   "fieldname": "sm_user",
-   "fieldtype": "Read Only",
-   "label": "SM",
-   "options": "User"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "amount_refund",
-   "fieldtype": "Int",
-   "label": "AMnt Ref",
-   "permlevel": 3
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "comment",
-   "fieldtype": "Small Text",
-   "label": "Keterangan"
-  },
-  {
-   "depends_on": "eval:(doc.saldo-doc.number) < 0",
-   "fieldname": "month",
-   "fieldtype": "Select",
-   "label": "Months",
-   "options": "\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12"
-  },
-  {
-   "fieldname": "advance",
+   "fieldname": "estimated_sales",
    "fieldtype": "Data",
-   "label": "Adv"
+   "label": "Est. Sls"
+  },
+  {
+   "fieldname": "avg_sales",
+   "fieldtype": "Data",
+   "label": "Avg. Sls"
   }
  ],
  "is_submittable": 1,
- "modified": "2020-09-22 14:14:15.702584",
+ "modified": "2020-09-21 11:23:48.105469",
  "modified_by": "Administrator",
  "module": "BO",
- "name": "DPPU",
+ "name": "ADV MOU",
  "owner": "Administrator",
  "permissions": [
   {
@@ -164,8 +171,6 @@
    "write": 1
   },
   {
-   "create": 1,
-   "delete": 1,
    "email": 1,
    "export": 1,
    "if_owner": 1,
@@ -173,50 +178,36 @@
    "read": 1,
    "report": 1,
    "role": "DM",
-   "share": 1,
-   "write": 1
+   "share": 1
   },
   {
-   "create": 1,
-   "delete": 1,
    "email": 1,
    "export": 1,
    "print": 1,
    "read": 1,
    "report": 1,
    "role": "SM",
-   "share": 1,
-   "write": 1
+   "share": 1
   },
   {
-   "cancel": 1,
-   "create": 1,
-   "delete": 1,
    "email": 1,
    "export": 1,
    "print": 1,
    "read": 1,
    "report": 1,
    "role": "GSM",
-   "share": 1,
-   "submit": 1,
-   "write": 1
+   "share": 1
   },
   {
-   "create": 1,
-   "delete": 1,
    "email": 1,
    "export": 1,
    "print": 1,
    "read": 1,
    "report": 1,
    "role": "MSD",
-   "share": 1,
-   "write": 1
+   "share": 1
   },
   {
-   "create": 1,
-   "delete": 1,
    "email": 1,
    "export": 1,
    "print": 1,
@@ -241,17 +232,13 @@
    "write": 1
   },
   {
-   "create": 1,
-   "delete": 1,
    "email": 1,
    "export": 1,
    "print": 1,
    "read": 1,
    "report": 1,
    "role": "ARCO",
-   "share": 1,
-   "submit": 1,
-   "write": 1
+   "share": 1
   }
  ],
  "route": "/dppu",
