@@ -5,7 +5,7 @@
  "engine": "InnoDB",
  "field_order": [
   "start",
-  "dest",
+  "destination",
   "qty",
   "data"
  ],
@@ -19,13 +19,6 @@
    "options": "Pasuruan"
   },
   {
-   "fieldname": "dest",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "label": "Destination",
-   "options": "\nJakarta Barat\nJakarta Pusat\nJakarta Selatan\nJakarta Timur\nJakarta Utara\nTangerang\nBogor\nBandung\nCirebon\nSemarang\nYogyakarta\nSurakarta\nSurabaya\nMalang\nKupang\nDenpasar\nBandar Lampung\nPalembang\nJambi\nPekanbaru\nPadang\nMedan\nPontianak\nBanjarmasin\nSamarinda\nMakassar\nPalu\nManado"
-  },
-  {
    "fieldname": "data",
    "fieldtype": "Text",
    "in_list_view": 1,
@@ -36,10 +29,17 @@
    "fieldname": "qty",
    "fieldtype": "Data",
    "label": "Qty"
+  },
+  {
+   "fieldname": "destination",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Destination",
+   "options": "\nJakarta Barat\nJakarta Pusat\nJakarta Selatan\nJakarta Timur\nJakarta Utara\nTangerang\nBogor\nBandung\nCirebon\nSemarang\nYogyakarta\nSurakarta\nSurabaya\nMalang\nKupang\nDenpasar\nBandar Lampung\nPalembang\nJambi\nPekanbaru\nPadang\nMedan\nPontianak\nBanjarmasin\nSamarinda\nMakassar\nPalu\nManado"
   }
  ],
  "issingle": 1,
- "modified": "2020-09-25 15:55:16.818778",
+ "modified": "2020-09-28 13:27:21.072483",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "Freight Item",
