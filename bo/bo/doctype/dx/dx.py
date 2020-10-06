@@ -11,39 +11,32 @@ from six import iteritems, string_types
 
 class Dx(Document):
 	def validate(self):
-		# frappe.msgprint("Dx validated")
 		t_roles = ["Account Manager", "System Manager"]
 		user_match_role = [x for x in t_roles if x in frappe.get_roles(frappe.session.user)]
 		# How to find the new added Acc Row?
-		# frappe.msgprint(user_match_role)
-		saldo = saldo2 = adv_saldo = adv2_saldo =  0
-		history = history2 =""
-		acc1name = acc2name = ""
-		for l in self.loan:
-			saldo = saldo + int(l.number)
-			history = history + str(l.date) + "\t\t " + str(l.number) + "\t\t " + str(l.saldo) + "\t\t 1"  + ",\n"
-			l.saldo = saldo
-			acc1name = acc1name + "ACC1 :"+ l.name + " -- " + str(l.number) + ",\n"
-		self.saldo_history = history
+		nrLine = 2
+		saldo = [0] * nrLine
+		adv_saldo = [0] * nrLine
+		mkt_saldo = [0] * nrLine
+		history = [""] * nrLine		
+		self.saldo = 0
+		for i in range(nrLine):
+			ls = '' if i == 0 else str(i+1)
+			for l in getattr(self, 'loan'+ ls):
+				saldo[i] += int(l.number)
+				history[i] += "{}\t\t{}\t\t{}\t\t{}\n".format(l.date, l.number, l.saldo, l.note)
+				l.saldo = saldo[i]
+			setattr(self, 'saldo_history'+ ls, history[i])			
+			
+			for a in getattr(self, 'adv'+ ls):
+				adv_saldo[i] += int(a.number)
+				a.saldo = adv_saldo[i]
 
-		for adv in self.adv:
-			adv_saldo += int(adv.number)			
-			adv.saldo = adv_saldo		
+			for m in getattr(self, 'mkt'+ ls):
+				mkt_saldo[i] += int(m.number)
+				m.saldo = mkt_saldo[i]
+		self.saldo = sum(saldo)
 
-		for l2 in self.loan2:
-			saldo2 = saldo2 + int(l2.number)
-			history2 = history2 + str(l2.date) + "\t\t " + str(l2.number) + "\t\t " + str(l2.saldo) + "\t\t 2"  + ",\n"
-			l2.saldo = saldo2
-			acc2name = acc2name + "ACC2 :"+ l2.name +" -- " +str(l2.number) + ",\n"
-
-		for adv2 in self.adv2:
-			adv2_saldo += int(adv2.number)			
-			adv2.saldo = adv2_saldo	
-
-		self.saldo = saldo + saldo2 + adv_saldo + adv2_saldo
-		self.saldo_history2 = history2
-		# frappe.msgprint(acc1name+",\n"+acc2name)
-		# frappe.msgprint(("{0} history validated").format(self.saldo_history))
 
 	def onload(self):
 		pass	

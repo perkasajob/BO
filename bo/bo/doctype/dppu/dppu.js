@@ -5,11 +5,18 @@ frappe.ui.form.on('DPPU', {
     onload: function(frm){
 		set_filter(frm)
 		set_color_saldo(frm)
-		check_state_warning(frm)
+		check_state_warning(frm)		
 		// check_booked(frm)
 	},
 	onload_post_render: function(frm){
 		check_booked(frm)
+		if(frm.doc.workflow_state == "CSD Received"){
+			frappe.show_alert('Hi, Do not forget to check the date !', 5);
+			disable_workflow("Approve")
+			$("[data-fieldname='date']").click((function(e){
+				frm.states.show_actions()
+			}).bind(frm))
+		}
 	},
     refresh: function(frm){
 		set_norek_btn(frm)
@@ -17,7 +24,8 @@ frappe.ui.form.on('DPPU', {
 		set_refund_btn(frm)
     },
     validate: function(frm){
-        if (frm.doc.date < frappe.datetime.get_today()) {
+		var allowed_states = ["Overdue Refund","DM Recap","Refund"]
+        if (frm.doc.date < frappe.datetime.get_today() && !allowed_states.includes(frm.doc.workflow_state)) {
             frappe.msgprint(__("You can not select past date in From Date"));
             frappe.validated = false;
 		}				
@@ -104,8 +112,7 @@ function set_norek_btn(frm){
 
 function bookDx(frm, check){
 	frm.enable_save();
-	$("[data-label='Approve']").parent().show()
-	$("[data-label='Send']").parent().show()
+	frm.states.show_actions()
 	frappe.call({
 		method: "bo.bo.doctype.dppu.dppu.book_transfer",
 		args: {						
@@ -122,8 +129,8 @@ function bookDx(frm, check){
 					frappe.msgprint("No Book Record !, click Book", "Not Booked")
 					frappe.validated = false;					 
 					frm.disable_save();
-					$("[data-label='Approve']").parent().hide()
-					$("[data-label='Send']").parent().hide()
+					disable_workflow("Approve")
+					disable_workflow("Send")
 				}
 			}
 		}
@@ -132,8 +139,7 @@ function bookDx(frm, check){
 
 function bookAdvDx(frm, check){
 	frm.enable_save();
-	$("[data-label='Approve']").parent().show()
-	$("[data-label='Send']").parent().show()
+	frm.states.show_actions()
 	frappe.call({
 		method: "bo.bo.doctype.dppu.dppu.adv_transfer",
 		args: {						
@@ -154,8 +160,8 @@ function bookAdvDx(frm, check){
 					frappe.msgprint("No Adv Book Record !, click Adv Book", "Adv Not Booked")
 					frappe.validated = false;
 					frm.disable_save();
-					$("[data-label='Approve']").parent().hide()
-					$("[data-label='Send']").parent().hide()
+					disable_workflow("Approve")
+					disable_workflow("Send")
 				}
 			}
 		}
@@ -227,7 +233,6 @@ function check_state_warning(frm){
 					sum += e.number
 				});
 				if (d.length > 3){
-					// <thead><tr><th>Name</th><th>State</th><th>Number</th></tr></thead>
 					str = '<table class="table" id="dppu-records" style="color:red"><tbody>'+str+ '<tr><td></td><td>Sum:</td><td>'+sum+'</td></tr></tbody></table>'
 					frappe.msgprint({
 						"title": "Not Eligible",
@@ -249,7 +254,11 @@ function check_state_warning(frm){
 
 function set_color_saldo(frm){
 	if(frm.doc.saldo < 0){
-		// $("[data-fieldname='saldo']>div>.control-input-wrapper").css({color:"red"})
 		$("[data-fieldname='saldo']>div>.control-input-wrapper>.control-value").css({"background-color":"red","color":"white"})
 	}
+}
+
+function disable_workflow(name){
+	$(`[data-label='${name}']`).css("color", "lightgrey")
+	$(`[data-label='${name}']`).parent().off()
 }

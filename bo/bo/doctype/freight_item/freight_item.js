@@ -3,6 +3,28 @@
 
 var priceList = []
 frappe.ui.form.on('Freight Item', {
+	onload(frm){
+		if(!frappe.user.has_role("System Manager")){
+			frm.set_df_property("data","read_only",1);
+		}
+		var pl = eval(tsvJSON(frm.doc.data))		
+		var str = '<br/><table id="table-data" style="border: 2px #808080 solid;padding:10px;"><tr><th>Start</th><th>Destination</th><th>D1</th><th>D2</th><th>D3</th></tr><tr>'				
+		let keys = Object.keys(pl[0])
+		
+		pl.forEach(p=>{
+			str += '<tr>'
+			keys.forEach(k =>{
+				str += `<td>${p[k]}</td>`
+			})
+			str += '</tr>'
+		})
+		str += '</table><br/>'
+		$('[data-fieldname="qty"]').append(str)
+		$('#table-data tr th').css({"padding":"10px 15px","background-color": "#FEEEC8"})
+		$('#table-data tr td').css("padding","10px 15px")
+		$("#table-data tr:even").css("background-color", "#FFFFFF");
+  		$("#table-data tr:odd").css("background-color", "#EFF1F1");
+	},
 	refresh(frm) {
 		set_btns(frm)
 	}

@@ -20,6 +20,21 @@ def get_data():
 					"type": "doctype",
 					"name": "LPD",
 					"onboard": 1,
+				},				
+				{
+					"type": "doctype",
+					"name": "Mkt",
+					"onboard": 1,
+				},
+				{
+					"type": "doctype",
+					"name": "Adv Install",
+					"onboard": 1,
+				},
+				{
+					"type": "doctype",
+					"name": "Freight Item",
+					"onboard": 1,
 				},
 				{
 					"type": "doctype",

@@ -1,0 +1,104 @@
+{
+ "autoname": "field:blanko_nr",
+ "creation": "2020-09-30 16:01:13.481970",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "blanko_nr",
+  "dppu",
+  "number",
+  "ref_nr",
+  "note",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "blanko_nr",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Blanko Nr",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "number",
+   "fieldtype": "Int",
+   "label": "Number",
+   "reqd": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Adv Install",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "note",
+   "fieldtype": "Data",
+   "label": "Note"
+  },
+  {
+   "fieldname": "ref_nr",
+   "fieldtype": "Data",
+   "label": "RefNr"
+  },
+  {
+   "fieldname": "dppu",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "DPPU",
+   "options": "DPPU",
+   "reqd": 1
+  }
+ ],
+ "is_submittable": 1,
+ "modified": "2020-09-30 16:44:24.429945",
+ "modified_by": "Administrator",
+ "module": "BO",
+ "name": "Adv Install",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "CSD",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

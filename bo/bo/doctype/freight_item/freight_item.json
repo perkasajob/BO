@@ -19,9 +19,9 @@
    "options": "Pasuruan"
   },
   {
+   "depends_on": "eval:frappe.user.has_role(\"System Manager\");",
    "fieldname": "data",
    "fieldtype": "Text",
-   "in_list_view": 1,
    "label": "Data",
    "reqd": 1
   },
@@ -39,7 +39,7 @@
   }
  ],
  "issingle": 1,
- "modified": "2020-09-28 13:27:21.072483",
+ "modified": "2020-10-02 19:34:34.884886",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "Freight Item",
@@ -52,6 +52,46 @@
    "print": 1,
    "read": 1,
    "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "DM",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "SM",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "GSM",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Accounts Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "CSD",
    "share": 1,
    "write": 1
   }

@@ -1,0 +1,143 @@
+{
+ "autoname": "format:{dppu}-{###}",
+ "creation": "2020-10-01 12:34:57.802857",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "date",
+  "dx",
+  "territory",
+  "sm",
+  "dm",
+  "mr",
+  "number",
+  "dppu",
+  "ref_nr",
+  "note",
+  "lpd",
+  "line",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "columns": 1,
+   "default": "Today",
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Date",
+   "reqd": 1
+  },
+  {
+   "columns": 1,
+   "default": "0",
+   "fieldname": "number",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Number",
+   "reqd": 1
+  },
+  {
+   "fieldname": "ref_nr",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "RefNr"
+  },
+  {
+   "fieldname": "note",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Note"
+  },
+  {
+   "fieldname": "lpd",
+   "fieldtype": "Link",
+   "label": "LPD",
+   "options": "LPD"
+  },
+  {
+   "fieldname": "dppu",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "DPPU",
+   "options": "DPPU",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "line",
+   "fieldtype": "Read Only",
+   "label": "Line"
+  },
+  {
+   "fieldname": "territory",
+   "fieldtype": "Read Only",
+   "label": "Territory",
+   "options": "Territory"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Mkt",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "dx",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Dx",
+   "options": "Dx",
+   "reqd": 1
+  },
+  {
+   "fieldname": "sm",
+   "fieldtype": "Read Only",
+   "label": "SM",
+   "options": "User"
+  },
+  {
+   "fieldname": "dm",
+   "fieldtype": "Read Only",
+   "label": "DM",
+   "options": "DM"
+  },
+  {
+   "fieldname": "mr",
+   "fieldtype": "Read Only",
+   "label": "MR",
+   "options": "MR"
+  }
+ ],
+ "is_submittable": 1,
+ "modified": "2020-10-06 10:34:21.144170",
+ "modified_by": "Administrator",
+ "module": "BO",
+ "name": "Mkt",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

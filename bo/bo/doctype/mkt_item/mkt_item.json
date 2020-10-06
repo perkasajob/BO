@@ -1,5 +1,5 @@
 {
- "creation": "2020-07-23 00:34:40.099440",
+ "creation": "2020-09-30 11:04:21.450679",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
@@ -12,7 +12,8 @@
   "note",
   "lpd",
   "dppu",
-  "line"
+  "line",
+  "territory"
  ],
  "fields": [
   {
@@ -25,14 +26,6 @@
    "reqd": 1
   },
   {
-   "default": "0",
-   "fieldname": "saldo",
-   "fieldtype": "Int",
-   "in_list_view": 1,
-   "label": "Sal",
-   "read_only": 1
-  },
-  {
    "columns": 1,
    "default": "0",
    "fieldname": "number",
@@ -42,21 +35,18 @@
    "reqd": 1
   },
   {
+   "default": "0",
+   "fieldname": "saldo",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Sal",
+   "read_only": 1
+  },
+  {
    "fieldname": "ref_nr",
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "RefNr"
-  },
-  {
-   "fieldname": "note",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Note"
-  },
-  {
-   "fieldname": "line",
-   "fieldtype": "Data",
-   "label": "Line"
   },
   {
    "columns": 1,
@@ -65,7 +55,13 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Type",
-   "options": "C\nT\nLPD\nDPPU\nDxAcc\nRC\nRT\nAC\nAT\n*"
+   "options": "C\nT\nLPD\nDPPU\nDxAcc\nAC\nAT\n*"
+  },
+  {
+   "fieldname": "note",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Note"
   },
   {
    "fieldname": "lpd",
@@ -78,13 +74,24 @@
    "fieldtype": "Link",
    "label": "DPPU",
    "options": "DPPU"
+  },
+  {
+   "fieldname": "line",
+   "fieldtype": "Data",
+   "label": "Line"
+  },
+  {
+   "fieldname": "territory",
+   "fieldtype": "Link",
+   "label": "Territory",
+   "options": "Territory"
   }
  ],
  "istable": 1,
- "modified": "2020-10-06 09:47:17.407698",
+ "modified": "2020-09-30 11:06:03.542892",
  "modified_by": "Administrator",
  "module": "BO",
- "name": "SP",
+ "name": "Mkt Item",
  "owner": "Administrator",
  "permissions": [],
  "quick_entry": 1,
