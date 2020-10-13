@@ -70,7 +70,7 @@ function check_booked(frm){
 
 function set_norek_btn(frm){
     if(frappe.user.has_role("CSD")){
-        frm.add_custom_button(__('Get Dx Rex'), function(){-
+        frm.add_custom_button(__('Get Dx Rex'), function(){
 			frappe.db.get_doc("Dx", frm.doc.dx_user).then(DxDoc=>{
 				if(!DxDoc){
 					frappe.msgprint("Not found", "Error")
