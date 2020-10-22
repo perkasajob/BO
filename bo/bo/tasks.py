@@ -23,7 +23,7 @@ def expire_dx_adv(today=nowdate()):
 		adv_idx = str(i) if i > 0 else ''
 		# advs = frappe.get_list('Adv Item', filters=[['parentfield','=','adv'+ adv_idx],['date','<=',today], ['type','in',['AC','AT']]], fields=['*'])
 		advs = frappe.get_list('Adv Item', filters=[['parentfield','=','adv'+ adv_idx], ['date','<=',today]], fields=['*'])
-
+		
 		for adv in advs:
 			suffix = adv.line if int(adv.line) > 1 else '' 
 			# idx = frappe.db.count('SP', {'parent': adv.parent, 'parentfield': 'loan' + suffix })
@@ -31,8 +31,9 @@ def expire_dx_adv(today=nowdate()):
 			dx = frappe.get_doc(adv.parenttype, adv.parent)
 			dx.append('mkt'+suffix ,{'date':adv.date,'number': adv.number, 'dppu': adv.dppu, 'type':adv.type, 'line': adv.line, 'note': adv.note, 'territory': adv.territory})
 			dx.validate()
-			dx.save()
-			mkt = frappe.get_doc({'doctype': 'Mkt','date':adv.date,'number': adv.number, 'dppu': adv.dppu, 'line': adv.line, 'note': adv.note, 'territory': adv.territory, 'dx': dx.name}).insert(ignore_permissions=True)
+			dx.save()			
+			dppu = frappe.get_doc('DPPU', adv.dppu)
+			mkt = frappe.get_doc({'doctype': 'Mkt','date':adv.date,'number': adv.number, 'dppu': adv.dppu, 'line': adv.line, 'note': adv.note, 'territory': adv.territory, 'dx': dx.name, 'dm': dppu.dm_user, 'sm': dppu.sm_user, 'mr': dppu.mr_user}).insert(ignore_permissions=True)
 			mkt.submit()
 			Event_doc, message = make_to_do(adv.parent, adv.owner)
 			#frappe.delete_doc("SP", adv.name)

@@ -26,7 +26,7 @@ class DxAcc(Document):
 	def parseXLS(self):		
 		file_url = self.get_full_path() # file attachment only the first one attached
 		fname = os.path.basename(file_url)
-		fxlsx = re.search("^{}.*\.xlsx".format("Dx"), fname)
+		fxlsx = re.search("^{}.*\.xlsx".format("Dx"), fname) 
 
 		if(fxlsx): # match
 			with open( file_url , "rb") as upfile:
@@ -36,7 +36,7 @@ class DxAcc(Document):
 				rows = read_xlsx_file_from_attached_file(fcontent=fcontent)
 			columns = rows[0]
 			rows.pop(0)
-			data = rows
+			data = rows			
 			frappe.enqueue(import_loan, name=self.name, rows=rows, now=True if len(rows) < 200 else False)
 			# for row in rows:
 			# 	dx = frappe.get_doc("Dx", row[0])				
@@ -102,10 +102,10 @@ class DxAcc(Document):
 
 def import_loan(name, rows):
 	for row in rows:
-		dx = frappe.get_doc("Dx", row[0])				
-		if(row[1]): # Acc 1 number
-			dx.append('loan', {'number': row[1], 'ref_nr': row[2], 'note': row[3] + ' -' + name, 'line': 1, 'type': 'DxAcc', 'date': today()})
-		if(row[4]): # Acc 2 number
-			dx.append('loan2', {'number': row[4], 'ref_nr': row[5], 'note': row[6] + ' -' + name, 'line': 2, 'type': 'DxAcc', 'date': today()})
+		dx = frappe.get_doc("Dx", row[0])
+		line = int(row[4]) # line
+		if(row[1]): # Acc number
+			dx_book = 'loan' if line == 1 else 'loan2'
+			dx.append(dx_book, {'number': row[1], 'ref_nr': row[2], 'note': row[3] + ' -' + name, 'line': line, 'type': 'DxAcc', 'date': today()})
 		dx.save()
 	frappe.publish_realtime('Dx acc', 'Success ...')
