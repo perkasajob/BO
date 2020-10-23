@@ -28,6 +28,11 @@ def get_data():
 				},
 				{
 					"type": "doctype",
+					"name": "SLS",
+					"onboard": 1,
+				},
+				{
+					"type": "doctype",
 					"name": "Adv Install",
 					"onboard": 1,
 				},
