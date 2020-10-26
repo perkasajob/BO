@@ -10,7 +10,9 @@
   "dpl_disc",
   "inc_sb",
   "ppg_item_code",
-  "ppg_item_name"
+  "ppg_item_name",
+  "apl_item_code",
+  "apl_item_name"
  ],
  "fields": [
   {
@@ -67,10 +69,20 @@
    "fieldname": "ppg_item_name",
    "fieldtype": "Data",
    "label": "PPG Item Name"
+  },
+  {
+   "fieldname": "apl_item_code",
+   "fieldtype": "Data",
+   "label": "APL Item Code"
+  },
+  {
+   "fieldname": "apl_item_name",
+   "fieldtype": "Data",
+   "label": "APL Item Name"
   }
  ],
  "istable": 1,
- "modified": "2020-10-24 13:08:35.234115",
+ "modified": "2020-10-26 15:50:04.952684",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "DPL Item",

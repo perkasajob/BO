@@ -39,7 +39,7 @@ frappe.ui.form.on('LPD', {
 	line: function(frm){
 	    if(frm.doc.line == "")
 	        return
-		var items = frappe.db.get_list("Item", {filters:{"line":frm.doc.line},fields: ["item_code","item_name","standard_rate","hjm_sm","hjm_gsm","hjm_fin"], limit: 20})
+		var items = frappe.db.get_list("Item", {filters:{"line":frm.doc.line},fields: ["item_code","item_name","standard_rate","hjm_sm","hjm_gsm","hjm_fin"], limit: 200})
 		
 		items.then((list)=>{
 		    list.forEach((o,i)=>{
