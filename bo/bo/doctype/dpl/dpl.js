@@ -1,15 +1,15 @@
 // Copyright (c) 2020, Sistem Koperasi and contributors
 // For license information, please see license.txt
-
+var comid = 0;
 var username = frappe.session.user.replace(/@.*/g,"").toUpperCase()
 
 frappe.ui.form.on('DPL', {
     onload: function(frm){
         if(frappe.user.has_role("DM")){
-            frappe.db.get_value("DM","DM-"+username,"territory",function(res){
+            frappe.db.get_value("DM","DM-"+username,["territory","comid"],function(res){
               if(res != undefined){
-                frm.set_value("territory", res.territory)
-                set_filter_by_territory(frm, res.territory)
+				comid = res.comid
+				set_filter_by_comid(frm, res.comid)
               } 
             })
         }
@@ -28,18 +28,22 @@ frappe.ui.form.on('DPL', {
 	},
 	outid: function(frm){
 	    frm.set_value("outlet_name", frm.doc.outid.replace(/^.*-/g,""))
-	    frm.set_value("is_outlet_id", frm.doc.outid.match(/^[0-9_]+/g)[0])
-	   // frappe.db.get_value("Outlet", cur_frm.doc.outid,"territory").then((res)=>{
-	   //     if(res.message.territory){
-	   //         frm.set_value("territory", res.message.territory)
-	   //     }
-	   // })
-	    
+		frm.set_value("is_outlet_id", frm.doc.outid.match(/^[0-9_]+/g)[0])
+	},
+	distributor: function(frm){
+		let dist_outlet = frm.doc.distributor.toLowerCase() + "_outlet_name"
+		let dist_outid = frm.doc.distributor.toLowerCase() + "_outid"
+		frappe.db.get_value("Outlet",frm.doc.outid,[dist_outlet, dist_outid],function(res){
+			if(res != undefined){
+				frm.set_value("dist_outlet_name", res[dist_outlet])
+				frm.set_value("dist_outid", res[dist_outid])
+			}	   
+	   })
 	},
 	line: function(frm){
 	    if(frm.doc.line == "")
 	        return
-		var items = frappe.db.get_list("Item", {filters:{"line":frm.doc.line},fields: ["item_code","item_name","standard_rate","ppg_item_code","ppg_item_name"], limit: 20})
+		var items = frappe.db.get_list("Item", {filters:{"line":frm.doc.line},fields: ["item_code","item_name","standard_rate","ppg_item_code","ppg_item_name"], limit: 200})
 		
 		items.then((list)=>{
 		    list.forEach((o,i)=>{
@@ -92,6 +96,16 @@ function set_filter_by_territory(frm, territory){
 		return {
 			filters: {
 				'territory': territory
+			}
+		};
+	});
+}
+
+function set_filter_by_comid(frm, comid){    
+    frm.set_query("outid", function(doc) {
+		return {
+			filters: {
+				'comid': comid
 			}
 		};
 	});

@@ -6,9 +6,14 @@
  "engine": "InnoDB",
  "field_order": [
   "outlet_id",
+  "comid",
   "outlet_name",
-  "territory",
-  "ppg_outid"
+  "ppg_outid",
+  "ppg_outlet_name",
+  "apl_outid",
+  "apl_outlet_name",
+  "outlet_addr",
+  "note"
  ],
  "fields": [
   {
@@ -23,24 +28,46 @@
    "fieldname": "outlet_name",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Nama Outlet",
-   "reqd": 1
-  },
-  {
-   "fieldname": "territory",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "Territory",
-   "options": "Territory",
+   "label": "Outlet Name",
    "reqd": 1
   },
   {
    "fieldname": "ppg_outid",
    "fieldtype": "Data",
    "label": "PPG Outlet ID"
+  },
+  {
+   "fieldname": "apl_outid",
+   "fieldtype": "Data",
+   "label": "APL Outlet ID"
+  },
+  {
+   "fieldname": "outlet_addr",
+   "fieldtype": "Data",
+   "label": "Outlet Address"
+  },
+  {
+   "fieldname": "note",
+   "fieldtype": "Data",
+   "label": "Note"
+  },
+  {
+   "fieldname": "comid",
+   "fieldtype": "Int",
+   "label": "Comid"
+  },
+  {
+   "fieldname": "ppg_outlet_name",
+   "fieldtype": "Data",
+   "label": "PPG Outlet"
+  },
+  {
+   "fieldname": "apl_outlet_name",
+   "fieldtype": "Data",
+   "label": "APL Outlet"
   }
  ],
- "modified": "2020-09-07 14:34:33.311775",
+ "modified": "2020-10-24 12:13:48.506246",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "Outlet",

@@ -14,7 +14,7 @@ frappe.ui.form.on('SLS', {
 	onload: function(frm){
 		if (!frappe.user.has_role("System Manager")) {
 			$('.form-attachments').hide()
-		}
+		}		
 		
 	},
 	onload_post_render: function(frm) {
@@ -54,6 +54,8 @@ frappe.ui.form.on('SLS', {
 				treeView: true
 			});
 
+		} else if($('.data-table').length > 0){
+			location.reload();
 		}
 	},
 	refresh: function(frm) {
