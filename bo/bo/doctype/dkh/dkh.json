@@ -1,0 +1,135 @@
+{
+ "autoname": "format:{month_code}-{outlet}-{###}",
+ "creation": "2020-10-30 16:00:22.085288",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "territory",
+  "sales_exec",
+  "outlet_details_section",
+  "outlet",
+  "start_on",
+  "ends_on",
+  "description",
+  "sales_order",
+  "actual_sales",
+  "month_code"
+ ],
+ "fields": [
+  {
+   "fetch_from": "sales_exec.territory",
+   "fieldname": "territory",
+   "fieldtype": "Read Only",
+   "label": "Territory",
+   "options": "Territory"
+  },
+  {
+   "fieldname": "outlet_details_section",
+   "fieldtype": "Section Break",
+   "label": "Outlet Details"
+  },
+  {
+   "fieldname": "outlet",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Outlet",
+   "options": "Outlet",
+   "reqd": 1
+  },
+  {
+   "fieldname": "start_on",
+   "fieldtype": "Datetime",
+   "label": "Start On",
+   "reqd": 1
+  },
+  {
+   "fieldname": "ends_on",
+   "fieldtype": "Datetime",
+   "label": "Ends On"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Text Editor",
+   "label": "Description"
+  },
+  {
+   "fieldname": "sales_order",
+   "fieldtype": "Currency",
+   "label": "Sales Order"
+  },
+  {
+   "fieldname": "actual_sales",
+   "fieldtype": "Currency",
+   "label": "Actual Sales"
+  },
+  {
+   "fieldname": "month_code",
+   "fieldtype": "Read Only",
+   "label": "Month Code"
+  },
+  {
+   "fieldname": "sales_exec",
+   "fieldtype": "Link",
+   "label": "Sales Executive",
+   "options": "Sales Executive",
+   "reqd": 1
+  }
+ ],
+ "modified": "2020-10-31 11:25:09.371616",
+ "modified_by": "Administrator",
+ "module": "BO",
+ "name": "DKH",
+ "name_case": "UPPER CASE",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Guest",
+   "share": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales User",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

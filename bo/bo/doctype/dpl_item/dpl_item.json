@@ -8,11 +8,22 @@
   "item_name",
   "hna",
   "dpl_disc",
+  "hna1",
+  "dpl_disc1",
+  "nsv1_ppn",
+  "off_faktur",
+  "nsv2_ppn",
+  "total_disc",
   "inc_sb",
   "ppg_item_code",
   "ppg_item_name",
   "apl_item_code",
-  "apl_item_name"
+  "apl_item_name",
+  "tsj_item_code",
+  "tsj_item_name",
+  "hjm_sm",
+  "hjm_gsm",
+  "hjm_fin"
  ],
  "fields": [
   {
@@ -26,7 +37,7 @@
    "options": "Item",
    "print_width": "50px",
    "reqd": 1,
-   "width": "30px"
+   "width": "20px"
   },
   {
    "fetch_from": "item_code.item_name",
@@ -42,7 +53,7 @@
    "columns": 2,
    "fetch_from": "item_code.standard_rate",
    "fieldname": "hna",
-   "fieldtype": "Float",
+   "fieldtype": "Currency",
    "in_list_view": 1,
    "label": "HNA",
    "precision": "0"
@@ -53,7 +64,8 @@
    "fieldname": "dpl_disc",
    "fieldtype": "Percent",
    "in_list_view": 1,
-   "label": "DPL"
+   "label": "DPL",
+   "precision": "2"
   },
   {
    "fieldname": "inc_sb",
@@ -79,10 +91,79 @@
    "fieldname": "apl_item_name",
    "fieldtype": "Data",
    "label": "APL Item Name"
+  },
+  {
+   "fieldname": "tsj_item_code",
+   "fieldtype": "Data",
+   "label": "TSJ Item Code"
+  },
+  {
+   "fieldname": "tsj_item_name",
+   "fieldtype": "Data",
+   "label": "TSJ Item Name"
+  },
+  {
+   "fieldname": "hna1",
+   "fieldtype": "Currency",
+   "label": "HNA 1",
+   "precision": "0"
+  },
+  {
+   "fieldname": "nsv1_ppn",
+   "fieldtype": "Read Only",
+   "label": "NSV1+PPN",
+   "precision": "1"
+  },
+  {
+   "default": "0",
+   "fieldname": "off_faktur",
+   "fieldtype": "Percent",
+   "label": "Off",
+   "precision": "2"
+  },
+  {
+   "fieldname": "nsv2_ppn",
+   "fieldtype": "Read Only",
+   "label": "NSV2+PPN",
+   "precision": "1"
+  },
+  {
+   "fieldname": "total_disc",
+   "fieldtype": "Read Only",
+   "label": "Total Disc",
+   "precision": "2"
+  },
+  {
+   "default": "0",
+   "fieldname": "dpl_disc1",
+   "fieldtype": "Percent",
+   "label": "DPL 1",
+   "precision": "2"
+  },
+  {
+   "fetch_from": "item_code.hjm_sm",
+   "fieldname": "hjm_sm",
+   "fieldtype": "Percent",
+   "label": "HJM SM",
+   "print_hide": 1
+  },
+  {
+   "fetch_from": "item_code.hjm_gsm",
+   "fieldname": "hjm_gsm",
+   "fieldtype": "Percent",
+   "label": "HJM GSM",
+   "print_hide": 1
+  },
+  {
+   "fetch_from": "item_code.hjm_fin",
+   "fieldname": "hjm_fin",
+   "fieldtype": "Percent",
+   "label": "HJM FIN",
+   "print_hide": 1
   }
  ],
  "istable": 1,
- "modified": "2020-10-26 15:50:04.952684",
+ "modified": "2020-11-03 17:13:58.471271",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "DPL Item",
