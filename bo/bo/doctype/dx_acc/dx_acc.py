@@ -19,14 +19,14 @@ import re
 from frappe.utils import today
 
 
-class DxAcc(Document):	
+class DxAcc(Document):
 	def validate(self):
 		pass
 
-	def parseXLS(self):		
+	def parseXLS(self):
 		file_url = self.get_full_path() # file attachment only the first one attached
 		fname = os.path.basename(file_url)
-		fxlsx = re.search("^{}.*\.xlsx".format("Dx"), fname) 
+		fxlsx = re.search("^{}.*\.xlsx".format("Dx"), fname)
 
 		if(fxlsx): # match
 			with open( file_url , "rb") as upfile:
@@ -36,10 +36,14 @@ class DxAcc(Document):
 				rows = read_xlsx_file_from_attached_file(fcontent=fcontent)
 			columns = rows[0]
 			rows.pop(0)
-			data = rows			
+			data = rows
+			res = check_dx_list(self.name, rows)
+			if res:
+				columns[0] = '<span style="color:red">Error ID Not Found</span>'
+				return {"columns": columns, "data": res, "filename": self.filename}
 			frappe.enqueue(import_loan, name=self.name, rows=rows, now=True if len(rows) < 200 else False)
 			# for row in rows:
-			# 	dx = frappe.get_doc("Dx", row[0])				
+			# 	dx = frappe.get_doc("Dx", row[0])
 			# 	if(row[1]): # Acc 1 number
 			# 		dx.append('loan', {'number': row[1], 'ref_nr': row[2], 'note': row[3] + ' -' + self.name, 'line': 1, 'type': 'DxAcc', 'date': today()})
 			# 	if(row[4]): # Acc 2 number
@@ -50,7 +54,7 @@ class DxAcc(Document):
 			return {"columns": columns, "data": data, "filename": self.filename}
 		else:
 			return {"status" : "Error", "filename": fname}
-	
+
 
 	def get_full_path(self):
 			"""Returns file path from given file name"""
@@ -58,7 +62,7 @@ class DxAcc(Document):
 			if att:
 				file_path = att[0].file_url or att[0].file_name
 			else:
-				frappe.throw("No Attachment found")	
+				frappe.throw("No Attachment found")
 
 			if "/" not in file_path:
 				file_path = "/files/" + file_path
@@ -99,6 +103,12 @@ class DxAcc(Document):
 
 		return False
 
+def check_dx_list(name, rows):
+	res = []
+	for row in rows:
+		if not frappe.db.exists("Dx", row[0]):
+			res.append(row)
+	return res
 
 def import_loan(name, rows):
 	for row in rows:
@@ -107,5 +117,6 @@ def import_loan(name, rows):
 		if(row[1]): # Acc number
 			dx_book = 'loan' if line == 1 else 'loan2'
 			dx.append(dx_book, {'number': row[1], 'ref_nr': row[2], 'note': row[3] + ' -' + name, 'line': line, 'type': 'DxAcc', 'date': today()})
+		dx.validate()
 		dx.save()
 	frappe.publish_realtime('Dx acc', 'Success ...')

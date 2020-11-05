@@ -105,15 +105,33 @@ function calc_item(frm, dt, dn){
 
 	let dpl_disc1 = frm.doc[o.parentfield][o.idx-1].dpl_disc1/100
 	let disc_off = frm.doc[o.parentfield][o.idx-1].off_faktur/100
-	let total_disc = 1 - (1-dpl_disc) * (1-dpl_disc1) * (1-disc_off)
+	var total_disc = 1 - (1-dpl_disc) * (1-dpl_disc1) * (1-disc_off)
 
 	var nf = Intl.NumberFormat('id-ID');
 	frm.doc[o.parentfield][o.idx-1].total_disc = (total_disc * 100).toFixed(2)
 	frm.doc[o.parentfield][o.idx-1].nsv1_ppn = nf.format((frm.doc[o.parentfield][o.idx-1].hna * (1-dpl_disc) * (1-dpl_disc1) * ppn).toFixed(0))
 	frm.doc[o.parentfield][o.idx-1].nsv2_ppn = nf.format((frm.doc[o.parentfield][o.idx-1].hna * (1-dpl_disc) * (1-dpl_disc1) * (1-disc_off) * ppn).toFixed(0))
 
+	frappe.db.get_value('Item', frm.doc[o.parentfield][o.idx-1].item_code, ['hjm_sm','hjm_gsm','hjm_fin'], function(res){
+		if(res != undefined){
+			let total_disc = frm.doc[o.parentfield][o.idx-1].total_disc
+			if([res.hjm_sm, res.hjm_gsm, res.hjm_fin].every(o=> o > 0)){
+				set_total_disc_color(total_disc, res)
+			}
+		}
+	})
 	frm.refresh_field(o.parentfield)
 }
+
+function set_total_disc_color(total_disc, res){
+	if(frappe.user.has_role("SM") && total_disc > res.hjm_sm
+		|| frappe.user.has_role("GSM") && total_disc > res.hjm_gsm
+		|| frappe.user.has_role("Accounts Manager") && total_disc > res.hjm_fin){
+			$("[data-fieldname='total_disc']>div>.control-input-wrapper>.control-value").css({"background-color":"red","color":"white"})
+	} else
+		$("[data-fieldname='total_disc']>div>.control-input-wrapper>.control-value").css({"background-color":"#f5f7fa","color":"black"})
+}
+
 function set_start_end_date(frm){
 	if(frm.doc.month){
 		frm.set_value("month_code", frm.doc.year.substring(2) + frm.doc.month)
@@ -186,7 +204,7 @@ function set_parseXls_btn(frm){
         open_url_post(method, {
 			doctype: frm.doctype,
 			file_type: "Excel",
-			export_fields: {"DPL":["name","outid","month","year","distributor","line","is_outlet_id"],"items":["name","item_code","item_name","hna","dpl_disc"]},
+			export_fields: {"DPL":["name","outid","month","year","distributor","line","is_outlet_id"],"items":["name","item_code","item_name","hna","dpl_disc","hna1","dpl_disc1","nsv1_ppn","off_faktur","nsv2_ppn","total_disc"]},
 			export_filters: filters,
 			export_protect_area: [2, 11, 12],
 		});
@@ -201,7 +219,7 @@ function set_parseXls_btn(frm){
         open_url_post(method, {
 			doctype: frm.doctype,
 			file_type: "Excel",
-			export_fields: {"DPL":["name","outid", "start_date", "end_date", "distributor","line","is_outlet_id"].concat(dpl_extras),"items":["name","item_code","item_name","hna","dpl_disc"].concat(item_extras)},
+			export_fields: {"DPL":["name","outid", "start_date", "end_date", "distributor","line","is_outlet_id"].concat(dpl_extras),"items":["name","item_code","item_name","hna","dpl_disc","hna1","dpl_disc1","nsv1_ppn"].concat(item_extras)},
 			export_filters: filters,
 			export_protect_area: [2, 12, 13],
 		});
