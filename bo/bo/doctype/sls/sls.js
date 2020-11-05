@@ -14,7 +14,7 @@ frappe.ui.form.on('SLS', {
 	onload: function(frm){
 		if (!frappe.user.has_role("System Manager")) {
 			$('.form-attachments').hide()
-			[...document.getElementsByClassName("timeline-items")].map(o=>o.hidden=true)
+			$(".timeline-items").remove()
 		}
 
 	},
