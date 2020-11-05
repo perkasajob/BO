@@ -16,7 +16,6 @@ frappe.ui.form.on('SLS', {
 			$('.form-attachments').hide()
 			$(".timeline-items").remove()
 		}
-
 	},
 	onload_post_render: function(frm) {
 		if(frm.doc.columns && frm.doc.data){
@@ -49,11 +48,15 @@ frappe.ui.form.on('SLS', {
 				})
 			}
 
-			let datatable = new DataTable('.form-page', {
+			var datatable = new DataTable('.form-page', {
 				columns: columns,
 				data: data,
 				treeView: true
 			});
+
+			cur_frm.datatable = datatable
+			cur_frm.dt_data = data
+			cur_frm.dt_columns = columns
 
 		} else if($('.data-table').length > 0){
 			location.reload();
@@ -64,6 +67,26 @@ frappe.ui.form.on('SLS', {
 
 	}
 });
+
+function download_csv(fileName, urlData) {
+	var aLink = document.createElement('a');
+    aLink.download = fileName;
+    aLink.href = urlData;
+
+    var event = new MouseEvent('click');
+    aLink.dispatchEvent(event);
+}
+
+
+function arrayToCSV(objArray) {
+	const array = typeof objArray !== 'object' ? JSON.parse(objArray) : objArray;
+	let str = `${Object.keys(array[0]).map(value => `"${value}"`).join(",")}` + '\r\n';
+
+	return array.reduce((str, next) => {
+		str += `${Object.values(next).map(value => `"${value}"`).join(",")}` + '\r\n';
+		return str;
+	   }, str);
+}
 
 
 function formatFileName(value, row, column, cell) {
@@ -79,7 +102,11 @@ function formatNumber(value, row, column, cell) {
 
 var loginName = frappe.user.full_name()
 function set_parseXls_btn(frm){
-    frm.add_custom_button(__('Get XLS'), function(){
+	frm.add_custom_button(__('Get CSV'), function(){
+		download_csv(frm.doc.name+'.csv', 'data:text/csv;charset=UTF-8,' + encodeURIComponent(Papa.unparse(cur_frm.dt_data)))
+	})
+
+    frm.add_custom_button(__('Read XLS'), function(){
 		// $.when(
 		// 	$.getScript( "/assets/bo/js/bo-datatable.js" ),
 		// 	$.Deferred(function( deferred ){
@@ -152,6 +179,8 @@ function set_parseXls_btn(frm){
 							columns: JSON.stringify(columns)
 						})
 					}
+					gdata = data
+					gcolumns = columns
 
 					let datatable = new DataTable('.form-page', {
 						columns: columns,
