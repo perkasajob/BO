@@ -77,7 +77,7 @@ function formatNumber(value, row, column, cell) {
 	return format_number(value, null, 0);
 }
 
-var loginName = 'hiburman lase' //frappe.user.full_name()
+var loginName = frappe.user.full_name()
 function set_parseXls_btn(frm){
     frm.add_custom_button(__('Get XLS'), function(){
 		// $.when(
