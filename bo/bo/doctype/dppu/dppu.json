@@ -135,7 +135,7 @@
    "depends_on": "eval:(doc.saldo-doc.number) < 0",
    "fieldname": "month",
    "fieldtype": "Select",
-   "label": "Months",
+   "label": "Jml Cccln",
    "options": "\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12"
   },
   {
@@ -145,7 +145,7 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2020-10-06 11:22:02.030733",
+ "modified": "2020-11-10 18:40:13.457108",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "DPPU",
