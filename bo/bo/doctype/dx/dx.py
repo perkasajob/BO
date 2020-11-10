@@ -14,11 +14,11 @@ class Dx(Document):
 		t_roles = ["Account Manager", "System Manager"]
 		user_match_role = [x for x in t_roles if x in frappe.get_roles(frappe.session.user)]
 		# How to find the new added Acc Row?
-		nrLine = 2
+		nrLine = 3
 		saldo = [0] * nrLine
 		adv_saldo = [0] * nrLine
 		mkt_saldo = [0] * nrLine
-		history = [""] * nrLine		
+		history = [""] * nrLine
 		self.saldo = 0
 		for i in range(nrLine):
 			ls = '' if i == 0 else str(i+1)
@@ -26,8 +26,8 @@ class Dx(Document):
 				saldo[i] += int(l.number)
 				history[i] += "{}\t\t{}\t\t{}\t\t{}\n".format(l.date, l.number, l.saldo, l.note)
 				l.saldo = saldo[i]
-			setattr(self, 'saldo_history'+ ls, history[i])			
-			
+			setattr(self, 'saldo_history'+ ls, history[i])
+
 			for a in getattr(self, 'adv'+ ls):
 				adv_saldo[i] += int(a.number)
 				a.saldo = adv_saldo[i]
@@ -39,7 +39,7 @@ class Dx(Document):
 
 
 	def onload(self):
-		pass	
+		pass
 
 	def on_submit(self):
 		frappe.msgprint("Dx submitted")
@@ -49,10 +49,10 @@ class Dx(Document):
 		pass
 
 	def toJSON(self):
-		return json.dumps(self, default=lambda o: o.__dict__, 
+		return json.dumps(self, default=lambda o: o.__dict__,
 			sort_keys=True, indent=4)
 
-					
+
 
 	def update_payment_status(self, cancel=False):
 		status = 'Payment Ordered'

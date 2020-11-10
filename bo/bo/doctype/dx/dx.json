@@ -17,7 +17,11 @@
   "saldo_history2",
   "loan2",
   "adv2",
-  "mkt2"
+  "mkt2",
+  "saldo_history3",
+  "loan3",
+  "adv3",
+  "mkt3"
  ],
  "fields": [
   {
@@ -106,9 +110,32 @@
    "fieldtype": "Table",
    "label": "Mkt 2",
    "options": "Mkt Item"
+  },
+  {
+   "fieldname": "saldo_history3",
+   "fieldtype": "Long Text",
+   "label": "History 3"
+  },
+  {
+   "fieldname": "loan3",
+   "fieldtype": "Table",
+   "label": "Acc 3",
+   "options": "SP"
+  },
+  {
+   "fieldname": "adv3",
+   "fieldtype": "Table",
+   "label": "Adv 3",
+   "options": "Adv Item"
+  },
+  {
+   "fieldname": "mkt3",
+   "fieldtype": "Table",
+   "label": "Mkt 3",
+   "options": "Mkt Item"
   }
  ],
- "modified": "2020-09-30 12:22:24.627111",
+ "modified": "2020-11-10 16:05:49.589650",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "Dx",

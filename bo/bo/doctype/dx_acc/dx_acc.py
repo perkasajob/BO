@@ -115,7 +115,8 @@ def import_loan(name, rows):
 		dx = frappe.get_doc("Dx", row[0])
 		line = int(row[4]) # line
 		if(row[1]): # Acc number
-			dx_book = 'loan' if line == 1 else 'loan2'
+			ls = str(line) if line > 1 else '' # Line Suffix
+			dx_book = 'loan' + ls
 			dx.append(dx_book, {'number': row[1], 'ref_nr': row[2], 'note': row[3] + ' -' + name, 'line': line, 'type': 'DxAcc', 'date': today()})
 		dx.validate()
 		dx.save()
