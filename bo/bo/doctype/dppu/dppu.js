@@ -59,12 +59,11 @@ frappe.ui.form.on('DPPU', {
 	jml_ccln: function(frm){
 		if(frm.doc.jml_ccln){
 			var delta = frm.doc.saldo - frm.doc.number
-
 			if(delta >= -5000 ){ // BO18
 				frm.set_value("jml_ccln", "")
-			} else if(delta < -5000 && delta >= -10000 && int(frm.doc.jml_ccln) > 3) {
+			} else if(delta < -5000 && delta >= -10000 && parseInt(frm.doc.jml_ccln) > 3) {
 				frm.set_value("jml_ccln", "3")
-			} else if(delta < -10000 && delta >= -25000 && int(frm.doc.jml_ccln) > 6) {
+			} else if(delta < -10000 && delta >= -25000 && parseInt(frm.doc.jml_ccln) > 6) {
 				frm.set_value("jml_ccln", "6")
 			}
 		}
