@@ -5,9 +5,9 @@ from frappe.utils.background_jobs import enqueue
 from frappe.utils import nowdate
 from frappe.desk.doctype.notification_log.notification_log import enqueue_create_notification,\
 	get_title, get_title_html
-from datetime import datetime	
+from datetime import datetime
 
-def daily():	
+def daily():
 	set_DPPU_overdue(14) # 14 days
 	expire_dx_adv()
 
@@ -19,23 +19,23 @@ def set_DPPU_overdue(period):
 
 @frappe.whitelist()
 def expire_dx_adv(today=nowdate()):
-	for i in range(2):		
+	for i in range(2):
 		adv_idx = str(i) if i > 0 else ''
 		# advs = frappe.get_list('Adv Item', filters=[['parentfield','=','adv'+ adv_idx],['date','<=',today], ['type','in',['AC','AT']]], fields=['*'])
 		advs = frappe.get_list('Adv Item', filters=[['parentfield','=','adv'+ adv_idx], ['date','<=',today]], fields=['*'])
-		
+
 		for adv in advs:
-			suffix = adv.line if int(adv.line) > 1 else '' 
+			suffix = adv.line if int(adv.line) > 1 else ''
 			# idx = frappe.db.count('SP', {'parent': adv.parent, 'parentfield': 'loan' + suffix })
 			# adv = frappe.get_doc("Adv Item", adv.name)
 			dx = frappe.get_doc(adv.parenttype, adv.parent)
 			dx.append('mkt'+suffix ,{'date':adv.date,'number': adv.number, 'dppu': adv.dppu, 'type':adv.type, 'line': adv.line, 'note': adv.note, 'territory': adv.territory})
 			dx.validate()
-			dx.save()			
+			dx.save()
 			dppu = frappe.get_doc('DPPU', adv.dppu)
 			mkt = frappe.get_doc({'doctype': 'Mkt','date':adv.date,'number': adv.number, 'dppu': adv.dppu, 'line': adv.line, 'note': adv.note, 'territory': adv.territory, 'dx': dx.name, 'dm': dppu.dm_user, 'sm': dppu.sm_user, 'mr': dppu.mr_user}).insert(ignore_permissions=True)
 			mkt.submit()
-			Event_doc, message = make_to_do(adv.parent, adv.owner)
+			Event_doc, message = make_to_do(adv.parent, adv.owner, adv.dppu)
 			#frappe.delete_doc("SP", adv.name)
 			notification_doc = {
 				'type': 'To Do',
@@ -47,13 +47,13 @@ def expire_dx_adv(today=nowdate()):
 			}
 
 			enqueue_create_notification(adv.owner, notification_doc)
-			
+
 	frappe.db.commit()
-	
+
 	return {"status" : "success"}
 
-def make_to_do(dx, user):
-	message = "Dx {} Installment is overdue".format(dx)
+def make_to_do(dx, user, dppu):
+	message = "Dx {} Installment from DPPU {} is overdue".format(dx, dppu)
 	Event_doc=frappe.new_doc("ToDo")
 	Event_doc.status="Open"
 	Event_doc.priority="Medium"
@@ -63,5 +63,3 @@ def make_to_do(dx, user):
 	Event_doc.flags.ignore_mandatory = True
 	Event_doc.save()
 	return Event_doc, message
-
-		

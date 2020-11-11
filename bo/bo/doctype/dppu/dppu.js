@@ -56,14 +56,16 @@ frappe.ui.form.on('DPPU', {
 			console.log("Exceeding saldo")
 		}
 	},
-	month: function(frm){
-		if(frm.doc.month){
-			if(frm.doc.number <= 5000 ){
-				frm.set_value("month", "")
-			} else if(frm.doc.number > 5000 && frm.doc.number <= 10000 && int(frm.doc.month) > 3) {
-				frm.set_value("month", "3")
-			} else if(frm.doc.number > 10000 && frm.doc.number <= 25000 && int(frm.doc.month) > 6) {
-				frm.set_value("month", "6")
+	jml_ccln: function(frm){
+		if(frm.doc.jml_ccln){
+			var delta = frm.doc.saldo - frm.doc.number
+
+			if(delta >= -5000 ){ // BO18
+				frm.set_value("jml_ccln", "")
+			} else if(delta < -5000 && delta >= -10000 && int(frm.doc.jml_ccln) > 3) {
+				frm.set_value("jml_ccln", "3")
+			} else if(delta < -10000 && delta >= -25000 && int(frm.doc.jml_ccln) > 6) {
+				frm.set_value("jml_ccln", "6")
 			}
 		}
 	}
@@ -72,7 +74,7 @@ frappe.ui.form.on('DPPU', {
 function check_booked(frm){
 	if((frm.doc.workflow_state == "FIN Approved")
 		&& (frappe.user.has_role("CSD")||frappe.user.has_role("Accounts Manager"))){
-		if(frm.doc.month)
+		if(frm.doc.jml_ccln)
 			bookAdvDx(frm, 1)
 		else
 			bookDx(frm, 1)
@@ -108,7 +110,7 @@ function set_norek_btn(frm){
 		});
 		if((frm.doc.workflow_state == "FIN Approved" || frm.doc.workflow_state == "CSD Transferred" || frm.doc.workflow_state == "DM Received" )
 			&& (frappe.user.has_role("CSD")||frappe.user.has_role("Accounts Manager"))){
-			if(frm.doc.month){
+			if(frm.doc.jml_ccln){
 				frm.add_custom_button(__('Adv Book'), function(){
 					bookAdvDx(frm, 0)
 				});
@@ -165,8 +167,8 @@ function bookAdvDx(frm, check){
 					frappe.msgprint("already book on : " + r.message.date, "Adv")
 				} else if(r.message.status == "Saldo is sufficient"){
 					frappe.msgprint("Sal is sufficcient, no need Adv", "Adv")
-				} else if(r.message.status == "Month is empty, No Adv DPPU"){
-					frappe.msgprint("Month is empty, No Adv DPPU", "Adv")
+				} else if(r.message.status == "Jml Ccln is empty, No Adv DPPU"){
+					frappe.msgprint("Jml Ccln is empty, No Adv DPPU", "Adv")
 				} else if(r.message.status == "No Book Record"){
 					frappe.msgprint("No Adv Book Record !, click Adv Book", "Adv Not Booked")
 					frappe.validated = false;
