@@ -5,7 +5,7 @@ frappe.ui.form.on('DPPU', {
     onload: function(frm){
 		set_filter(frm)
 		set_color_saldo(frm)
-		check_state_warning(frm)		
+		check_state_warning(frm)
 		// check_booked(frm)
 	},
 	onload_post_render: function(frm){
@@ -28,10 +28,10 @@ frappe.ui.form.on('DPPU', {
         if (frm.doc.date < frappe.datetime.get_today() && !allowed_states.includes(frm.doc.workflow_state)) {
             frappe.msgprint(__("You can not select past date in From Date"));
             frappe.validated = false;
-		}				
+		}
 	},
-	before_workflow_action: function(frm){ //before_workflow_action		
-		// if((frm.doc.workflow_state == "FIN Approved") 
+	before_workflow_action: function(frm){ //before_workflow_action
+		// if((frm.doc.workflow_state == "FIN Approved")
 		// 	&& (frappe.user.has_role("CSD")||frappe.user.has_role("Accounts Manager"))){
 		// 	var status = bookDx(frm, 1)
 		// 	if(!status){
@@ -55,15 +55,26 @@ frappe.ui.form.on('DPPU', {
 		if(delta < 0){
 			console.log("Exceeding saldo")
 		}
+	},
+	month: function(frm){
+		if(frm.doc.month){
+			if(frm.doc.number <= 5000 ){
+				frm.set_value("month", "")
+			} else if(frm.doc.number > 5000 && frm.doc.number <= 10000 && int(frm.doc.month) > 3) {
+				frm.set_value("month", "3")
+			} else if(frm.doc.number > 10000 && frm.doc.number <= 25000 && int(frm.doc.month) > 6) {
+				frm.set_value("month", "6")
+			}
+		}
 	}
 })
 
 function check_booked(frm){
-	if((frm.doc.workflow_state == "FIN Approved") 
+	if((frm.doc.workflow_state == "FIN Approved")
 		&& (frappe.user.has_role("CSD")||frappe.user.has_role("Accounts Manager"))){
 		if(frm.doc.month)
 			bookAdvDx(frm, 1)
-		else	
+		else
 			bookDx(frm, 1)
 	}
 }
@@ -95,39 +106,39 @@ function set_norek_btn(frm){
         frm.add_custom_button(__('Go Dx'), function(){
             frappe.set_route("Form", "Dx", frm.doc.dx_user)
 		});
-		if((frm.doc.workflow_state == "FIN Approved" || frm.doc.workflow_state == "CSD Transferred" || frm.doc.workflow_state == "DM Received" ) 
+		if((frm.doc.workflow_state == "FIN Approved" || frm.doc.workflow_state == "CSD Transferred" || frm.doc.workflow_state == "DM Received" )
 			&& (frappe.user.has_role("CSD")||frappe.user.has_role("Accounts Manager"))){
 			if(frm.doc.month){
-				frm.add_custom_button(__('Adv Book'), function(){				
-					bookAdvDx(frm, 0)		
+				frm.add_custom_button(__('Adv Book'), function(){
+					bookAdvDx(frm, 0)
 				});
 			} else {
-				frm.add_custom_button(__('Book'), function(){				
-					bookDx(frm, 0)		
+				frm.add_custom_button(__('Book'), function(){
+					bookDx(frm, 0)
 				});
-			}			
+			}
 		}
     }
-}	
+}
 
 function bookDx(frm, check){
 	frm.enable_save();
 	frm.states.show_actions()
 	frappe.call({
 		method: "bo.bo.doctype.dppu.dppu.book_transfer",
-		args: {						
+		args: {
 			"docname": frm.doc.name,
 			"check": check
 		},
 		callback: function(r) {
-			if (r.message) {							
+			if (r.message) {
 				if(r.message.status == "Success"){
 					frappe.set_route("Form", "Dx", frm.doc.dx_user)
 				} else if(r.message.status == "Booked"){
 					frappe.msgprint("already book on : " + r.message.date, "Booked")
 				} else if(r.message.status == "No Book Record"){
 					frappe.msgprint("No Book Record !, click Book", "Not Booked")
-					frappe.validated = false;					 
+					frappe.validated = false;
 					frm.disable_save();
 					disable_workflow("Approve")
 					disable_workflow("Send")
@@ -142,12 +153,12 @@ function bookAdvDx(frm, check){
 	frm.states.show_actions()
 	frappe.call({
 		method: "bo.bo.doctype.dppu.dppu.adv_transfer",
-		args: {						
+		args: {
 			"docname": frm.doc.name,
 			"check": check
 		},
 		callback: function(r) {
-			if (r.message) {							
+			if (r.message) {
 				if(r.message.status == "Success"){
 					frappe.set_route("Form", "Dx", frm.doc.dx_user)
 				} else if(r.message.status == "Booked"){
@@ -155,7 +166,7 @@ function bookAdvDx(frm, check){
 				} else if(r.message.status == "Saldo is sufficient"){
 					frappe.msgprint("Sal is sufficcient, no need Adv", "Adv")
 				} else if(r.message.status == "Month is empty, No Adv DPPU"){
-					frappe.msgprint("Month is empty, No Adv DPPU", "Adv")		
+					frappe.msgprint("Month is empty, No Adv DPPU", "Adv")
 				} else if(r.message.status == "No Book Record"){
 					frappe.msgprint("No Adv Book Record !, click Adv Book", "Adv Not Booked")
 					frappe.validated = false;
@@ -170,7 +181,7 @@ function bookAdvDx(frm, check){
 
 function set_refund_btn(frm){
     if((frappe.user.has_role("ARCO") || frappe.user.has_role("Accounts Manager")) && frm.doc.amount_refund ){
-        frm.add_custom_button(__('R fun'), function(){			
+        frm.add_custom_button(__('R fun'), function(){
 			frappe.call({
 				method: 'bo.bo.doctype.dppu.dppu.refund',
 				args: {
@@ -201,9 +212,9 @@ function set_filter(frm){
 				frm.set_value("sm_user", res.sm_user)
               }else {
                 //frappe.msgprint("You may not have a DM role, not allowed !")
-              } 
+              }
           })
-    }      
+    }
     if(frm.doc.dm_user){
 		frm.set_query("mr_user", function(doc) {
 			return {
@@ -222,7 +233,7 @@ function set_filter(frm){
     }
 }
 
-function check_state_warning(frm){	
+function check_state_warning(frm){
 	if(frappe.user.has_role("CSD") || frappe.user.has_role("Accounts Manager")|| frappe.user.has_role("Accounts User")){
 		frappe.db.get_list("DPPU", {filters:{"dm_user":frm.doc.dm_user,"workflow_state" : ['in',["DM Received","Refund"]]},fields: ["workflow_state","name","number"], limit: 20}).then((d)=>{
 			if(d.length > 0){
@@ -239,7 +250,7 @@ function check_state_warning(frm){
 						"message": str,
 						"indicator": "red"
 					})
-				}else{				
+				}else{
 					str = '<table class="table" id="dppu-records"><tbody>'+str+ '<tr><td></td><td>Sum:</td><td>'+sum+'</td></tr></tbody></table>'
 					frappe.msgprint(str, "Active DPPU")
 				}
@@ -248,7 +259,7 @@ function check_state_warning(frm){
 				$("#dppu-records").remove()
 			}
 		})
-	}	
+	}
 }
 
 
