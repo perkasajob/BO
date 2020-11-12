@@ -1,4 +1,5 @@
 {
+ "allow_rename": 1,
  "autoname": "field:dx_name",
  "creation": "2020-07-20 14:25:24.557305",
  "doctype": "DocType",
@@ -165,7 +166,7 @@
    "options": "Mkt Item"
   }
  ],
- "modified": "2020-11-11 16:26:36.229572",
+ "modified": "2020-11-12 13:15:15.377707",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "Dx",
