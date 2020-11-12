@@ -21,12 +21,14 @@ class Dx(Document):
 		history = [""] * nrLine
 		self.saldo = 0
 		for i in range(nrLine):
-			ls = '' if i == 0 else str(i+1)
+			ls = str(i+1)
 			for l in getattr(self, 'loan'+ ls):
 				saldo[i] += int(l.number)
 				history[i] += "{}\t\t{}\t\t{}\t\t{}\n".format(l.date, l.number, l.saldo, l.note)
 				l.saldo = saldo[i]
 			setattr(self, 'saldo_history'+ ls, history[i])
+			# TODO: add saldo details
+			setattr(self, 'saldo'+ ls, saldo[i])
 
 			for a in getattr(self, 'adv'+ ls):
 				adv_saldo[i] += int(a.number)

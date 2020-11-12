@@ -8,12 +8,17 @@
   "dx_name",
   "territory",
   "saldo",
+  "sal_sb",
+  "saldo1",
+  "saldo2",
+  "saldo3",
+  "sal_e_sb",
   "cash_transfer",
   "rek",
-  "saldo_history",
-  "loan",
-  "adv",
-  "mkt",
+  "saldo_history1",
+  "loan1",
+  "adv1",
+  "mkt1",
   "saldo_history2",
   "loan2",
   "adv2",
@@ -48,20 +53,6 @@
    "label": "Sal"
   },
   {
-   "default": "{}",
-   "fieldname": "saldo_history",
-   "fieldtype": "Long Text",
-   "label": "History",
-   "permlevel": 1
-  },
-  {
-   "fieldname": "loan",
-   "fieldtype": "Table",
-   "label": "Acc 1",
-   "options": "SP",
-   "permlevel": 1
-  },
-  {
    "fieldname": "cash_transfer",
    "fieldtype": "Select",
    "label": "Type",
@@ -88,22 +79,10 @@
    "permlevel": 1
   },
   {
-   "fieldname": "adv",
-   "fieldtype": "Table",
-   "label": "Adv 1",
-   "options": "Adv Item"
-  },
-  {
    "fieldname": "adv2",
    "fieldtype": "Table",
    "label": "Adv 2",
    "options": "Adv Item"
-  },
-  {
-   "fieldname": "mkt",
-   "fieldtype": "Table",
-   "label": "Mkt 1",
-   "options": "Mkt Item"
   },
   {
    "fieldname": "mkt2",
@@ -133,9 +112,60 @@
    "fieldtype": "Table",
    "label": "Mkt 3",
    "options": "Mkt Item"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "sal_sb",
+   "fieldtype": "Section Break",
+   "label": "Sal"
+  },
+  {
+   "fieldname": "saldo1",
+   "fieldtype": "Read Only",
+   "label": "Sal 1"
+  },
+  {
+   "fieldname": "saldo2",
+   "fieldtype": "Read Only",
+   "label": "Sal 2"
+  },
+  {
+   "fieldname": "saldo3",
+   "fieldtype": "Read Only",
+   "label": "Sal 3"
+  },
+  {
+   "fieldname": "sal_e_sb",
+   "fieldtype": "Section Break"
+  },
+  {
+   "default": "{}",
+   "fieldname": "saldo_history1",
+   "fieldtype": "Long Text",
+   "label": "History",
+   "permlevel": 1
+  },
+  {
+   "fieldname": "loan1",
+   "fieldtype": "Table",
+   "label": "Acc 1",
+   "options": "SP",
+   "permlevel": 1
+  },
+  {
+   "fieldname": "adv1",
+   "fieldtype": "Table",
+   "label": "Adv 1",
+   "options": "Adv Item"
+  },
+  {
+   "fieldname": "mkt1",
+   "fieldtype": "Table",
+   "label": "Mkt 1",
+   "options": "Mkt Item"
   }
  ],
- "modified": "2020-11-10 16:05:49.589650",
+ "modified": "2020-11-11 16:26:36.229572",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "Dx",

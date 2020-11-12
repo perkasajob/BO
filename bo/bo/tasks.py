@@ -20,16 +20,15 @@ def set_DPPU_overdue(period):
 @frappe.whitelist()
 def expire_dx_adv(today=nowdate()):
 	for i in range(2):
-		adv_idx = str(i) if i > 0 else ''
+		adv_idx = str(i)
 		# advs = frappe.get_list('Adv Item', filters=[['parentfield','=','adv'+ adv_idx],['date','<=',today], ['type','in',['AC','AT']]], fields=['*'])
 		advs = frappe.get_list('Adv Item', filters=[['parentfield','=','adv'+ adv_idx], ['date','<=',today]], fields=['*'])
 
 		for adv in advs:
-			suffix = adv.line if int(adv.line) > 1 else ''
 			# idx = frappe.db.count('SP', {'parent': adv.parent, 'parentfield': 'loan' + suffix })
 			# adv = frappe.get_doc("Adv Item", adv.name)
 			dx = frappe.get_doc(adv.parenttype, adv.parent)
-			dx.append('mkt'+suffix ,{'date':adv.date,'number': adv.number, 'dppu': adv.dppu, 'type':adv.type, 'line': adv.line, 'note': adv.note, 'territory': adv.territory})
+			dx.append('mkt'+adv.line ,{'date':adv.date,'number': adv.number, 'dppu': adv.dppu, 'type':adv.type, 'line': adv.line, 'note': adv.note, 'territory': adv.territory})
 			dx.validate()
 			dx.save()
 			dppu = frappe.get_doc('DPPU', adv.dppu)

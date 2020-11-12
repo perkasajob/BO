@@ -14,6 +14,11 @@
   "mr_user",
   "dx_user",
   "saldo",
+  "sal_sb",
+  "saldo1",
+  "saldo2",
+  "saldo3",
+  "sal_e_sb",
   "cash_transfer",
   "number",
   "date",
@@ -136,10 +141,38 @@
    "fieldtype": "Select",
    "label": "Jml Ccln",
    "options": "\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "sal_sb",
+   "fieldtype": "Section Break",
+   "label": "Sal"
+  },
+  {
+   "fetch_from": "dx_user.saldo1",
+   "fieldname": "saldo1",
+   "fieldtype": "Read Only",
+   "label": "Sal 1"
+  },
+  {
+   "fetch_from": "dx_user.saldo2",
+   "fieldname": "saldo2",
+   "fieldtype": "Read Only",
+   "label": "Sal 2"
+  },
+  {
+   "fetch_from": "dx_user.saldo3",
+   "fieldname": "saldo3",
+   "fieldtype": "Read Only",
+   "label": "Sal 3"
+  },
+  {
+   "fieldname": "sal_e_sb",
+   "fieldtype": "Section Break"
   }
  ],
  "is_submittable": 1,
- "modified": "2020-11-11 14:31:06.825090",
+ "modified": "2020-11-11 16:26:58.854907",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "DPPU",

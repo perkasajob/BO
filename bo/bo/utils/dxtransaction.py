@@ -15,13 +15,14 @@ def update_sp(dppu=None, number=None):
 	if number == None or dppu == None:
 		return {"status":" error "}
 
-	dppu = frappe.get_doc('DPPU', dppu)	
+	dppu = frappe.get_doc('DPPU', dppu)
 	if int(number) > int(dppu.number):
 		number = dppu.number
 
 	ct = 'C' if dppu.cash_transfer == 'Cash' else 'T'
 	dx = frappe.get_doc('Dx', dppu.dx_user)
 	dx.append('dppu',{'date':today(),'number': int(number), 'dppu': dppu.name, 'type':ct})
+	dx.validate()
 	dx.save()
 	frappe.db.commit()
 	return dx

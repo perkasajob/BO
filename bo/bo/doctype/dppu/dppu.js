@@ -51,14 +51,16 @@ frappe.ui.form.on('DPPU', {
 		set_refund_btn(frm)
 	},
 	number: function(frm){
-		var delta = frm.doc.saldo - frm.doc.number
+		let line = frm.doc.mr_user.substr(-1)
+		var delta = frm.doc['saldo' + line] - frm.doc.number
 		if(delta < 0){
 			console.log("Exceeding saldo")
 		}
 	},
 	jml_ccln: function(frm){
 		if(frm.doc.jml_ccln){
-			var delta = frm.doc.saldo - frm.doc.number
+			let line = frm.doc.mr_user.substr(-1)
+			var delta = frm.doc['saldo' + line] - frm.doc.number
 			if(delta >= -5000 ){ // BO18
 				frm.set_value("jml_ccln", "")
 			} else if(delta < -5000 && delta >= -10000 && parseInt(frm.doc.jml_ccln) > 3) {
@@ -265,7 +267,8 @@ function check_state_warning(frm){
 
 
 function set_color_saldo(frm){
-	if(frm.doc.saldo < 0){
+	let line = frm.doc.mr_user.substr(-1)
+	if(frm.doc['saldo' + line] < 0){
 		$("[data-fieldname='saldo']>div>.control-input-wrapper>.control-value").css({"background-color":"red","color":"white"})
 	}
 }

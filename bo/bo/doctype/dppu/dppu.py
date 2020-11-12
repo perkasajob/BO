@@ -27,7 +27,7 @@ def book_transfer(docname, check=0):
 		dppu = frappe.get_doc('DPPU', docname)
 		line = dppu.mr_user[-1]
 		ct = 'C' if dppu.cash_transfer == 'Cash' else 'T'
-		ls = line if int(line) > 1 else '' # Line Suffix
+		# ls = line if int(line) > 1 else '' # Line Suffix
 		sp = frappe.db.sql("select * from `tabSP` where dppu='{}'  and number < 0".format(docname))
 		if len(sp) > 0:
 			return {"status": "Booked", "date": str(sp[0][10])}
@@ -35,8 +35,8 @@ def book_transfer(docname, check=0):
 			return {"status": "No Book Record"}
 		dx = frappe.get_doc('Dx', dppu.dx_user)
 		amount = -1*dppu.number if dppu.number > 0 else dppu.number
-		dx.append('loan'+ls,{'date':today(),'number': amount, 'dppu': dppu.name, 'type':ct, 'line': line, 'note': "by " + frappe.session.user})
-		dx.append('mkt'+ls ,{'date':today(),'number': amount, 'dppu': dppu.name, 'type':ct, 'line': line, 'note': "by " + frappe.session.user, 'territory': dx.territory})
+		dx.append('loan'+line,{'date':today(),'number': amount, 'dppu': dppu.name, 'type':ct, 'line': line, 'note': "by " + frappe.session.user})
+		dx.append('mkt'+line ,{'date':today(),'number': amount, 'dppu': dppu.name, 'type':ct, 'line': line, 'note': "by " + frappe.session.user, 'territory': dx.territory})
 		# mkt = frappe.get_doc({'doctype': 'Mkt','date':today(),'number': amount, 'dppu': dppu.name, 'line': line, 'note': "by " + frappe.session.user, 'territory': dx.territory})
 		# mkt.insert()
 		dx.validate()
@@ -51,7 +51,7 @@ def refund(docname):
 		dppu = frappe.get_doc('DPPU', docname)
 		line = dppu.mr_user[-1]
 		ct = 'RC' if dppu.cash_transfer == 'Cash' else 'RT'
-		ls = line if int(line) > 1 else '' # Line Suffix
+		# ls = line if int(line) > 1 else '' # Line Suffix
 		sp = frappe.db.sql("select * from `tabSP` where dppu='{}' and number > 0".format(docname))
 		if len(sp) > 0:
 			return {"status": "Refunded", "date": str(sp[0][10])}
@@ -62,8 +62,8 @@ def refund(docname):
 			return {"status": "No R Amount"}
 		dx = frappe.get_doc('Dx', dppu.dx_user)
 		amount = abs(dppu.amount_refund)
-		dx.append('loan'+ls,{'date':today(),'number': amount, 'dppu': dppu.name, 'type':ct, 'line': line, 'note': "RFun by " + frappe.session.user})
-		dx.append('mkt'+ls , {'date':today(),'number': amount, 'dppu': dppu.name, 'type':ct, 'line': line, 'note': "RFun by " + frappe.session.user, 'territory': dx.territory})
+		dx.append('loan'+line,{'date':today(),'number': amount, 'dppu': dppu.name, 'type':ct, 'line': line, 'note': "RFun by " + frappe.session.user})
+		dx.append('mkt'+line , {'date':today(),'number': amount, 'dppu': dppu.name, 'type':ct, 'line': line, 'note': "RFun by " + frappe.session.user, 'territory': dx.territory})
 		mkt = frappe.get_doc({'doctype': 'Mkt','date':today(),'number': amount, 'dppu': dppu.name, 'line': line, 'note': "RFun by " + frappe.session.user, 'territory': dx.territory, 'dx': dppu.dx_user, 'dm': dppu.dm_user, 'sm': dppu.sm_user, 'mr': dppu.mr_user}).insert(ignore_permissions=True)
 		mkt.submit()
 		dx.validate()
@@ -83,7 +83,7 @@ def adv_transfer(docname, check=0):
 		line = dppu.mr_user[-1]
 		ct = 'AC' if dppu.cash_transfer == 'Cash' else 'AT'
 
-		if int(dppu.saldo) > dppu.number:
+		if int(dppu['saldo' + line]) > dppu.number:
 			return {"status": "Saldo is sufficient"}
 
 		if dppu.jml_ccln :
@@ -97,18 +97,18 @@ def adv_transfer(docname, check=0):
 
 		dx = frappe.get_doc('Dx', dppu.dx_user)
 
-		delta = int(dppu.saldo) - int(dppu.number)
+		delta = int(dppu['saldo' + line]) - int(dppu.number)
 
 		_date = datetime.now()
 
-		ls = '' if int(line) == 1 else line
+		# ls = '' if int(line) == 1 else line
 
-		if int(dppu.saldo) < 0:
+		if int(dppu['saldo' + line]) < 0:
 			amount = -1*int(abs(dppu.number)/int(dppu.jml_ccln))
 		elif delta < 0:
 			amount = int(delta/int(dppu.jml_ccln)) # amount is the advance per month
 
-		dx.append('loan'+ls ,{'date':today(),'number': -1*int(dppu.number), 'dppu': dppu.name, 'type':ct, 'line': line, 'note': " Adv by " + frappe.session.user})
+		dx.append('loan'+line ,{'date':today(),'number': -1*int(dppu.number), 'dppu': dppu.name, 'type':ct, 'line': line, 'note': " Adv by " + frappe.session.user})
 		# dx.append('mkt'+ls ,{'date':today(),'number': -1*int(dppu.number), 'dppu': dppu.name, 'type':ct, 'line': line, 'note': " Adv-mou by " + frappe.session.user, 'territory': dx.territory})
 
 		# amount = -1*int(abs(dppu.number)/int(dppu.jml_ccln)) if dppu.saldo < 0 else -1*int(abs(delta)/int(dppu.jml_ccln))
@@ -116,7 +116,7 @@ def adv_transfer(docname, check=0):
 		for i in range(int(dppu.jml_ccln)):
 			_date += relativedelta(months=+1)
 			_date = _date.replace(day=1)
-			dx.append('adv'+ls ,{'date':_date.strftime("%Y-%m-%d"),'number': amount, 'dppu': dppu.name, 'type':ct, 'line': line, 'note': "Adv:{}-{}:{} by {}".format(str(i+1), dppu.jml_ccln, str(delta), frappe.session.user), 'territory': dx.territory})
+			dx.append('adv'+line ,{'date':_date.strftime("%Y-%m-%d"),'number': amount, 'dppu': dppu.name, 'type':ct, 'line': line, 'note': "Adv:{}-{}:{} by {}".format(str(i+1), dppu.jml_ccln, str(delta), frappe.session.user), 'territory': dx.territory})
 		dx.validate()
 		dx.save()
 		frappe.db.commit()
