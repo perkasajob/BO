@@ -121,16 +121,19 @@
    "label": "Sal"
   },
   {
+   "default": "0",
    "fieldname": "saldo1",
    "fieldtype": "Read Only",
    "label": "Sal 1"
   },
   {
+   "default": "0",
    "fieldname": "saldo2",
    "fieldtype": "Read Only",
    "label": "Sal 2"
   },
   {
+   "default": "0",
    "fieldname": "saldo3",
    "fieldtype": "Read Only",
    "label": "Sal 3"
@@ -166,7 +169,7 @@
    "options": "Mkt Item"
   }
  ],
- "modified": "2020-11-12 13:15:15.377707",
+ "modified": "2020-11-16 10:24:32.949006",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "Dx",

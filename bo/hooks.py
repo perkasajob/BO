@@ -16,11 +16,11 @@ app_logo_url = '/assets/bo/images/logo.png'
 # ------------------
 
 # include js, css files in header of desk.html
-# app_include_css = "/assets/bo/css/bo.css"
+app_include_css = "/assets/bo/css/qltheme.css"
 # app_include_js = "/assets/bo/js/bo.js"
 
 # include js, css files in header of web template
-# web_include_css = "/assets/bo/css/bo.css"
+web_include_css = "/assets/bo/css/qltheme.css"
 # web_include_js = "/assets/bo/js/bo.js"
 
 # include js in page
@@ -81,7 +81,7 @@ website_context = {
 # 	"Event": "frappe.desk.doctype.event.event.has_permission",
 # }
 permission_query_conditions = {
-	"DPPU": "bo.bo.permission.dppu_get_permission_query_conditions"	
+	"DPPU": "bo.bo.permission.dppu_get_permission_query_conditions"
 }
 
 # has_permission = {
@@ -141,4 +141,10 @@ scheduler_events = {
 # override_doctype_dashboards = {
 # 	"Task": "bo.task.get_dashboard_data"
 # }
+
+default_mail_footer = """
+    <div>
+        Sent via <a href="http://dev99.sistemkoperasi.com/" target="_blank">Sistem Koperasi</a>
+    </div>
+"""
 

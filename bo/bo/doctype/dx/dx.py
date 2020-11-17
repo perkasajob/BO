@@ -8,27 +8,27 @@ from frappe.model.document import Document
 from frappe import _, scrub, ValidationError
 import frappe, json
 from six import iteritems, string_types
+from frappe.utils import nowdate, flt, cstr
 
 class Dx(Document):
-	def validate(self):
-		t_roles = ["Account Manager", "System Manager"]
-		user_match_role = [x for x in t_roles if x in frappe.get_roles(frappe.session.user)]
-		# How to find the new added Acc Row?
+	def save(self):
+		# t_roles = ["Account Manager", "System Manager"]
+		# user_match_role = [x for x in t_roles if x in frappe.get_roles(frappe.session.user)]
 		nrLine = 3
 		saldo = [0] * nrLine
 		adv_saldo = [0] * nrLine
 		mkt_saldo = [0] * nrLine
 		history = [""] * nrLine
-		self.saldo = 0
 		for i in range(nrLine):
 			ls = str(i+1)
 			for l in getattr(self, 'loan'+ ls):
 				saldo[i] += int(l.number)
-				history[i] += "{}\t\t{}\t\t{}\t\t{}\n".format(l.date, l.number, l.saldo, l.note)
 				l.saldo = saldo[i]
-			setattr(self, 'saldo_history'+ ls, history[i])
-			# TODO: add saldo details
-			setattr(self, 'saldo'+ ls, saldo[i])
+				history[i] += "{}\t\t{}\t\t{}\t\t{}\n".format(l.date, l.number, l.saldo, l.note)
+			if getattr(self, 'saldo_history'+ ls) != history[i] :
+				setattr(self, 'saldo_history'+ ls, history[i])
+			if getattr(self, 'saldo'+ ls) != cstr(saldo[i]) :
+				setattr(self, 'saldo'+ ls, saldo[i])
 
 			for a in getattr(self, 'adv'+ ls):
 				adv_saldo[i] += int(a.number)
@@ -37,7 +37,10 @@ class Dx(Document):
 			for m in getattr(self, 'mkt'+ ls):
 				mkt_saldo[i] += int(m.number)
 				m.saldo = mkt_saldo[i]
-		self.saldo = sum(saldo)
+
+		if getattr(self, 'saldo') != cstr(sum(saldo)):
+			self.saldo = sum(saldo)
+		super(Dx, self).save()
 
 
 	def onload(self):

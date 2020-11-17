@@ -1,0 +1,66 @@
+{
+ "allow_rename": 1,
+ "creation": "2020-11-16 13:03:22.849573",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "outlet",
+  "visit_in",
+  "visit_out",
+  "attachments",
+  "sales_order",
+  "actual_order"
+ ],
+ "fields": [
+  {
+   "columns": 1,
+   "fieldname": "visit_in",
+   "fieldtype": "Time",
+   "in_list_view": 1,
+   "label": "In"
+  },
+  {
+   "columns": 1,
+   "fieldname": "visit_out",
+   "fieldtype": "Time",
+   "in_list_view": 1,
+   "label": "Out"
+  },
+  {
+   "fieldname": "attachments",
+   "fieldtype": "Attach",
+   "in_list_view": 1,
+   "label": "Attachments"
+  },
+  {
+   "fieldname": "sales_order",
+   "fieldtype": "Currency",
+   "label": "Sales Order"
+  },
+  {
+   "fieldname": "actual_order",
+   "fieldtype": "Currency",
+   "label": "Actual Order"
+  },
+  {
+   "fieldname": "outlet",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Outlet",
+   "options": "Outlet",
+   "reqd": 1
+  }
+ ],
+ "istable": 1,
+ "modified": "2020-11-16 16:11:14.173062",
+ "modified_by": "Administrator",
+ "module": "BO",
+ "name": "Customer Visit",
+ "owner": "Administrator",
+ "permissions": [],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

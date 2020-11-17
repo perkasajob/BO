@@ -7,7 +7,7 @@ def get_data():
 		{
 			"module_name": "BO",
 			"color": "grey",
-			"icon": "octicon octicon-dashboard",
+			"icon": "icon hr-blue",
 			"type": "module",
 			"label": _("BO")
 		}

@@ -14,7 +14,7 @@ frappe.listview_settings['DPPU'] = {
 		}
 	},
 	refresh: function(listview) {
-		listview.page.add_action_item(__('Download XLS'), function(e,o){
+		listview.page.add_menu_item(__('Download XLS'), function(e,o){
 			var method =
 					'/api/method/bo.bo.doctype.dpl.dpl.download_template';
 			var names = listview.get_checked_items().map((o,i)=>{

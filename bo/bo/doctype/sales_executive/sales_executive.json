@@ -1,7 +1,7 @@
 {
  "allow_import": 1,
  "allow_rename": 1,
- "autoname": "field:sales_executive_name",
+ "autoname": "Prompt",
  "creation": "2020-10-31 10:52:45.029694",
  "description": "All Sales Transactions can be tagged against multiple **Sales Persons** so that you can set and monitor targets.",
  "doctype": "DocType",
@@ -105,11 +105,12 @@
   },
   {
    "fieldname": "sales_executive_name",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Sales Person Name",
    "oldfieldname": "sales_person_name",
    "oldfieldtype": "Data",
+   "options": "User",
    "reqd": 1,
    "unique": 1
   },
@@ -134,10 +135,11 @@
  ],
  "icon": "icon-user",
  "is_tree": 1,
- "modified": "2020-10-31 11:14:12.728195",
+ "modified": "2020-11-16 15:13:11.085805",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "Sales Executive",
+ "name_case": "UPPER CASE",
  "nsm_parent_field": "parent_sales_executive",
  "owner": "Administrator",
  "permissions": [

@@ -67,7 +67,7 @@
    "label": "APL Outlet"
   }
  ],
- "modified": "2020-10-24 12:13:48.506246",
+ "modified": "2020-11-16 15:37:26.821143",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "Outlet",
@@ -119,6 +119,15 @@
    "read": 1,
    "report": 1,
    "role": "MSD",
+   "share": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "SE",
    "share": 1
   }
  ],

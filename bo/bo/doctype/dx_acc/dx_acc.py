@@ -42,15 +42,6 @@ class DxAcc(Document):
 				columns[0] = '<span style="color:red">Error ID Not Found</span>'
 				return {"columns": columns, "data": res, "filename": self.filename}
 			frappe.enqueue(import_loan, name=self.name, rows=rows, now=True if len(rows) < 200 else False)
-			# for row in rows:
-			# 	dx = frappe.get_doc("Dx", row[0])
-			# 	if(row[1]): # Acc 1 number
-			# 		dx.append('loan', {'number': row[1], 'ref_nr': row[2], 'note': row[3] + ' -' + self.name, 'line': 1, 'type': 'DxAcc', 'date': today()})
-			# 	if(row[4]): # Acc 2 number
-			# 		dx.append('loan2', {'number': row[4], 'ref_nr': row[5], 'note': row[6] + ' -' + self.name, 'line': 2, 'type': 'DxAcc', 'date': today()})
-
-			# 	# dx.insert(ignore_permissions=True)
-			# 	dx.save()
 			return {"columns": columns, "data": data, "filename": self.filename}
 		else:
 			return {"status" : "Error", "filename": fname}
@@ -117,6 +108,5 @@ def import_loan(name, rows):
 		if(row[1]): # Acc number
 			dx_book = 'loan' + str(line)
 			dx.append(dx_book, {'number': row[1], 'ref_nr': row[2], 'note': row[3] + ' -' + name, 'line': line, 'type': 'DxAcc', 'date': today()})
-		dx.validate()
 		dx.save()
 	frappe.publish_realtime('Dx acc', 'Success ...')

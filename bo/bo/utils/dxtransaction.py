@@ -22,7 +22,6 @@ def update_sp(dppu=None, number=None):
 	ct = 'C' if dppu.cash_transfer == 'Cash' else 'T'
 	dx = frappe.get_doc('Dx', dppu.dx_user)
 	dx.append('dppu',{'date':today(),'number': int(number), 'dppu': dppu.name, 'type':ct})
-	dx.validate()
 	dx.save()
 	frappe.db.commit()
 	return dx

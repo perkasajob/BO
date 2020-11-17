@@ -1,20 +1,20 @@
 {
- "autoname": "format:{month_code}-{outlet}-{###}",
+ "autoname": "format:{date_code}-{sales_exec}",
  "creation": "2020-10-30 16:00:22.085288",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
   "territory",
+  "date",
   "sales_exec",
-  "outlet_details_section",
-  "outlet",
-  "start_on",
-  "ends_on",
-  "description",
+  "parent_sales_executive",
+  "visits",
   "sales_order",
+  "sales_oder",
   "actual_sales",
-  "month_code"
+  "date_code",
+  "amended_from"
  ],
  "fields": [
   {
@@ -25,65 +25,74 @@
    "options": "Territory"
   },
   {
-   "fieldname": "outlet_details_section",
-   "fieldtype": "Section Break",
-   "label": "Outlet Details"
-  },
-  {
-   "fieldname": "outlet",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "Outlet",
-   "options": "Outlet",
-   "reqd": 1
-  },
-  {
-   "fieldname": "start_on",
-   "fieldtype": "Datetime",
-   "label": "Start On",
-   "reqd": 1
-  },
-  {
-   "fieldname": "ends_on",
-   "fieldtype": "Datetime",
-   "label": "Ends On"
-  },
-  {
-   "fieldname": "description",
-   "fieldtype": "Text Editor",
-   "label": "Description"
-  },
-  {
    "fieldname": "sales_order",
-   "fieldtype": "Currency",
-   "label": "Sales Order"
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Effective Call"
   },
   {
    "fieldname": "actual_sales",
    "fieldtype": "Currency",
-   "label": "Actual Sales"
-  },
-  {
-   "fieldname": "month_code",
-   "fieldtype": "Read Only",
-   "label": "Month Code"
+   "hidden": 1,
+   "label": "Total Actual Order"
   },
   {
    "fieldname": "sales_exec",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Sales Executive",
    "options": "Sales Executive",
    "reqd": 1
+  },
+  {
+   "fieldname": "visits",
+   "fieldtype": "Table",
+   "label": "Visits",
+   "options": "Customer Visit"
+  },
+  {
+   "fieldname": "sales_oder",
+   "fieldtype": "Currency",
+   "hidden": 1,
+   "label": "Total Sales Order"
+  },
+  {
+   "fetch_from": "sales_exec.parent_sales_executive",
+   "fieldname": "parent_sales_executive",
+   "fieldtype": "Read Only",
+   "label": "Sales Coordinator"
+  },
+  {
+   "default": "Today",
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "fieldname": "date_code",
+   "fieldtype": "Read Only",
+   "label": "Date Code",
+   "unique": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "DKH",
+   "print_hide": 1,
+   "read_only": 1
   }
  ],
- "modified": "2020-10-31 11:25:09.371616",
+ "is_submittable": 1,
+ "modified": "2020-11-17 09:11:29.104301",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "DKH",
- "name_case": "UPPER CASE",
  "owner": "Administrator",
  "permissions": [
   {
+   "cancel": 1,
    "create": 1,
    "delete": 1,
    "email": 1,
@@ -93,6 +102,7 @@
    "report": 1,
    "role": "System Manager",
    "share": 1,
+   "submit": 1,
    "write": 1
   },
   {
@@ -106,6 +116,7 @@
    "share": 1
   },
   {
+   "cancel": 1,
    "create": 1,
    "delete": 1,
    "email": 1,
@@ -115,6 +126,7 @@
    "report": 1,
    "role": "Sales Manager",
    "share": 1,
+   "submit": 1,
    "write": 1
   },
   {
@@ -126,6 +138,19 @@
    "report": 1,
    "role": "Sales User",
    "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "SE",
+   "share": 1,
+   "submit": 1,
    "write": 1
   }
  ],
