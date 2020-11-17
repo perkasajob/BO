@@ -20,7 +20,7 @@ def get_data():
 					"type": "doctype",
 					"name": "LPD",
 					"onboard": 1,
-				},				
+				},
 				{
 					"type": "doctype",
 					"name": "Mkt",
@@ -38,6 +38,11 @@ def get_data():
 				},
 				{
 					"type": "doctype",
+					"name": "DKH",
+					"onboard": 1,
+				},
+				{
+					"type": "doctype",
 					"name": "Freight Item",
 					"onboard": 1,
 				},
@@ -48,7 +53,7 @@ def get_data():
 				{
 					"type": "doctype",
 					"name": "MR"
-				},				
+				},
 				{
 					"type": "doctype",
 					"name": "Outlet"

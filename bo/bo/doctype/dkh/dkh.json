@@ -71,6 +71,7 @@
   {
    "fieldname": "date_code",
    "fieldtype": "Read Only",
+   "hidden": 1,
    "label": "Date Code",
    "unique": 1
   },
@@ -85,7 +86,7 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2020-11-17 09:11:29.104301",
+ "modified": "2020-11-17 14:30:50.368446",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "DKH",

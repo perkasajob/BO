@@ -3,7 +3,6 @@
 
 frappe.ui.form.on('DKH', {
 	onload: function(frm) {
-		// frm.set_value('month_code',frm.doc.start_on.substr(2,5).replace('-',''))
 		set_filter(frm)
 		frm.set_value('date_code', moment(cur_frm.doc.date).format("DDMMYY"))
 	},
