@@ -38,7 +38,6 @@ def book_transfer(docname, check=0):
 		dx.append('mkt'+line ,{'date':today(),'number': amount, 'dppu': dppu.name, 'type':ct, 'line': line, 'note': "by " + frappe.session.user, 'territory': dx.territory})
 		# mkt = frappe.get_doc({'doctype': 'Mkt','date':today(),'number': amount, 'dppu': dppu.name, 'line': line, 'note': "by " + frappe.session.user, 'territory': dx.territory})
 		# mkt.insert()
-		# dx.validate()
 		dx.save()
 		mkt = frappe.get_doc({'doctype': 'Mkt','date':today(),'number': amount, 'dppu': dppu.name, 'line': line, 'note': "by " + frappe.session.user, 'territory': dx.territory, 'dx': dppu.dx_user, 'dm': dppu.dm_user, 'sm': dppu.sm_user, 'mr': dppu.mr_user}).insert(ignore_permissions=True)
 		mkt.submit()
@@ -64,7 +63,6 @@ def refund(docname):
 		dx.append('mkt'+line , {'date':today(),'number': amount, 'dppu': dppu.name, 'type':ct, 'line': line, 'note': "RFun by " + frappe.session.user, 'territory': dx.territory})
 		mkt = frappe.get_doc({'doctype': 'Mkt','date':today(),'number': amount, 'dppu': dppu.name, 'line': line, 'note': "RFun by " + frappe.session.user, 'territory': dx.territory, 'dx': dppu.dx_user, 'dm': dppu.dm_user, 'sm': dppu.sm_user, 'mr': dppu.mr_user}).insert(ignore_permissions=True)
 		mkt.submit()
-		# dx.validate()
 		dx.save()
 		frappe.db.commit()
 		return {"status": "Success"}
@@ -113,7 +111,6 @@ def adv_transfer(docname, check=0):
 			_date += relativedelta(months=+1)
 			_date = _date.replace(day=1)
 			dx.append('adv'+line ,{'date':_date.strftime("%Y-%m-%d"),'number': amount, 'dppu': dppu.name, 'type':ct, 'line': line, 'note': "Adv:{}-{}:{} by {}".format(str(i+1), dppu.jml_ccln, str(delta), frappe.session.user), 'territory': dx.territory})
-		# dx.validate()
 		dx.save()
 		frappe.db.commit()
 		return {"status": "Success"}

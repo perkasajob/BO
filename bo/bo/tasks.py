@@ -29,7 +29,6 @@ def expire_dx_adv(today=nowdate()):
 			# adv = frappe.get_doc("Adv Item", adv.name)
 			dx = frappe.get_doc(adv.parenttype, adv.parent)
 			dx.append('mkt'+adv.line ,{'date':adv.date,'number': adv.number, 'dppu': adv.dppu, 'type':adv.type, 'line': adv.line, 'note': adv.note, 'territory': adv.territory})
-			dx.validate()
 			dx.save()
 			dppu = frappe.get_doc('DPPU', adv.dppu)
 			mkt = frappe.get_doc({'doctype': 'Mkt','date':adv.date,'number': adv.number, 'dppu': adv.dppu, 'line': adv.line, 'note': adv.note, 'territory': adv.territory, 'dx': dx.name, 'dm': dppu.dm_user, 'sm': dppu.sm_user, 'mr': dppu.mr_user}).insert(ignore_permissions=True)

@@ -1,4 +1,5 @@
 {
+ "allow_rename": 1,
  "autoname": "Prompt",
  "creation": "2020-07-20 19:02:12.962057",
  "doctype": "DocType",
@@ -47,7 +48,7 @@
    "label": "Territory"
   }
  ],
- "modified": "2020-08-10 10:31:42.756850",
+ "modified": "2020-11-18 09:18:46.092496",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "MR",

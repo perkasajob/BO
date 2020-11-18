@@ -21,6 +21,5 @@ class AdvInstall(Document):
 			note = "Adv-Inst by {}, {} {}".format(frappe.session.user, self.blanko_nr, self.note)
 			dx.append('loan'+line,{'date':today(),'number': self.number, 'dppu': dppu.name, 'type':ct, 'line': int(line), 'note': note, 'ref_nr': self.ref_nr})
 			# dx.append('mkt'+ls ,{'date':today(),'number': self.number, 'dppu': dppu.name, 'type':ct, 'line': line, 'note': note, 'territory': dx.territory, 'ref_nr': self.ref_nr})
-			dx.validate()
 			dx.save()
 			frappe.db.commit()

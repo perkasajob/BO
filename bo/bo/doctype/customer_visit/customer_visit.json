@@ -48,13 +48,13 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Outlet",
-   "options": "Outlet",
+   "options": "Outlet GTR",
    "reqd": 1
   }
  ],
  "istable": 1,
- "modified": "2020-11-16 16:11:14.173062",
- "modified_by": "Administrator",
+ "modified": "2020-11-17 15:17:36.334460",
+ "modified_by": "bro@ksp.ksp",
  "module": "BO",
  "name": "Customer Visit",
  "owner": "Administrator",
