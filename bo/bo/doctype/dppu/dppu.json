@@ -22,6 +22,7 @@
   "cash_transfer",
   "number",
   "date",
+  "number_part",
   "jml_ccln",
   "amount_refund",
   "comment",
@@ -169,10 +170,15 @@
   {
    "fieldname": "sal_e_sb",
    "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "number_part",
+   "fieldtype": "Data",
+   "label": "Number Partition"
   }
  ],
  "is_submittable": 1,
- "modified": "2020-11-11 16:26:58.854907",
+ "modified": "2020-11-18 13:38:27.515301",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "DPPU",

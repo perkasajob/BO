@@ -57,6 +57,14 @@ frappe.ui.form.on('DPPU', {
 			console.log("Exceeding saldo")
 		}
 	},
+	number_part: function(frm){
+		let number_part = frm.doc.number_part.replaceAll(' ','').replaceAll('.',',').split(',').map(o=>cint(o))
+		frm.set_value('number', number_part.reduce((a,v)=>a+v))
+		var delta = frm.doc['saldo'] - frm.doc.number
+		if(delta < 0){
+			console.log("Exceeding saldo")
+		}
+	},
 	jml_ccln: function(frm){
 		if(frm.doc.jml_ccln){
 			let line = frm.doc.mr_user.substr(-1)

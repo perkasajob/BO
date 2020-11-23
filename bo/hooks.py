@@ -81,7 +81,8 @@ website_context = {
 # 	"Event": "frappe.desk.doctype.event.event.has_permission",
 # }
 permission_query_conditions = {
-	"DPPU": "bo.bo.permission.dppu_get_permission_query_conditions"
+	"DPPU": "bo.bo.permission.dppu_get_permission_query_conditions",
+	"DKH": "bo.bo.permission.dkh_get_permission_query_conditions"
 }
 
 # has_permission = {
@@ -102,25 +103,9 @@ permission_query_conditions = {
 # Scheduled Tasks
 # ---------------
 scheduler_events = {
-	# "all": [
-	# 	"bo.bo.tasks.hourly"
-	# ]
-# scheduler_events = {
-# 	"all": [
-# 		"bo.tasks.all"
-# 	],
 	"daily": [
 		"bo.bo.tasks.daily"
-	],
-# 	"hourly": [
-# 		"bo.tasks.hourly"
-# 	],
-# 	"weekly": [
-# 		"bo.tasks.weekly"
-# 	]
-# 	"monthly": [
-# 		"bo.tasks.monthly"
-# 	]
+	]
 }
 
 # Testing

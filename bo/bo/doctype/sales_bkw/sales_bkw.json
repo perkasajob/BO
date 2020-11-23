@@ -1,0 +1,349 @@
+{
+ "creation": "2020-10-22 11:17:43.295638",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "comid",
+  "disid",
+  "id_dist",
+  "kota",
+  "id_kota",
+  "dist_kota",
+  "urut_kota",
+  "id_prov",
+  "urut_prov",
+  "urut_prov2",
+  "region",
+  "tanggal",
+  "tahun",
+  "bulan",
+  "hari",
+  "no_faktur",
+  "quantum",
+  "proid",
+  "divisi",
+  "nama_div",
+  "urut_div",
+  "grup",
+  "nama_grup",
+  "urut_grup",
+  "no",
+  "produk",
+  "urut_prod",
+  "hna",
+  "value",
+  "kode_lang",
+  "nama_lang",
+  "alamat_lan",
+  "diskon",
+  "ref_faktur",
+  "area",
+  "hna2",
+  "value2",
+  "value_asli",
+  "disc_p",
+  "disc_berno",
+  "disc_distributor",
+  "disc_amt",
+  "se",
+  "kode_pos",
+  "outid",
+  "mrid",
+  "gsmname",
+  "smname",
+  "dmname",
+  "spvname",
+  "mrname",
+  "of_faktur"
+ ],
+ "fields": [
+  {
+   "fieldname": "comid",
+   "fieldtype": "Data",
+   "label": "COMID"
+  },
+  {
+   "fieldname": "disid",
+   "fieldtype": "Data",
+   "label": "DISID"
+  },
+  {
+   "fieldname": "id_dist",
+   "fieldtype": "Data",
+   "label": "ID_DIST"
+  },
+  {
+   "fieldname": "kota",
+   "fieldtype": "Data",
+   "label": "KOTA"
+  },
+  {
+   "fieldname": "id_kota",
+   "fieldtype": "Data",
+   "label": "ID_KOTA"
+  },
+  {
+   "fieldname": "dist_kota",
+   "fieldtype": "Data",
+   "label": "DIST_KOTA"
+  },
+  {
+   "fieldname": "urut_kota",
+   "fieldtype": "Data",
+   "label": "URUT_KOTA"
+  },
+  {
+   "fieldname": "id_prov",
+   "fieldtype": "Data",
+   "label": "ID_PROV"
+  },
+  {
+   "fieldname": "urut_prov",
+   "fieldtype": "Data",
+   "label": "URUT_PROV"
+  },
+  {
+   "fieldname": "urut_prov2",
+   "fieldtype": "Data",
+   "label": "URUT_PROV2"
+  },
+  {
+   "fieldname": "region",
+   "fieldtype": "Data",
+   "label": "REGION"
+  },
+  {
+   "fieldname": "tanggal",
+   "fieldtype": "Data",
+   "label": "TANGGAL"
+  },
+  {
+   "fieldname": "tahun",
+   "fieldtype": "Data",
+   "label": "TAHUN"
+  },
+  {
+   "fieldname": "bulan",
+   "fieldtype": "Data",
+   "label": "BULAN"
+  },
+  {
+   "fieldname": "hari",
+   "fieldtype": "Data",
+   "label": "HARI"
+  },
+  {
+   "fieldname": "no_faktur",
+   "fieldtype": "Data",
+   "label": "NO_FAKTUR"
+  },
+  {
+   "fieldname": "quantum",
+   "fieldtype": "Data",
+   "label": "QUANTUM"
+  },
+  {
+   "fieldname": "proid",
+   "fieldtype": "Data",
+   "label": "PROID"
+  },
+  {
+   "fieldname": "divisi",
+   "fieldtype": "Data",
+   "label": "DIVISI"
+  },
+  {
+   "fieldname": "nama_div",
+   "fieldtype": "Data",
+   "label": "nama_div"
+  },
+  {
+   "fieldname": "urut_div",
+   "fieldtype": "Data",
+   "label": "urut_div"
+  },
+  {
+   "fieldname": "grup",
+   "fieldtype": "Data",
+   "label": "GRUP"
+  },
+  {
+   "fieldname": "nama_grup",
+   "fieldtype": "Data",
+   "label": "nama_grup"
+  },
+  {
+   "fieldname": "urut_grup",
+   "fieldtype": "Data",
+   "label": "urut_grup"
+  },
+  {
+   "fieldname": "no",
+   "fieldtype": "Data",
+   "label": "no"
+  },
+  {
+   "fieldname": "produk",
+   "fieldtype": "Data",
+   "label": "produk"
+  },
+  {
+   "fieldname": "urut_prod",
+   "fieldtype": "Data",
+   "label": "urut_prod"
+  },
+  {
+   "fieldname": "hna",
+   "fieldtype": "Data",
+   "label": "hna"
+  },
+  {
+   "fieldname": "value",
+   "fieldtype": "Data",
+   "label": "VALUE"
+  },
+  {
+   "fieldname": "kode_lang",
+   "fieldtype": "Data",
+   "label": "KODE_LANG"
+  },
+  {
+   "fieldname": "nama_lang",
+   "fieldtype": "Data",
+   "label": "NAMA_LANG"
+  },
+  {
+   "fieldname": "alamat_lan",
+   "fieldtype": "Data",
+   "label": "ALAMAT_LAN"
+  },
+  {
+   "fieldname": "diskon",
+   "fieldtype": "Data",
+   "label": "DISKON"
+  },
+  {
+   "fieldname": "ref_faktur",
+   "fieldtype": "Data",
+   "label": "REF_FAKTUR"
+  },
+  {
+   "fieldname": "area",
+   "fieldtype": "Data",
+   "label": "AREA"
+  },
+  {
+   "fieldname": "hna2",
+   "fieldtype": "Data",
+   "label": "HNA2"
+  },
+  {
+   "fieldname": "value2",
+   "fieldtype": "Data",
+   "label": "VALUE2"
+  },
+  {
+   "fieldname": "value_asli",
+   "fieldtype": "Data",
+   "label": "VALUE_ASLI"
+  },
+  {
+   "fieldname": "disc_p",
+   "fieldtype": "Data",
+   "label": "DISC_P"
+  },
+  {
+   "fieldname": "disc_berno",
+   "fieldtype": "Data",
+   "label": "DISC_BERNO"
+  },
+  {
+   "fieldname": "disc_distributor",
+   "fieldtype": "Data",
+   "label": "DISC_DISTRIBUTOR"
+  },
+  {
+   "fieldname": "disc_amt",
+   "fieldtype": "Data",
+   "label": "DISC_AMT"
+  },
+  {
+   "fieldname": "se",
+   "fieldtype": "Data",
+   "label": "SE"
+  },
+  {
+   "fieldname": "kode_pos",
+   "fieldtype": "Data",
+   "label": "kode_pos"
+  },
+  {
+   "fieldname": "outid",
+   "fieldtype": "Data",
+   "label": "outid"
+  },
+  {
+   "fieldname": "mrid",
+   "fieldtype": "Data",
+   "label": "MRID"
+  },
+  {
+   "fieldname": "gsmname",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "GSMNAME"
+  },
+  {
+   "fieldname": "smname",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "SMNAME"
+  },
+  {
+   "fieldname": "dmname",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "DMNAME"
+  },
+  {
+   "fieldname": "spvname",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "SPVNAME"
+  },
+  {
+   "fieldname": "mrname",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "MRNAME"
+  },
+  {
+   "fieldname": "of_faktur",
+   "fieldtype": "Data",
+   "label": "OF_FAKTUR"
+  }
+ ],
+ "modified": "2020-11-19 16:06:48.202594",
+ "modified_by": "Administrator",
+ "module": "BO",
+ "name": "Sales BKW",
+ "owner": "bro@ksp.ksp",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
