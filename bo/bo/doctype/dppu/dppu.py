@@ -80,8 +80,20 @@ def refund(docname):
 	amount = abs(dppu.amount_refund)
 	dx.append('loan'+line,{'date':today(),'number': amount, 'dppu': dppu.name, 'type':ct, 'line': line, 'note': "RFun by " + frappe.session.user})
 	dx.append('mkt'+line , {'date':today(),'number': amount, 'dppu': dppu.name, 'type':ct, 'line': line, 'note': "RFun by " + frappe.session.user, 'territory': dx.territory})
-	mkt = frappe.get_doc({'doctype': 'Mkt','date':today(),'number': amount, 'dppu': dppu.name, 'line': line, 'note': "RFun by " + frappe.session.user, 'territory': dx.territory, 'dx': dppu.dx_user, 'dm': dppu.dm_user, 'sm': dppu.sm_user, 'mr': dppu.mr_user}).insert(ignore_permissions=True)
-	mkt.submit()
+	mkt = frappe.new_doc('Mkt')
+	mkt.date = today()
+	mkt.number = amount
+	mkt.dppu = dppu.name
+	mkt.line = line
+	mkt.note = "RFun by " + frappe.session.user
+	mkt.territory = dx.territory
+	mkt.dx = dppu.dx_user
+	mkt.dm = dppu.dm_user
+	mkt.sm = dppu.sm_user
+	mkt.mr = dppu.mr_user
+	mkt.insert(ignore_permissions=True)
+	# {'doctype': 'Mkt','date':today(),'number': amount, 'dppu': dppu.name, 'line': line, 'note': "RFun by " + frappe.session.user, 'territory': dx.territory, 'dx': dppu.dx_user, 'dm': dppu.dm_user, 'sm': dppu.sm_user, 'mr': dppu.mr_user}).insert(ignore_permissions=True)
+	# mkt.submit()
 	dx.save()
 	frappe.db.commit()
 	return {"status": "Success"}

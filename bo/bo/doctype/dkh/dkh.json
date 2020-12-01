@@ -10,8 +10,8 @@
   "sales_exec",
   "parent_sales_executive",
   "visits",
+  "effective_call",
   "sales_order",
-  "sales_oder",
   "actual_sales",
   "date_code",
   "amended_from"
@@ -25,7 +25,7 @@
    "options": "Territory"
   },
   {
-   "fieldname": "sales_order",
+   "fieldname": "effective_call",
    "fieldtype": "Data",
    "hidden": 1,
    "label": "Effective Call"
@@ -51,7 +51,7 @@
    "options": "Customer Visit"
   },
   {
-   "fieldname": "sales_oder",
+   "fieldname": "sales_order",
    "fieldtype": "Currency",
    "hidden": 1,
    "label": "Total Sales Order"
@@ -86,7 +86,7 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2020-11-19 19:26:47.274676",
+ "modified": "2020-11-24 10:59:52.319691",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "DKH",
@@ -105,16 +105,6 @@
    "share": 1,
    "submit": 1,
    "write": 1
-  },
-  {
-   "create": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "Guest",
-   "share": 1
   },
   {
    "cancel": 1,

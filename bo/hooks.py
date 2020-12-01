@@ -31,7 +31,9 @@ web_include_css = "/assets/bo/css/qltheme.css"
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
-
+# override_doctype_class = {
+# 	'ToDo': 'test_app.overrides.CustomToDo'
+# }
 # Home Pages
 # ----------
 

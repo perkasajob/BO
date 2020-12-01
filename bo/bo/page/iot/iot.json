@@ -1,0 +1,23 @@
+{
+ "content": null,
+ "creation": "2020-11-25 10:16:35.432456",
+ "docstatus": 0,
+ "doctype": "Page",
+ "idx": 0,
+ "modified": "2020-11-25 10:16:35.432456",
+ "modified_by": "Administrator",
+ "module": "BO",
+ "name": "iot",
+ "owner": "Administrator",
+ "page_name": "IoT",
+ "roles": [
+  {
+   "role": "System Manager"
+  }
+ ],
+ "script": null,
+ "standard": "Yes",
+ "style": null,
+ "system_page": 1,
+ "title": "IoT"
+}

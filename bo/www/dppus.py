@@ -1,6 +1,7 @@
 import frappe
 from frappe.website.website_generator import WebsiteGenerator
 
+base_template_path = "templates/base_bo.html"
 
 def get_context(context):
     context.no_cache = 1
