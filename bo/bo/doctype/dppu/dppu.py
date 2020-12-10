@@ -91,7 +91,7 @@ def refund(docname):
 	mkt.dm = dppu.dm_user
 	mkt.sm = dppu.sm_user
 	mkt.mr = dppu.mr_user
-	mkt.insert(ignore_permissions=True)
+	mkt.submit(ignore_permissions=True)
 	# {'doctype': 'Mkt','date':today(),'number': amount, 'dppu': dppu.name, 'line': line, 'note': "RFun by " + frappe.session.user, 'territory': dx.territory, 'dx': dppu.dx_user, 'dm': dppu.dm_user, 'sm': dppu.sm_user, 'mr': dppu.mr_user}).insert(ignore_permissions=True)
 	# mkt.submit()
 	dx.save()

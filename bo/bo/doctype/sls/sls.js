@@ -9,6 +9,8 @@ $('<link/>', {
  }).appendTo('head');
 
 const colReTotal = RegExp('^Sum of|^Total','gi');
+var gdata = []
+var gcolumns = []
 
 frappe.ui.form.on('SLS', {
 	onload: function(frm){
@@ -141,7 +143,11 @@ function set_parseXls_btn(frm){
 											} else {
 												// data.push({'JABATAN': c, 'indent': j, [frm.doc.header_value]:dat[total_col_nr]});
 												let ec = extraCols(dat, columns, j)
-												data.push(Object.assign({'JABATAN': c, 'indent': j}, ec));
+												if(j == 4){
+													data.push(Object.assign({'JABATAN': c, 'indent': j}, {}));
+													data.push(Object.assign({'JABATAN': '-', 'indent': 5}, ec));
+												} else
+													data.push(Object.assign({'JABATAN': c, 'indent': j}, ec));
 											}
 										}
 										isExtraRow = false
