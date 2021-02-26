@@ -6,7 +6,7 @@ from __future__ import unicode_literals
 # import frappe
 from frappe.model.document import Document
 from frappe import _, scrub, ValidationError
-import frappe, json
+import frappe, json, re
 from six import iteritems, string_types
 from frappe.utils import today, flt
 from datetime import datetime, timedelta
@@ -25,7 +25,8 @@ def book_transfer(docname, check=0):
 		return {"status": "Not Authorized"}
 
 	dppu = frappe.get_doc('DPPU', docname)
-	line = dppu.mr_user[-1]
+	# line = dppu.mr_user[-1]
+	line = re.search(r'(?<=_)\w+', dppu.mr_user).group().lower()
 	ct = 'C' if dppu.cash_transfer == 'Cash' else 'T'
 	sp = frappe.db.sql("select * from `tabSP` where dppu='{}' and number < 0".format(docname))
 	if len(sp) > 0:
@@ -35,8 +36,8 @@ def book_transfer(docname, check=0):
 
 	dx = frappe.get_doc('Dx', dppu.dx_user)
 	amount = -1*dppu.number if dppu.number > 0 else dppu.number
-	dx.append('loan'+line,{'date':today(),'number': amount, 'dppu': dppu.name, 'type':ct, 'line': line, 'note': "by " + frappe.session.user})
-	dx.append('mkt'+line ,{'date':today(),'number': amount, 'dppu': dppu.name, 'type':ct, 'line': line, 'note': "by " + frappe.session.user, 'territory': dx.territory})
+	dx.append('loan_'+line,{'date':today(),'number': amount, 'dppu': dppu.name, 'type':ct, 'line': line, 'note': "by " + frappe.session.user})
+	dx.append('mkt_'+line ,{'date':today(),'number': amount, 'dppu': dppu.name, 'type':ct, 'line': line, 'note': "by " + frappe.session.user, 'territory': dx.territory})
 
 	dx.save()
 	mkt = frappe.get_doc({'doctype': 'Mkt','date':today(),'number': amount, 'dppu': dppu.name, 'line': line, 'note': "by " + frappe.session.user, 'territory': dx.territory, 'dx': dppu.dx_user, 'dm': dppu.dm_user, 'sm': dppu.sm_user, 'mr': dppu.mr_user}).insert(ignore_permissions=True)
@@ -66,7 +67,8 @@ def book_transfer(docname, check=0):
 @frappe.whitelist()
 def refund(docname):
 	dppu = frappe.get_doc('DPPU', docname)
-	line = dppu.mr_user[-1]
+	# line = dppu.mr_user[-1] if dppu.mr_user[-3:-1] == 'QL' else dppu.mr_user[-2:].lower() #(?<=_)\w+$
+	line = re.search(r'(?<=_)\w+', dppu.mr_user).group().lower()
 	ct = 'RC' if dppu.cash_transfer == 'Cash' else 'RT'
 	sp = frappe.db.sql("select * from `tabSP` where dppu='{}' and number > 0".format(docname))
 	if len(sp) > 0:
@@ -78,8 +80,8 @@ def refund(docname):
 		return {"status": "No R Amount"}
 	dx = frappe.get_doc('Dx', dppu.dx_user)
 	amount = abs(dppu.amount_refund)
-	dx.append('loan'+line,{'date':today(),'number': amount, 'dppu': dppu.name, 'type':ct, 'line': line, 'note': "RFun by " + frappe.session.user})
-	dx.append('mkt'+line , {'date':today(),'number': amount, 'dppu': dppu.name, 'type':ct, 'line': line, 'note': "RFun by " + frappe.session.user, 'territory': dx.territory})
+	dx.append('loan_'+line,{'date':today(),'number': amount, 'dppu': dppu.name, 'type':ct, 'line': line, 'note': "RFun by " + frappe.session.user})
+	dx.append('mkt_'+line , {'date':today(),'number': amount, 'dppu': dppu.name, 'type':ct, 'line': line, 'note': "RFun by " + frappe.session.user, 'territory': dx.territory})
 	mkt = frappe.new_doc('Mkt')
 	mkt.date = today()
 	mkt.number = amount
@@ -91,7 +93,7 @@ def refund(docname):
 	mkt.dm = dppu.dm_user
 	mkt.sm = dppu.sm_user
 	mkt.mr = dppu.mr_user
-	mkt.submit(ignore_permissions=True)
+	mkt.submit()
 	# {'doctype': 'Mkt','date':today(),'number': amount, 'dppu': dppu.name, 'line': line, 'note': "RFun by " + frappe.session.user, 'territory': dx.territory, 'dx': dppu.dx_user, 'dm': dppu.dm_user, 'sm': dppu.sm_user, 'mr': dppu.mr_user}).insert(ignore_permissions=True)
 	# mkt.submit()
 	dx.save()
@@ -107,10 +109,11 @@ def adv_transfer(docname, check=0):
 		return {"status": "Not Authorized"}
 
 	dppu = frappe.get_doc('DPPU', docname)
-	line = dppu.mr_user[-1]
+	# line = dppu.mr_user[-1]
+	line = re.search(r'(?<=_)\w+', dppu.mr_user).group().lower()
 	ct = 'AC' if dppu.cash_transfer == 'Cash' else 'AT'
 
-	if cint(dppu.get_value('saldo' + line)) > dppu.number:
+	if cint(dppu.get_value('saldo_' + line)) > dppu.number:
 		return {"status": "Saldo is sufficient"}
 
 	if dppu.jml_ccln :
@@ -124,16 +127,16 @@ def adv_transfer(docname, check=0):
 
 	dx = frappe.get_doc('Dx', dppu.dx_user)
 
-	delta = cint(dppu.get_value('saldo' + line)) - int(dppu.number)
+	delta = cint(dppu.get_value('saldo_' + line)) - int(dppu.number)
 
 	_date = datetime.now()
 
-	if cint(dppu.get_value('saldo' + line)) < 0:
+	if cint(dppu.get_value('saldo_' + line)) < 0:
 		amount = -1*int(abs(dppu.number)/int(dppu.jml_ccln))
 	elif delta < 0:
 		amount = int(delta/int(dppu.jml_ccln)) # amount is the advance per month
 
-	dx.append('loan'+line ,{'date':today(),'number': -1*int(dppu.number), 'dppu': dppu.name, 'type':ct, 'line': line, 'note': " Adv by " + frappe.session.user})
+	dx.append('loan_'+line ,{'date':today(),'number': -1*int(dppu.number), 'dppu': dppu.name, 'type':ct, 'line': line, 'note': " Adv by " + frappe.session.user})
 	# dx.append('mkt'+ls ,{'date':today(),'number': -1*int(dppu.number), 'dppu': dppu.name, 'type':ct, 'line': line, 'note': " Adv-mou by " + frappe.session.user, 'territory': dx.territory})
 
 	# amount = -1*int(abs(dppu.number)/int(dppu.jml_ccln)) if dppu.saldo < 0 else -1*int(abs(delta)/int(dppu.jml_ccln))
@@ -141,7 +144,7 @@ def adv_transfer(docname, check=0):
 	for i in range(int(dppu.jml_ccln)):
 		_date += relativedelta(months=+1)
 		_date = _date.replace(day=1)
-		dx.append('adv'+line ,{'date':_date.strftime("%Y-%m-%d"),'number': amount, 'dppu': dppu.name, 'type':ct, 'line': line, 'note': "Adv:{}-{}:{} by {}".format(str(i+1), dppu.jml_ccln, str(delta), frappe.session.user), 'territory': dx.territory})
+		dx.append('adv_'+line ,{'date':_date.strftime("%Y-%m-%d"),'number': amount, 'dppu': dppu.name, 'type':ct, 'line': line, 'note': "Adv:{}-{}:{} by {}".format(str(i+1), dppu.jml_ccln, str(delta), frappe.session.user), 'territory': dx.territory})
 	dx.save()
 	frappe.db.commit()
 	return {"status": "Success"}

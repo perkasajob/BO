@@ -14,27 +14,28 @@ class Dx(Document):
 	def save(self):
 		# t_roles = ["Account Manager", "System Manager"]
 		# user_match_role = [x for x in t_roles if x in frappe.get_roles(frappe.session.user)]
-		nrLine = 3
+		lines = ['ql1','ql2','ql3','n1']
+		nrLine = len(lines)
 		saldo = [0] * nrLine
 		adv_saldo = [0] * nrLine
 		mkt_saldo = [0] * nrLine
 		history = [""] * nrLine
 		for i in range(nrLine):
-			ls = str(i+1)
-			for l in getattr(self, 'loan'+ ls):
+			ls = lines[i]
+			for l in getattr(self, 'loan_'+ ls):
 				saldo[i] += int(l.number)
 				l.saldo = saldo[i]
 				history[i] += "{}\t\t{}\t\t{}\t\t{}\n".format(l.date, l.number, l.saldo, l.note)
-			if getattr(self, 'saldo_history'+ ls) != history[i] :
-				setattr(self, 'saldo_history'+ ls, history[i])
-			if getattr(self, 'saldo'+ ls) != cstr(saldo[i]) :
-				setattr(self, 'saldo'+ ls, saldo[i])
+			if getattr(self, 'saldo_history_'+ ls) != history[i] :
+				setattr(self, 'saldo_history_'+ ls, history[i])
+			if getattr(self, 'saldo_'+ ls) != cstr(saldo[i]) :
+				setattr(self, 'saldo_'+ ls, saldo[i])
 
-			for a in getattr(self, 'adv'+ ls):
+			for a in getattr(self, 'adv_'+ ls):
 				adv_saldo[i] += int(a.number)
 				a.saldo = adv_saldo[i]
 
-			for m in getattr(self, 'mkt'+ ls):
+			for m in getattr(self, 'mkt_'+ ls):
 				mkt_saldo[i] += int(m.number)
 				m.saldo = mkt_saldo[i]
 

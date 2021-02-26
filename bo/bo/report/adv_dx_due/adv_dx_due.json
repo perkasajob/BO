@@ -1,0 +1,47 @@
+{
+ "add_total_row": 1,
+ "creation": "2021-02-10 11:41:22.693792",
+ "disable_prepared_report": 0,
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "idx": 0,
+ "is_standard": "Yes",
+ "json": "{}",
+ "modified": "2021-02-10 15:15:35.762064",
+ "modified_by": "Administrator",
+ "module": "BO",
+ "name": "Adv Dx Due",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "query": "SELECT\n  `tabAdv Item`.date as \"Date:Date:120\",\n  `tabAdv Item`.parent as \"Dx:Link/Dx:200\",\n  `tabAdv Item`.number as \"Number:Int:100\",\n  `tabAdv Item`.dppu as \"DPPU:Data:100\",\n  `tabAdv Item`.parentfield as \"Line:Data:100\",\n  `tabDPPU`.mr_user as \"MR:Data:100\",\n  `tabDPPU`.jml_ccln as \"JmlCcln:Data:100\",\n  `tabDPPU`.blanko_nr as \"Blanko Nr:Data:100\"\nFROM\n  `tabAdv Item`\n  left join `tabDPPU` on (\n\t\t`tabAdv Item`.dppu= `tabDPPU`.name\n\t)\nWHERE  \n  `tabAdv Item`.`date`between %(start_date)s and %(end_date)s  \n  ",
+ "ref_doctype": "Dx",
+ "report_name": "Adv Dx Due",
+ "report_type": "Query Report",
+ "roles": [
+  {
+   "role": "CSD"
+  },
+  {
+   "role": "MSD"
+  },
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "SM"
+  },
+  {
+   "role": "DM"
+  },
+  {
+   "role": "ARCO"
+  },
+  {
+   "role": "GSM"
+  },
+  {
+   "role": "Accounts Manager"
+  }
+ ]
+}

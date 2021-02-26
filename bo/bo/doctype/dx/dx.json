@@ -10,24 +10,29 @@
   "territory",
   "saldo",
   "sal_sb",
-  "saldo1",
-  "saldo2",
-  "saldo3",
+  "saldo_ql1",
+  "saldo_ql2",
+  "saldo_ql3",
+  "saldo_n1",
   "sal_e_sb",
   "cash_transfer",
   "rek",
-  "saldo_history1",
-  "loan1",
-  "adv1",
-  "mkt1",
-  "saldo_history2",
-  "loan2",
-  "adv2",
-  "mkt2",
-  "saldo_history3",
-  "loan3",
-  "adv3",
-  "mkt3"
+  "saldo_history_ql1",
+  "loan_ql1",
+  "adv_ql1",
+  "mkt_ql1",
+  "saldo_history_ql2",
+  "loan_ql2",
+  "adv_ql2",
+  "mkt_ql2",
+  "saldo_history_ql3",
+  "loan_ql3",
+  "adv_ql3",
+  "mkt_ql3",
+  "saldo_history_n1",
+  "loan_n1",
+  "adv_n1",
+  "mkt_n1"
  ],
  "fields": [
   {
@@ -60,59 +65,11 @@
    "options": "\nCash\nTransfer"
   },
   {
-   "fieldname": "loan2",
-   "fieldtype": "Table",
-   "label": "Acc 2",
-   "options": "SP",
-   "permlevel": 1
-  },
-  {
-   "fieldname": "saldo_history2",
-   "fieldtype": "Long Text",
-   "label": "History 2",
-   "permlevel": 1
-  },
-  {
    "fieldname": "rek",
    "fieldtype": "Table",
    "label": "NRx",
    "options": "DxRek",
    "permlevel": 1
-  },
-  {
-   "fieldname": "adv2",
-   "fieldtype": "Table",
-   "label": "Adv 2",
-   "options": "Adv Item"
-  },
-  {
-   "fieldname": "mkt2",
-   "fieldtype": "Table",
-   "label": "Mkt 2",
-   "options": "Mkt Item"
-  },
-  {
-   "fieldname": "saldo_history3",
-   "fieldtype": "Long Text",
-   "label": "History 3"
-  },
-  {
-   "fieldname": "loan3",
-   "fieldtype": "Table",
-   "label": "Acc 3",
-   "options": "SP"
-  },
-  {
-   "fieldname": "adv3",
-   "fieldtype": "Table",
-   "label": "Adv 3",
-   "options": "Adv Item"
-  },
-  {
-   "fieldname": "mkt3",
-   "fieldtype": "Table",
-   "label": "Mkt 3",
-   "options": "Mkt Item"
   },
   {
    "collapsible": 1,
@@ -121,55 +78,131 @@
    "label": "Sal"
   },
   {
-   "default": "0",
-   "fieldname": "saldo1",
-   "fieldtype": "Read Only",
-   "label": "Sal 1"
-  },
-  {
-   "default": "0",
-   "fieldname": "saldo2",
-   "fieldtype": "Read Only",
-   "label": "Sal 2"
-  },
-  {
-   "default": "0",
-   "fieldname": "saldo3",
-   "fieldtype": "Read Only",
-   "label": "Sal 3"
-  },
-  {
    "fieldname": "sal_e_sb",
    "fieldtype": "Section Break"
   },
   {
+   "fieldname": "saldo_history_n1",
+   "fieldtype": "Long Text",
+   "label": "History N1"
+  },
+  {
+   "fieldname": "loan_n1",
+   "fieldtype": "Table",
+   "label": "Acc N1",
+   "options": "SP"
+  },
+  {
+   "fieldname": "adv_n1",
+   "fieldtype": "Table",
+   "label": "Adv N1",
+   "options": "Adv Item"
+  },
+  {
+   "fieldname": "mkt_n1",
+   "fieldtype": "Table",
+   "label": "Mkt N1",
+   "options": "Mkt Item"
+  },
+  {
    "default": "{}",
-   "fieldname": "saldo_history1",
+   "fieldname": "saldo_history_ql1",
    "fieldtype": "Long Text",
    "label": "History",
    "permlevel": 1
   },
   {
-   "fieldname": "loan1",
+   "fieldname": "loan_ql1",
    "fieldtype": "Table",
    "label": "Acc 1",
    "options": "SP",
    "permlevel": 1
   },
   {
-   "fieldname": "adv1",
+   "fieldname": "adv_ql1",
    "fieldtype": "Table",
    "label": "Adv 1",
    "options": "Adv Item"
   },
   {
-   "fieldname": "mkt1",
+   "fieldname": "mkt_ql1",
    "fieldtype": "Table",
    "label": "Mkt 1",
    "options": "Mkt Item"
+  },
+  {
+   "fieldname": "saldo_history_ql2",
+   "fieldtype": "Long Text",
+   "label": "History 2",
+   "permlevel": 1
+  },
+  {
+   "fieldname": "loan_ql2",
+   "fieldtype": "Table",
+   "label": "Acc 2",
+   "options": "SP",
+   "permlevel": 1
+  },
+  {
+   "fieldname": "adv_ql2",
+   "fieldtype": "Table",
+   "label": "Adv 2",
+   "options": "Adv Item"
+  },
+  {
+   "fieldname": "mkt_ql2",
+   "fieldtype": "Table",
+   "label": "Mkt 2",
+   "options": "Mkt Item"
+  },
+  {
+   "fieldname": "saldo_history_ql3",
+   "fieldtype": "Long Text",
+   "label": "History 3"
+  },
+  {
+   "fieldname": "loan_ql3",
+   "fieldtype": "Table",
+   "label": "Acc 3",
+   "options": "SP"
+  },
+  {
+   "fieldname": "adv_ql3",
+   "fieldtype": "Table",
+   "label": "Adv 3",
+   "options": "Adv Item"
+  },
+  {
+   "fieldname": "mkt_ql3",
+   "fieldtype": "Table",
+   "label": "Mkt 3",
+   "options": "Mkt Item"
+  },
+  {
+   "default": "0",
+   "fieldname": "saldo_ql1",
+   "fieldtype": "Read Only",
+   "label": "Sal 1"
+  },
+  {
+   "default": "0",
+   "fieldname": "saldo_ql2",
+   "fieldtype": "Read Only",
+   "label": "Sal 2"
+  },
+  {
+   "default": "0",
+   "fieldname": "saldo_ql3",
+   "fieldtype": "Read Only",
+   "label": "Sal 3"
+  },
+  {
+   "fieldname": "saldo_n1",
+   "fieldtype": "Read Only",
+   "label": "Sal N1"
   }
  ],
- "modified": "2020-11-16 10:24:32.949006",
+ "modified": "2021-02-06 20:28:28.211975",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "Dx",

@@ -52,7 +52,7 @@ frappe.ui.form.on('DPPU', {
 	},
 	number: function(frm){
 		let line = frm.doc.mr_user.substr(-1)
-		var delta = frm.doc['saldo' + line] - frm.doc.number
+		var delta = frm.doc['saldo_' + line] - frm.doc.number
 		if(delta < 0){
 			console.log("Exceeding saldo")
 		}
@@ -68,13 +68,13 @@ frappe.ui.form.on('DPPU', {
 	jml_ccln: function(frm){
 		if(frm.doc.jml_ccln){
 			let line = frm.doc.mr_user.substr(-1)
-			var delta = frm.doc['saldo' + line] - frm.doc.number
-			if(delta >= -5000 ){ // BO18
-				frm.set_value("jml_ccln", "")
-			} else if(delta < -5000 && delta >= -10000 && parseInt(frm.doc.jml_ccln) > 3) {
-				frm.set_value("jml_ccln", "3")
-			} else if(delta < -10000 && delta >= -25000 && parseInt(frm.doc.jml_ccln) > 6) {
+			var delta = frm.doc['saldo_' + line] - frm.doc.number
+			if(delta >= -10000 && parseInt(frm.doc.jml_ccln) > 6){ // BO18->BO28
 				frm.set_value("jml_ccln", "6")
+			} else if(delta < -10000 && delta >= -20000 && parseInt(frm.doc.jml_ccln) > 9) {
+				frm.set_value("jml_ccln", "9")
+			} else if(delta < -20000 && parseInt(frm.doc.jml_ccln) > 12) {
+				frm.set_value("jml_ccln", "12")
 			}
 		}
 	}
@@ -276,7 +276,7 @@ function check_state_warning(frm){
 
 function set_color_saldo(frm){
 	let line = frm.doc.mr_user.substr(-1)
-	if(frm.doc['saldo' + line] < 0){
+	if(frm.doc['saldo_' + line] < 0){
 		$("[data-fieldname='saldo']>div>.control-input-wrapper>.control-value").css({"background-color":"red","color":"white"})
 	}
 }
