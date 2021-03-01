@@ -275,9 +275,11 @@ function check_state_warning(frm){
 
 
 function set_color_saldo(frm){
-	let line = frm.doc.mr_user.match(/(?<=_)\w+$/gi)[0].toLowerCase()
-	if(frm.doc['saldo_' + line] < 0){
-		$("[data-fieldname='saldo']>div>.control-input-wrapper>.control-value").css({"background-color":"red","color":"white"})
+	if(frm.doc.mr_user){
+		let line = frm.doc.mr_user.match(/(?<=_)\w+$/gi)[0].toLowerCase()
+		if(frm.doc['saldo_' + line] < 0){
+			$("[data-fieldname='saldo']>div>.control-input-wrapper>.control-value").css({"background-color":"red","color":"white"})
+		}
 	}
 }
 
