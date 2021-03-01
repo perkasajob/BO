@@ -15,9 +15,10 @@
   "dx_user",
   "saldo",
   "sal_sb",
-  "saldo1",
-  "saldo2",
-  "saldo3",
+  "saldo_ql1",
+  "saldo_ql2",
+  "saldo_ql3",
+  "saldo_n1",
   "sal_e_sb",
   "cash_transfer",
   "number",
@@ -150,24 +151,6 @@
    "label": "Sal"
   },
   {
-   "fetch_from": "dx_user.saldo1",
-   "fieldname": "saldo1",
-   "fieldtype": "Read Only",
-   "label": "Sal 1"
-  },
-  {
-   "fetch_from": "dx_user.saldo2",
-   "fieldname": "saldo2",
-   "fieldtype": "Read Only",
-   "label": "Sal 2"
-  },
-  {
-   "fetch_from": "dx_user.saldo3",
-   "fieldname": "saldo3",
-   "fieldtype": "Read Only",
-   "label": "Sal 3"
-  },
-  {
    "fieldname": "sal_e_sb",
    "fieldtype": "Section Break"
   },
@@ -175,10 +158,33 @@
    "fieldname": "number_part",
    "fieldtype": "Data",
    "label": "Number Partition"
+  },
+  {
+   "fetch_from": "dx_user.saldo1",
+   "fieldname": "saldo_ql1",
+   "fieldtype": "Read Only",
+   "label": "Sal QL1"
+  },
+  {
+   "fetch_from": "dx_user.saldo2",
+   "fieldname": "saldo_ql2",
+   "fieldtype": "Read Only",
+   "label": "Sal QL2"
+  },
+  {
+   "fetch_from": "dx_user.saldo3",
+   "fieldname": "saldo_ql3",
+   "fieldtype": "Read Only",
+   "label": "Sal QL3"
+  },
+  {
+   "fieldname": "saldo_n1",
+   "fieldtype": "Read Only",
+   "label": "Sal N1"
   }
  ],
  "is_submittable": 1,
- "modified": "2020-11-18 13:38:27.515301",
+ "modified": "2021-03-01 13:48:50.461724",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "DPPU",
