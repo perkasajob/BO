@@ -160,31 +160,32 @@
    "label": "Number Partition"
   },
   {
-   "fetch_from": "dx_user.saldo1",
+   "fetch_from": "dx_user.saldo_ql1",
    "fieldname": "saldo_ql1",
    "fieldtype": "Read Only",
    "label": "Sal QL1"
   },
   {
-   "fetch_from": "dx_user.saldo2",
+   "fetch_from": "dx_user.saldo_ql2",
    "fieldname": "saldo_ql2",
    "fieldtype": "Read Only",
    "label": "Sal QL2"
   },
   {
-   "fetch_from": "dx_user.saldo3",
+   "fetch_from": "dx_user.saldo_ql3",
    "fieldname": "saldo_ql3",
    "fieldtype": "Read Only",
    "label": "Sal QL3"
   },
   {
+   "fetch_from": "dx_user.saldo_n1",
    "fieldname": "saldo_n1",
    "fieldtype": "Read Only",
    "label": "Sal N1"
   }
  ],
  "is_submittable": 1,
- "modified": "2021-03-01 13:48:50.461724",
+ "modified": "2021-03-01 14:26:09.715170",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "DPPU",
