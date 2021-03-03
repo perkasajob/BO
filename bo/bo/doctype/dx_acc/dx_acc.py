@@ -104,9 +104,9 @@ def check_dx_list(name, rows):
 def import_loan(name, rows):
 	for row in rows:
 		dx = frappe.get_doc("Dx", row[0])
-		line = int(row[4]) # line
+		line = row[4] # line
 		if(row[1]): # Acc number
-			dx_book = 'loan' + str(line)
+			dx_book = 'loan_' + line
 			dx.append(dx_book, {'number': row[1], 'ref_nr': row[2], 'note': row[3] + ' -' + name, 'line': line, 'type': 'DxAcc', 'date': today()})
 		dx.save()
 	frappe.publish_realtime('Dx acc', 'Success ...')
