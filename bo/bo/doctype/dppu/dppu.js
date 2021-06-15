@@ -55,6 +55,9 @@ frappe.ui.form.on('DPPU', {
 		var delta = frm.doc['saldo_' + line] - frm.doc.number
 		if(delta < 0){
 			console.log("Exceeding saldo")
+		} else {
+			frm.set_value("jml_ccln", "")
+			frm.set_value("number_part", "")
 		}
 	},
 	number_part: function(frm){
@@ -63,6 +66,9 @@ frappe.ui.form.on('DPPU', {
 		var delta = frm.doc['saldo'] - frm.doc.number
 		if(delta < 0){
 			console.log("Exceeding saldo")
+		} else {
+			frm.set_value("jml_ccln", "")
+			frm.set_value("number_part", "")
 		}
 	},
 	jml_ccln: function(frm){
