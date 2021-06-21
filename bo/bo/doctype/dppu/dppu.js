@@ -29,6 +29,10 @@ frappe.ui.form.on('DPPU', {
             frappe.msgprint(__("You can not select past date in From Date"));
             frappe.validated = false;
 		}
+		if (frm.doc.number < 1){
+			frappe.msgprint(__("Number Cannot be 0 or minus"));
+            frappe.validated = false;
+		}
 	},
 	before_workflow_action: function(frm){ //before_workflow_action
 		// if((frm.doc.workflow_state == "FIN Approved")
@@ -62,7 +66,11 @@ frappe.ui.form.on('DPPU', {
 	},
 	number_part: function(frm){
 		let number_part = frm.doc.number_part.replaceAll(' ','').replaceAll('.',',').split(',').map(o=>cint(o))
-		frm.set_value('number', number_part.reduce((a,v)=>a+v))
+		number_part = number_part.reduce((a,v)=>a+v)
+		if (number_part < 1)
+			return
+
+		frm.set_value('number', number_part)
 		var delta = frm.doc['saldo'] - frm.doc.number
 		if(delta < 0){
 			console.log("Exceeding saldo")

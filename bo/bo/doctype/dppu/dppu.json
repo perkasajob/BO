@@ -157,6 +157,7 @@
   {
    "fieldname": "number_part",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "Number Partition"
   },
   {
@@ -185,7 +186,7 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2021-03-01 14:26:09.715170",
+ "modified": "2021-06-21 11:12:03.740969",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "DPPU",
