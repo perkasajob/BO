@@ -89,6 +89,8 @@ frappe.ui.form.on('DPPU', {
 				frm.set_value("jml_ccln", "9")
 			} else if(delta < -20000 && parseInt(frm.doc.jml_ccln) > 12) {
 				frm.set_value("jml_ccln", "12")
+			}  else if(delta < -1000001 && parseInt(frm.doc.jml_ccln) > 24) { // Shierly:ada user butuh 24 bulan
+				frm.set_value("jml_ccln", "24")
 			}
 		}
 	}
