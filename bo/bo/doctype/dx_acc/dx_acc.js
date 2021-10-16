@@ -9,7 +9,7 @@ frappe.ui.form.on('Dx Acc', {
 })
 
 function set_btns(frm){
-	if(!frappe.user.has_role("DM")){
+	if(!frappe.user.has_role("DM") && !frappe.user.has_role("SM") && !frappe.user.has_role("GSM")){
 		frm.add_custom_button(__('Download XLS'), function(){
 			var method =
 					'/api/method/bo.bo.doctype.lpd.lpd.download_template';

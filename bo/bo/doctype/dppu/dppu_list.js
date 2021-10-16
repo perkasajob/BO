@@ -14,7 +14,7 @@ frappe.listview_settings['DPPU'] = {
 		}
 	},
 	refresh: function(listview) {
-		if(!frappe.user.has_role("DM")){
+		if(!frappe.user.has_role("DM") && !frappe.user.has_role("SM") && !frappe.user.has_role("GSM")){
 			listview.page.add_menu_item(__('Download XLS'), function(e,o){
 				var method =
 						'/api/method/bo.bo.doctype.dpl.dpl.download_template';

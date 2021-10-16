@@ -53,7 +53,7 @@
    "fieldname": "mr_user",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "MR",
+   "label": "TP",
    "options": "MR",
    "reqd": 1
   },
@@ -142,7 +142,7 @@
    "fieldname": "jml_ccln",
    "fieldtype": "Select",
    "label": "Jml Ccln",
-   "options": "\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12"
+   "options": "\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24"
   },
   {
    "collapsible": 1,
@@ -158,7 +158,9 @@
    "fieldname": "number_part",
    "fieldtype": "Data",
    "hidden": 1,
-   "label": "Number Partition"
+   "label": "Number Partition",
+   "permlevel": 2,
+   "report_hide": 1
   },
   {
    "fetch_from": "dx_user.saldo_ql1",
@@ -186,7 +188,7 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2021-06-21 11:12:03.740969",
+ "modified": "2021-10-16 10:15:57.651319",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "DPPU",

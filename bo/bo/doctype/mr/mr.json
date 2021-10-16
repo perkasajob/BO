@@ -30,7 +30,7 @@
    "fieldname": "full_name",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "MR Name",
+   "label": "TP Name",
    "reqd": 1,
    "search_index": 1
   },
@@ -48,7 +48,7 @@
    "label": "Territory"
   }
  ],
- "modified": "2020-11-18 09:18:46.092496",
+ "modified": "2021-07-06 15:20:42.736806",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "MR",

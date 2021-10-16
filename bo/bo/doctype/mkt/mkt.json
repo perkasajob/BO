@@ -109,12 +109,12 @@
   {
    "fieldname": "mr",
    "fieldtype": "Read Only",
-   "label": "MR",
+   "label": "TP",
    "options": "MR"
   }
  ],
  "is_submittable": 1,
- "modified": "2020-12-02 09:00:39.167276",
+ "modified": "2021-07-06 15:22:43.825157",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "Mkt",
@@ -151,6 +151,18 @@
    "report": 1,
    "role": "Accounts Manager",
    "share": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "ARCO",
+   "share": 1,
+   "submit": 1,
+   "write": 1
   }
  ],
  "quick_entry": 1,
