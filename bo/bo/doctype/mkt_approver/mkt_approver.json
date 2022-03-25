@@ -1,0 +1,153 @@
+{
+ "autoname": "field:username",
+ "creation": "2022-02-11 15:10:04.096118",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "username",
+  "full_name",
+  "berno_id",
+  "approver_ql1",
+  "approver_ql2",
+  "approver_n1"
+ ],
+ "fields": [
+  {
+   "fieldname": "username",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "username",
+   "options": "User",
+   "reqd": 1,
+   "search_index": 1,
+   "unique": 1
+  },
+  {
+   "fetch_from": "username.full_name",
+   "fieldname": "full_name",
+   "fieldtype": "Read Only",
+   "in_standard_filter": 1,
+   "label": "Full Name"
+  },
+  {
+   "fieldname": "berno_id",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "IS ID"
+  },
+  {
+   "fieldname": "approver_ql1",
+   "fieldtype": "Link",
+   "label": "Approver QL1",
+   "options": "Mkt Approver"
+  },
+  {
+   "fieldname": "approver_ql2",
+   "fieldtype": "Link",
+   "label": "Approver QL2",
+   "options": "Mkt Approver"
+  },
+  {
+   "fieldname": "approver_n1",
+   "fieldtype": "Link",
+   "label": "Approver N1",
+   "options": "Mkt Approver"
+  }
+ ],
+ "modified": "2022-02-11 15:45:32.592061",
+ "modified_by": "Administrator",
+ "module": "BO",
+ "name": "Mkt Approver",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "DM",
+   "share": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "SM",
+   "share": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "GSM",
+   "share": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "MSD",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "CSD",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Mkt Approver",
+   "share": 1
+  }
+ ],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

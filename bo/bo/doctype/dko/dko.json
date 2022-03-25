@@ -1,0 +1,281 @@
+{
+ "allow_import": 1,
+ "autoname": "field:blanko_nr",
+ "color": "green",
+ "creation": "2020-07-20 13:56:36.056017",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "blanko_nr",
+  "dm_user",
+  "territory",
+  "approver_1",
+  "mr_user",
+  "dx_user",
+  "saldo",
+  "sal_sb",
+  "saldo_ql1",
+  "saldo_ql2",
+  "saldo_ql3",
+  "saldo_n1",
+  "sal_e_sb",
+  "cash_transfer",
+  "number",
+  "date",
+  "amount_refund",
+  "comment",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "columns": 1,
+   "fieldname": "blanko_nr",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Blanko Nr",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "dm_user",
+   "fieldtype": "Read Only",
+   "in_list_view": 1,
+   "label": "DM",
+   "options": "DM",
+   "reqd": 1,
+   "set_only_once": 1
+  },
+  {
+   "fieldname": "mr_user",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "TP",
+   "options": "MR",
+   "reqd": 1
+  },
+  {
+   "fieldname": "number",
+   "fieldtype": "Int",
+   "label": "Number",
+   "reqd": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "default": "Today",
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "fieldname": "dx_user",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Dx",
+   "options": "Dx",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "dm_user.territory",
+   "fieldname": "territory",
+   "fieldtype": "Read Only",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Territory"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "DKO",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "default": "Cash",
+   "fieldname": "cash_transfer",
+   "fieldtype": "Select",
+   "label": "C/T",
+   "options": "\nCash\nTransfer\nSPP"
+  },
+  {
+   "fetch_from": "dx_user.saldo",
+   "fieldname": "saldo",
+   "fieldtype": "Read Only",
+   "label": "Sal",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "dm_user.sm_user",
+   "fieldname": "approver_1",
+   "fieldtype": "Read Only",
+   "label": "Approver 1",
+   "options": "User"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "amount_refund",
+   "fieldtype": "Int",
+   "label": "AMnt Ref",
+   "permlevel": 3
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "comment",
+   "fieldtype": "Small Text",
+   "label": "Keterangan"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "sal_sb",
+   "fieldtype": "Section Break",
+   "label": "Sal"
+  },
+  {
+   "fieldname": "sal_e_sb",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fetch_from": "dx_user.saldo_ql1",
+   "fieldname": "saldo_ql1",
+   "fieldtype": "Read Only",
+   "label": "Sal QL1"
+  },
+  {
+   "fetch_from": "dx_user.saldo_ql2",
+   "fieldname": "saldo_ql2",
+   "fieldtype": "Read Only",
+   "label": "Sal QL2"
+  },
+  {
+   "fetch_from": "dx_user.saldo_ql3",
+   "fieldname": "saldo_ql3",
+   "fieldtype": "Read Only",
+   "label": "Sal QL3"
+  },
+  {
+   "fetch_from": "dx_user.saldo_n1",
+   "fieldname": "saldo_n1",
+   "fieldtype": "Read Only",
+   "label": "Sal N1"
+  }
+ ],
+ "is_submittable": 1,
+ "modified": "2022-02-11 14:07:14.866186",
+ "modified_by": "Administrator",
+ "module": "BO",
+ "name": "DKO",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "if_owner": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "DM",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "SM",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "GSM",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "MSD",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "CSD",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "ARCO",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "route": "/dko",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "title_field": "blanko_nr",
+ "track_changes": 1
+}
