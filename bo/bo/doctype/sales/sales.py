@@ -16,7 +16,7 @@ from frappe.utils.csvutils import validate_google_sheets_url
 from frappe import _
 import re
 
-class Restruct(Document):
+class Sales(Document):
 	def validate(self):
 		pass
 
@@ -34,36 +34,9 @@ class Restruct(Document):
 			columns = rows[0]
 			rows.pop(0)
 			data = rows
-			try:
-				for row in rows:
-					name = row[0]
-					full_name = row[1]
-					isid = row[2]
-					dm_id = row[3]
-					if frappe.db.exists('MR', name):
-						doc = frappe.get_doc('MR', name)
-						doc.full_name = full_name
-						doc.berno_id = isid
-						doc.dm_id = dm_id
-						doc.save()
-					else:
-						doc = frappe.get_doc({
-							"doctype": "MR",
-							"name": name,
-							"full_name": full_name,
-							"email": name.lower() + "@ksp.ksp",
-							"berno_id": isid,
-							"dm_id": dm_id
-						}).insert()
-				frappe.db.commit()
-				frappe.msgprint("Done")
-			except:
-				frappe.db.rollback()
-				frappe.msgprint("Error has occurred")
-
 			return {"columns": columns, "data": data}
 		else:
-			return {"status" : "Error", "filename": fname, "doctype": self.doctype}
+			return {"status" : "Error", "filename": fname, "doctype": self.doctype}	
 
 
 	def get_full_path(self):
@@ -72,7 +45,7 @@ class Restruct(Document):
 			if att:
 				file_path = att[0].file_url or att[0].file_name
 			else:
-				frappe.throw("No Attachment found")
+				frappe.throw("No Attachment found")	
 
 			if "/" not in file_path:
 				file_path = "/files/" + file_path
@@ -140,7 +113,7 @@ class Restruct(Document):
 		return self.get_importer().export_errored_rows()
 
 	def get_importer(self):
-		return Importer(self.reference_doctype, data_import=self)
+		return Importer(self.reference_doctype, data_import=self)		
 
 
 def get_mop_query(doctype, txt, searchfield, start, page_len, filters):
@@ -206,12 +179,12 @@ def download_template(
 		:param export_filters: Filter dict
 		:param file_type: File type to export into
 	"""
-
+	
 	export_fields = frappe.parse_json(export_fields)
 	export_filters = frappe.parse_json(export_filters)
 	export_data = export_records != "blank_template"
 	export_protect_area = frappe.parse_json(export_protect_area)
-
+		
 	e = Exporter(
 		doctype,
 		export_fields=export_fields,
@@ -221,7 +194,7 @@ def download_template(
 		export_protect_area=export_protect_area,
 		export_page_length=5 if export_records == "5_records" else None,
 	)
-
+	
 	e.build_response()
 
 @frappe.whitelist()
@@ -236,12 +209,12 @@ def download_list(
 		:param export_filters: Filter dict
 		:param file_type: File type to export into
 	"""
-
+	
 	export_fields = frappe.parse_json(export_fields)
 	export_filters = {"name": ["in", names]}
 	export_data = export_records != "blank_template"
 	export_protect_area = frappe.parse_json(export_protect_area)
-
+		
 	e = Exporter(
 		doctype,
 		export_fields=export_fields,
@@ -251,7 +224,7 @@ def download_list(
 		export_protect_area=export_protect_area,
 		export_page_length=5 if export_records == "5_records" else None,
 	)
-
+	
 	e.build_response()
 
 

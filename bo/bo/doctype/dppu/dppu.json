@@ -138,7 +138,7 @@
    "label": "Keterangan"
   },
   {
-   "depends_on": "eval:(doc.saldo-doc.number) < 0",
+   "depends_on": "eval:(doc.saldo-doc.number) < 0 && doc.cash_transfer != \"SPP\"",
    "fieldname": "jml_ccln",
    "fieldtype": "Select",
    "label": "Jml Ccln",
@@ -188,7 +188,7 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2021-10-16 10:15:57.651319",
+ "modified": "2022-01-05 22:33:47.302243",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "DPPU",

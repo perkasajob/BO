@@ -6,7 +6,7 @@ frappe.ui.form.on('DPPU', {
 		set_filter(frm)
 		set_color_saldo(frm)
 		check_state_warning(frm)
-		// check_booked(frm)
+		check_booked(frm)
 	},
 	onload_post_render: function(frm){
 		check_booked(frm)
@@ -79,6 +79,12 @@ frappe.ui.form.on('DPPU', {
 			frm.set_value("number_part", "")
 		}
 	},
+	cash_transfer: function(frm){
+		if(frm.doc.cash_transfer == "SPP"){
+			frm.set_value("jml_ccln", "")
+			frm.set_value("number_part", "")
+		}
+	},
 	jml_ccln: function(frm){
 		if(frm.doc.jml_ccln){
 			let line = frm.doc.mr_user.match(/(?<=_)\w+$/gi)[0].toLowerCase()
@@ -87,8 +93,6 @@ frappe.ui.form.on('DPPU', {
 				frm.set_value("jml_ccln", "6")
 			} else if(delta < -10000 && delta >= -20000 && parseInt(frm.doc.jml_ccln) > 9) {
 				frm.set_value("jml_ccln", "9")
-			} else if(delta < -20000 && parseInt(frm.doc.jml_ccln) > 12) {
-				frm.set_value("jml_ccln", "12")
 			}  else if(delta < -1000001 && parseInt(frm.doc.jml_ccln) > 24) { // Shierly:ada user butuh 24 bulan
 				frm.set_value("jml_ccln", "24")
 			}
@@ -99,10 +103,7 @@ frappe.ui.form.on('DPPU', {
 function check_booked(frm){
 	if((frm.doc.workflow_state == "FIN Approved")
 		&& (frappe.user.has_role("CSD")||frappe.user.has_role("Accounts Manager"))){
-		if(frm.doc.jml_ccln)
-			bookAdvDx(frm, 1)
-		else
-			bookDx(frm, 1)
+		getBookStatus(frm)
 	}
 }
 
@@ -148,6 +149,26 @@ function set_norek_btn(frm){
     }
 }
 
+function getBookStatus(frm){
+	frappe.call({
+		method: "bo.bo.doctype.dppu.dppu.get_book_status",
+		args: {
+			"docname": frm.doc.name
+		},
+		callback: function(r) {
+			if (r.message) {
+				if(r.message.status == "No Book Record"){
+					console.log("No Book Record !, click Book", "Not Booked")
+					frappe.validated = false;
+					frm.disable_save();
+					disable_workflow("Approve")
+					disable_workflow("Send")
+				}
+			}
+		}
+	});
+}
+
 function bookDx(frm, check){
 	frm.enable_save();
 	frm.states.show_actions()
@@ -160,6 +181,7 @@ function bookDx(frm, check){
 		callback: function(r) {
 			if (r.message) {
 				if(r.message.status == "Success"){
+					enable_workflow("Send")
 					frappe.set_route("Form", "Dx", frm.doc.dx_user)
 				} else if(r.message.status == "Booked"){
 					frappe.msgprint("already book on : " + r.message.date, "Booked")
@@ -233,14 +255,15 @@ function set_refund_btn(frm){
 function set_filter(frm){
     if(frappe.user.has_role("DM") && frappe.user.name != "Administrator"){
           frm.set_value("dm_user", "DM-" + frappe.session.user.replace(/@.*/g,"").toUpperCase())
-          frappe.db.get_value("DM",frm.doc.dm_user,["territory","sm_user"],function(res){
-              if(res != undefined){
-				frm.set_value("territory", res.territory)
-				frm.set_value("sm_user", res.sm_user)
-              }else {
-                //frappe.msgprint("You may not have a DM role, not allowed !")
-              }
-          })
+		  if(frm.doc.__islocal || !frm.doc.sm_user)
+			frappe.db.get_value("DM",frm.doc.dm_user,["territory","sm_user"],function(res){
+				if(res != undefined){
+					frm.set_value("territory", res.territory)
+					frm.set_value("sm_user", res.sm_user)
+				}else {
+					//frappe.msgprint("You may not have a DM role, not allowed !")
+				}
+			})
     }
     if(frm.doc.dm_user){
 		frm.set_query("mr_user", function(doc) {
@@ -302,4 +325,9 @@ function set_color_saldo(frm){
 function disable_workflow(name){
 	$(`[data-label='${name}']`).css("color", "lightgrey")
 	$(`[data-label='${name}']`).parent().off()
+}
+
+function enable_workflow(name){
+	$(`[data-label='${name}']`).css("color", "grey")
+	$(`[data-label='${name}']`).parent().on()
 }

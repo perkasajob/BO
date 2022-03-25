@@ -9,7 +9,9 @@ frappe.ui.form.on('Dx Acc', {
 })
 
 function set_btns(frm){
-	if(!frappe.user.has_role("DM") && !frappe.user.has_role("SM") && !frappe.user.has_role("GSM")){
+
+	// if(!frappe.user.has_role("DM") && !frappe.user.has_role("SM") && !frappe.user.has_role("GSM")){
+		console.log("I was called")
 		frm.add_custom_button(__('Download XLS'), function(){
 			var method =
 					'/api/method/bo.bo.doctype.lpd.lpd.download_template';
@@ -24,7 +26,7 @@ function set_btns(frm){
 			});
 		});
 
-
+		console.log("I was called")
 		frm.add_custom_button(__('Read XLS'), function(){
 			frm.call('parseXLS').then((res) => {
 					console.log(res)
@@ -62,5 +64,5 @@ function set_btns(frm){
 					}
 				});
 		});
-	}
+	// }
 }
