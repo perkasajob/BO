@@ -1,0 +1,66 @@
+{
+ "creation": "2022-04-30 12:01:15.531294",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "limit_1",
+  "delta_jml_ccln_9",
+  "delta_jml_ccln_12",
+  "delta_jml_ccln_24"
+ ],
+ "fields": [
+  {
+   "fieldname": "limit_1",
+   "fieldtype": "Int",
+   "label": "Limit 1"
+  },
+  {
+   "fieldname": "delta_jml_ccln_9",
+   "fieldtype": "Int",
+   "label": "Delta Jml_ccln 9"
+  },
+  {
+   "fieldname": "delta_jml_ccln_12",
+   "fieldtype": "Int",
+   "label": "Delta Jml_ccln 12"
+  },
+  {
+   "fieldname": "delta_jml_ccln_24",
+   "fieldtype": "Int",
+   "label": "Delta Jml_ccln 24"
+  }
+ ],
+ "issingle": 1,
+ "modified": "2022-04-30 12:19:48.392672",
+ "modified_by": "Administrator",
+ "module": "BO",
+ "name": "DPPU Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "CSD",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

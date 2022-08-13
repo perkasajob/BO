@@ -2,11 +2,16 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on('DPPU', {
+	setup: function(frm) {
+		frappe.db.get_doc('DPPU Settings')
+			.then(settings => {
+				frm.settings = settings
+			})
+	},
     onload: function(frm){
 		set_filter(frm)
 		set_color_saldo(frm)
 		check_state_warning(frm)
-		// check_booked(frm)
 	},
 	onload_post_render: function(frm){
 		check_booked(frm)
@@ -17,13 +22,18 @@ frappe.ui.form.on('DPPU', {
 				frm.states.show_actions()
 			}).bind(frm))
 		}
+
+		if((frm.doc.workflow_state == "Approved 1" && frm.doc.approver_1 === frappe.user.name)
+		|| (frm.doc.workflow_state == "Approved 2" && frm.doc.approver_2 === frappe.user.name)){
+			disable_workflow("Approve")
+		}
 	},
-    refresh: function(frm){
+	refresh: function(frm){
 		set_norek_btn(frm)
 		set_color_saldo(frm)
 		set_refund_btn(frm)
-    },
-    validate: function(frm){
+	},
+	validate: function(frm){
 		var allowed_states = ["Overdue Refund","DM Recap","Refund"]
         if (frm.doc.date < frappe.datetime.get_today() && !allowed_states.includes(frm.doc.workflow_state)) {
             frappe.msgprint(__("You can not select past date in From Date"));
@@ -33,19 +43,23 @@ frappe.ui.form.on('DPPU', {
 			frappe.msgprint(__("Number Cannot be 0 or minus"));
             frappe.validated = false;
 		}
+		if (frm.doc.number > frm.settings.limit_1 && !frm.doc.approver_2){
+			frappe.msgprint(__("Approver 2 is required"));
+            frappe.validated = false;
+		}
 	},
-	before_workflow_action: function(frm){ //before_workflow_action
-		// if((frm.doc.workflow_state == "FIN Approved")
-		// 	&& (frappe.user.has_role("CSD")||frappe.user.has_role("Accounts Manager"))){
-		// 	var status = bookDx(frm, 1)
-		// 	if(!status){
-		// 		frappe.validated = false;
-		// 		frappe.throw("Not yet Booked")
-		// 		frm.disable_save();
-		// 	}else{
-		// 		frm.enable_save();
-		// 	};
-		// }
+	before_workflow_action: async function(frm){
+		console.log(frm.selected_workflow_action);
+		if((frm.doc.workflow_state == "FIN Approved")
+			&& (frappe.user.has_role("CSD")||frappe.user.has_role("Accounts Manager"))){
+					if(frm.doc.jml_ccln)
+						await checkBookAdvDx(frm, 1)
+					else
+						await checkBookDx(frm, 1)
+		}
+
+		if (!frappe.validated)
+			throw("Error !")
 	},
 	amount_refund: function(frm){
 		if(frm.doc.amount_refund > frm.doc.number){
@@ -55,7 +69,7 @@ frappe.ui.form.on('DPPU', {
 		set_refund_btn(frm)
 	},
 	number: function(frm){
-		let line = frm.doc.mr_user.match(/(?<=_)\w+$/gi)[0].toLowerCase() //frm.doc.mr_user.substr(-1)
+		let line = frm.doc.mr_user.match(/_(\w+$)/i)[1].toLowerCase() //frm.doc.mr_user.substr(-1)
 		var delta = frm.doc['saldo_' + line] - frm.doc.number
 		if(delta < 0){
 			console.log("Exceeding saldo")
@@ -81,15 +95,15 @@ frappe.ui.form.on('DPPU', {
 	},
 	jml_ccln: function(frm){
 		if(frm.doc.jml_ccln){
-			let line = frm.doc.mr_user.match(/(?<=_)\w+$/gi)[0].toLowerCase()
+			let line = frm.doc.mr_user.match(/_(\w+$)/i)[1].toLowerCase()
 			var delta = frm.doc['saldo_' + line] - frm.doc.number
-			if(delta >= -10000 && parseInt(frm.doc.jml_ccln) > 6){ // BO18->BO28
+			if(delta >= -frm.settings.delta_jml_ccln_9 && parseInt(frm.doc.jml_ccln) > 6){ // BO18->BO28
 				frm.set_value("jml_ccln", "6")
-			} else if(delta < -10000 && delta >= -20000 && parseInt(frm.doc.jml_ccln) > 9) {
+			} else if(delta < -frm.settings.delta_jml_ccln_9 && delta >= -frm.settings.delta_jml_ccln_12 && parseInt(frm.doc.jml_ccln) > 9) {
 				frm.set_value("jml_ccln", "9")
-			} else if(delta < -20000 && parseInt(frm.doc.jml_ccln) > 12) {
+			} else if(delta < -frm.settings.delta_jml_ccln_12 && parseInt(frm.doc.jml_ccln) > 12) {
 				frm.set_value("jml_ccln", "12")
-			}  else if(delta < -1000001 && parseInt(frm.doc.jml_ccln) > 24) { // Shierly:ada user butuh 24 bulan
+			}  else if(delta < -frm.settings.delta_jml_ccln_24 && parseInt(frm.doc.jml_ccln) > 24) { // Shierly:ada user butuh 24 bulan
 				frm.set_value("jml_ccln", "24")
 			}
 		}
@@ -105,6 +119,7 @@ function check_booked(frm){
 			bookDx(frm, 1)
 	}
 }
+
 
 function set_norek_btn(frm){
     if(frappe.user.has_role("CSD")){
@@ -175,6 +190,57 @@ function bookDx(frm, check){
 	});
 }
 
+function checkBookDx(frm, check){
+	return frappe.call({
+		method: "bo.bo.doctype.dppu.dppu.book_transfer",
+		args: {
+			"docname": frm.doc.name,
+			"check": check
+		},
+		callback: function(r) {
+			if (r.message) {
+				if(r.message.status == "Booked"){
+					console.log("already book on : " + r.message.date, "Booked")
+				} else if(r.message.status == "No Book Record"){
+					frappe.validated = false;
+					frm.disable_save();
+					disable_workflow("Approve")
+					disable_workflow("Send")
+					frappe.throw("No Book Record !, click Book")
+				}
+			}
+		}
+	});
+}
+
+function checkBookAdvDx(frm, check){
+	return frappe.call({
+		method: "bo.bo.doctype.dppu.dppu.adv_transfer",
+		args: {
+			"docname": frm.doc.name,
+			"check": check
+		},
+		callback: function(r) {
+			if (r.message) {
+				if(r.message.status == "Booked"){
+					console.log("already book on : " + r.message.date)
+				} else if(r.message.status == "Saldo is sufficient"){
+					console.log("Sal is sufficcient, no need Adv")
+				} else if(r.message.status == "Jml Ccln is empty, No Adv DPPU"){
+					frappe.throw("Jml Ccln is empty, No Adv DPPU", "Adv")
+					frappe.validated = false;
+				} else if(r.message.status == "No Book Record"){
+					frappe.validated = false;
+					frm.disable_save();
+					disable_workflow("Approve")
+					disable_workflow("Send")
+					frappe.throw("No Adv Book Record !, click Adv Book")
+				}
+			}
+		}
+	});
+}
+
 function bookAdvDx(frm, check){
 	frm.enable_save();
 	frm.states.show_actions()
@@ -194,6 +260,7 @@ function bookAdvDx(frm, check){
 					frappe.msgprint("Sal is sufficcient, no need Adv", "Adv")
 				} else if(r.message.status == "Jml Ccln is empty, No Adv DPPU"){
 					frappe.msgprint("Jml Ccln is empty, No Adv DPPU", "Adv")
+					frappe.validated = false;
 				} else if(r.message.status == "No Book Record"){
 					frappe.msgprint("No Adv Book Record !, click Adv Book", "Adv Not Booked")
 					frappe.validated = false;
@@ -236,7 +303,7 @@ function set_filter(frm){
           frappe.db.get_value("DM",frm.doc.dm_user,["territory","sm_user"],function(res){
               if(res != undefined){
 				frm.set_value("territory", res.territory)
-				frm.set_value("sm_user", res.sm_user)
+				// frm.set_value("sm_user", res.sm_user)
               }else {
                 //frappe.msgprint("You may not have a DM role, not allowed !")
               }
@@ -292,7 +359,8 @@ function check_state_warning(frm){
 
 function set_color_saldo(frm){
 	if(frm.doc.mr_user){
-		let line = frm.doc.mr_user.match(/(?<=_)\w+$/gi)[0].toLowerCase()
+		let line = frm.doc.mr_user.match(/_(\w+$)/i)[1].toLowerCase()
+
 		if(frm.doc['saldo_' + line] < 0){
 			$("[data-fieldname='saldo']>div>.control-input-wrapper>.control-value").css({"background-color":"red","color":"white"})
 		}
@@ -303,3 +371,4 @@ function disable_workflow(name){
 	$(`[data-label='${name}']`).css("color", "lightgrey")
 	$(`[data-label='${name}']`).parent().off()
 }
+

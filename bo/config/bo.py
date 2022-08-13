@@ -55,5 +55,14 @@ def get_data():
 					"name": "MR"
 				}
 			]
+		}, {
+			"label": _("Settings"),
+			"items": [
+				{
+					"type": "doctype",
+					"name": "DPPU Settings",
+					"onboard": 1,
+				}
+			]
 		}
     ]
