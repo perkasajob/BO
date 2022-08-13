@@ -175,7 +175,7 @@ function getBookStatus(frm){
 		callback: function(r) {
 			if (r.message) {
 				if(r.message.status == "No Book Record"){
-					console.log("No Book Record !, click Book", "Not Booked")
+					frappe.msgprint("No Book Record !, click Book", "Not Booked")
 					frappe.validated = false;
 					frm.disable_save();
 					disable_workflow("Approve")
