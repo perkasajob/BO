@@ -17,6 +17,9 @@ from frappe.utils.csvutils import validate_google_sheets_url
 from frappe import _
 import re
 from frappe.utils import today
+from frappe_s3_attachment import controller
+from urllib.parse import urlparse
+from urllib.parse import parse_qs
 
 
 class DxAcc(Document):
@@ -24,14 +27,13 @@ class DxAcc(Document):
 		pass
 
 	def parseXLS(self):
-		file_url = self.get_full_path() # file attachment only the first one attached
-		fname = os.path.basename(file_url)
-		fxlsx = re.search("^{}.*\.xlsx".format("Dx"), fname)
+		file_url, fname = self.get_full_path() # file attachment only the first one attached
+		fxlsx = re.search("{}.*\.xlsx".format("Dx"), fname)
 
 		if(fxlsx): # match
-			with open( file_url , "rb") as upfile:
-				fcontent = upfile.read()
-			if frappe.safe_encode(fname).lower().endswith("xlsx".encode('utf-8')):
+			s3 = controller.S3Operations()
+			fcontent = s3.read_file_from_s3(file_url)['Body'].read()
+			if frappe.safe_encode(file_url).lower().endswith("xlsx".encode('utf-8')):
 				from frappe.utils.xlsxutils import read_xlsx_file_from_attached_file
 				rows = read_xlsx_file_from_attached_file(fcontent=fcontent)
 			columns = rows[0]
@@ -48,26 +50,39 @@ class DxAcc(Document):
 
 
 	def get_full_path(self):
-			"""Returns file path from given file name"""
-			att = get_attachments(self.doctype, self.name)
-			if att:
-				file_path = att[0].file_url or att[0].file_name
-			else:
-				frappe.throw("No Attachment found")
+		"""Returns file path from given file name"""
+		att = get_attachments(self.doctype, self.name)
+		if att:
+			file_path = att[0].file_url or att[0].file_name
+		else:
+			frappe.throw("No Attachment found")
+		parsed_url = urlparse(file_path)
+		parsed_qs = parse_qs(parsed_url.query)
 
-			if "/" not in file_path:
-				file_path = "/files/" + file_path
+		return parsed_qs['key'][0], parsed_qs['file_name'][0]
 
-			if file_path.startswith("/private/files/"):
-				file_path = get_files_path(*file_path.split("/private/files/", 1)[1].split("/"), is_private=1)
 
-			elif file_path.startswith("/files/"):
-				file_path = get_files_path(*file_path.split("/files/", 1)[1].split("/"))
+	def get_full_path_local(self):
+		"""Returns file path from given file name"""
+		att = get_attachments(self.doctype, self.name)
+		if att:
+			file_path = att[0].file_url or att[0].file_name
+		else:
+			frappe.throw("No Attachment found")
 
-			else:
-				frappe.throw(_("There is some problem with the file url: {0}").format(file_path))
+		if "/" not in file_path:
+			file_path = "/files/" + file_path
 
-			return file_path
+		if file_path.startswith("/private/files/"):
+			file_path = get_files_path(*file_path.split("/private/files/", 1)[1].split("/"), is_private=1)
+
+		elif file_path.startswith("/files/"):
+			file_path = get_files_path(*file_path.split("/files/", 1)[1].split("/"))
+
+		else:
+			frappe.throw(_("There is some problem with the file url: {0}").format(file_path))
+
+		return file_path
 
 	def start_import(self):
 		from frappe.core.page.background_jobs.background_jobs import get_info

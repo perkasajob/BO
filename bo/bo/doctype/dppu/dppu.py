@@ -18,6 +18,20 @@ class DPPU(Document):
 
 
 @frappe.whitelist()
+def get_book_status(docname):
+	t_roles = ["CSD", "Accounts Manager", "System Manager"]
+	user_match_role = [x for x in t_roles if x in frappe.get_roles(frappe.session.user)]
+	if not user_match_role:
+		return {"status": "Not Authorized"}
+
+	sp = frappe.db.sql("select * from `tabSP` where dppu='{}' and number < 0".format(docname))
+	if len(sp) > 0:
+		return {"status": "Booked", "date": str(sp[0][10])}
+	else:
+		return {"status": "No Book Record"}
+
+
+@frappe.whitelist()
 def book_transfer(docname, check=0):
 	t_roles = ["CSD", "Accounts Manager", "System Manager"]
 	user_match_role = [x for x in t_roles if x in frappe.get_roles(frappe.session.user)]
