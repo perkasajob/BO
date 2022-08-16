@@ -52,14 +52,14 @@ frappe.ui.form.on('DPPU', {
 		console.log(frm.selected_workflow_action);
 		if((frm.doc.workflow_state == "FIN Approved")
 			&& (frappe.user.has_role("CSD")||frappe.user.has_role("Accounts Manager"))){
-					if(frm.doc.jml_ccln)
-						await checkBookAdvDx(frm, 1)
-					else
-						await checkBookDx(frm, 1)
-		}
+				if(frm.doc.jml_ccln)
+					await checkBookAdvDx(frm, 1)
+				else
+					await checkBookDx(frm, 1)
 
-		if (!frappe.validated)
-			throw("Error !")
+				if (!frappe.validated)
+					throw("Error !")
+		}
 	},
 	amount_refund: function(frm){
 		if(frm.doc.amount_refund > frm.doc.number){
