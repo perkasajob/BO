@@ -5,17 +5,21 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "area_name",
   "area_code",
-  "berno_id"
+  "area_name",
+  "berno_id",
+  "lft",
+  "rgt",
+  "is_group",
+  "old_parent",
+  "parent_area",
+  "sub_area"
  ],
  "fields": [
   {
    "fieldname": "area_name",
    "fieldtype": "Data",
-   "in_list_view": 1,
    "label": "Area Name",
-   "reqd": 1,
    "search_index": 1
   },
   {
@@ -28,14 +32,56 @@
   {
    "fieldname": "berno_id",
    "fieldtype": "Data",
-   "in_list_view": 1,
    "label": "IS ID"
+  },
+  {
+   "fieldname": "lft",
+   "fieldtype": "Int",
+   "hidden": 1,
+   "label": "Left",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "rgt",
+   "fieldtype": "Int",
+   "hidden": 1,
+   "label": "Right",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "is_group",
+   "fieldtype": "Check",
+   "label": "Is Group"
+  },
+  {
+   "fieldname": "old_parent",
+   "fieldtype": "Link",
+   "label": "Old Parent",
+   "options": "Area"
+  },
+  {
+   "fieldname": "parent_area",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Parent Area",
+   "options": "Area"
+  },
+  {
+   "fieldname": "sub_area",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "label": "Sub Area"
   }
  ],
- "modified": "2022-02-10 16:30:22.878935",
- "modified_by": "Administrator",
+ "is_tree": 1,
+ "modified": "2023-02-14 10:21:43.724749",
+ "modified_by": "dwi@ksp.ksp",
  "module": "BO",
  "name": "Area",
+ "nsm_parent_field": "parent_area",
  "owner": "Administrator",
  "permissions": [
   {

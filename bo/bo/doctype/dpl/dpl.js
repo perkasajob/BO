@@ -1,22 +1,52 @@
 // Copyright (c) 2020, Sistem Koperasi and contributors
 // For license information, please see license.txt
 var comid = 0;
-var username = frappe.session.user.replace(/@.*/g,"").toUpperCase()
-var ppn = 1.1;
+// var username = frappe.session.user.replace(/@.*/g,"").toUpperCase()
+var username = frappe.user.full_name()
+var ppn = 1.11;
+var old_outid = null
 
 frappe.ui.form.on('DPL', {
-    onload: function(frm){
-        if(frappe.user.has_role("DM")){
-            frappe.db.get_value("DM","DM-"+username,["territory","comid"],function(res){
-              if(res != undefined){
-				comid = res.comid
-				set_filter_by_comid(frm, res.comid)
-              }
-            })
-        }
-    },
+	onload: function(frm){
+		load_org_code(frm)
+		set_readonly_fixed_price(frm)
+	},
+	onload_post_render(frm){
+		set_DM(frm)
+		paint_over_hjm(frm)
+		frm.fields_dict.outid.$input.on('input', function (e) {
+			let val = e.target.value
+			if(val.length > 2 && !val.startsWith(old_outid)){ // pull list
+				load_outid(frm, val)
+				old_outid = val
+			}
+		}).on('awesomplete-selectcomplete', function(e){
+			try {
+				frm.set_value('outid', e.target.value)
+				if(frm?.var?.outlets !== undefined
+					&& frm.var.outlets[e.target.value] !== undefined ){
+					frm.set_value("outlet_name", frm.var.outlets[e.target.value].name)
+					frm.set_value("outlet_address", frm.var.outlets[e.target.value].address)
+				}
+			} catch (error) {console.log(error)}
+		})
+	},
 	refresh: function(frm) {
 	    set_parseXls_btn(frm)
+	},
+	validate(frm){
+		if(!frm.doc.dm){
+			frappe.validated = false;
+			frappe.msgprint('DM cannot be empty !')
+		}
+		if(frm.doc.type == 'DPF'){
+			$.each(frm.doc.items || [], function(i, d) {
+				if(!d.qty) {
+					frappe.validated = false;
+					frappe.msgprint('Item Qty cannot be empty for DPF!')
+				}
+			})
+		}
 	},
 	year: function(frm){
 	    set_start_end_date(frm)
@@ -27,23 +57,26 @@ frappe.ui.form.on('DPL', {
 	start_date: function(frm){
 	   // frm.set_value("month_code", moment(frm.doc.start_date).format("YYMM"))
 	},
-	outid: function(frm){
-	    frm.set_value("outlet_name", frm.doc.outid.replace(/^.*-/g,""))
-		frm.set_value("is_outlet_id", frm.doc.outid.match(/^[0-9_]+/g)[0])
+	type: function(frm){
+	  set_readonly_fixed_price(frm)
+	},
+	org_code:function(frm){
+		old_outid = null
 	},
 	distributor: function(frm){
-		let dist_outlet = frm.doc.distributor.toLowerCase() + "_outlet_name"
-		let dist_outid = frm.doc.distributor.toLowerCase() + "_outid"
-		frappe.db.get_value("Outlet",frm.doc.outid,[dist_outlet, dist_outid],function(res){
-			if(res != undefined){
-				frm.set_value("dist_outlet_name", res[dist_outlet])
-				frm.set_value("dist_outid", res[dist_outid])
-			}
-	   })
+		load_org_code(frm)
+		// let dist_outlet = frm.doc.distributor.toLowerCase() + "_outlet_name"
+		// let dist_outid = frm.doc.distributor.toLowerCase() + "_outid"
+		// frappe.db.get_value("Outlet",frm.doc.outid,[dist_outlet, dist_outid],function(res){
+		// 	if(res != undefined){
+		// 		frm.set_value("dist_outlet_name", res[dist_outlet])
+		// 		frm.set_value("dist_outid", res[dist_outid])
+		// 	}
+	  //  })
 	},
 	line: function(frm){
-	    if(frm.doc.line == "")
-			return
+		// frappe.validated = true;
+		set_DM(frm)
 		// let distributor = frm.doc.distributor.toLowerCase()
 		// var items = frappe.db.get_list("Item", {filters:{"line":frm.doc.line},fields: ["item_code","item_name","standard_rate",distributor +"_item_code",distributor +"_item_name"], limit: 200})
 		// items.then((list)=>{
@@ -62,17 +95,21 @@ frappe.ui.form.on('DPL', {
 })
 
 frappe.ui.form.on('DPL Item', {
+	form_render(frm, dt, dn){
+		setTimeout(paint_over_hjm_item, 3000, frm, locals[dt][dn]);
+	},
 	refresh(frm) {
 
 	},
 	item_code: function(frm, dt, dn) {
 		let o = locals[dt][dn];
 		// frm.doc[o.parentfield][o.idx-1].add_fetch('hjm_sm','hjm_gsm','hjm_fin')
+		calc_item(frm, dt, dn)
 	},
 	hna: function(frm, dt, dn) {
 		calc_item(frm, dt, dn)
 	},
-	hna1: function(frm, dt, dn) {
+	hna2: function(frm, dt, dn) {
 		calc_item(frm, dt, dn)
 	},
 	dpl_disc: function(frm, dt, dn) {
@@ -86,51 +123,104 @@ frappe.ui.form.on('DPL Item', {
 	}
 })
 
+function set_DM(frm){
+	if(frappe.user.has_role("DM") && frappe.user.name != "Administrator"){
+		frappe.db.get_value('MP', {line: frm.doc.line, full_name: frappe.user.full_name()}, 'name')
+		.then(r => {
+			if(r.message?.name){
+				frm.set_value("dm", r.message.name)
+			} else {frappe.msgprint(frappe.user.full_name() + " not found in MP " + frm.doc.line)}
+		})
+	}
+}
+
 function dpl_disc_calc(frm, dt, dn){
 	let o = locals[dt][dn];
-	// reset hna1
-	frm.doc[o.parentfield][o.idx-1].hna1 = 0
+	// reset hna2
+	frm.doc[o.parentfield][o.idx-1].hna2 = 0
 	calc_item(frm, dt, dn)
 }
 
 function calc_item(frm, dt, dn){
 	let o = locals[dt][dn];
-	let dpl_disc = frm.doc[o.parentfield][o.idx-1].dpl_disc?frm.doc[o.parentfield][o.idx-1].dpl_disc/100:0
-	if (frm.doc[o.parentfield][o.idx-1].hna1){
-		dpl_disc = 1-frm.doc[o.parentfield][o.idx-1].hna1 /frm.doc[o.parentfield][o.idx-1].hna
-		frm.doc[o.parentfield][o.idx-1].dpl_disc = dpl_disc * 100
+	let dc = frm.doc[o.parentfield][o.idx-1]
+	let dpl_disc = dc.dpl_disc?dc.dpl_disc/100:0
+	if (dc.hna2){
+		dpl_disc = 1-dc.hna2 /dc.hna
+		dc.dpl_disc = dpl_disc * 100
 	} else {
-		frm.doc[o.parentfield][o.idx-1].hna1 =  frm.doc[o.parentfield][o.idx-1].hna * (1-dpl_disc)
+		dc.hna2 =  dc.hna * (1-dpl_disc)
 	}
 
-	let dpl_disc1 = frm.doc[o.parentfield][o.idx-1].dpl_disc1/100
-	let disc_off = frm.doc[o.parentfield][o.idx-1].off_faktur/100
-	var total_disc = 1 - (1-dpl_disc) * (1-dpl_disc1) * (1-disc_off)
+	let dpl_disc1 = dc.dpl_disc1/100
+	let disc_off = dc.off_faktur/100
+	var total_disc = 1 - (1-dpl_disc) * (1-dpl_disc1)
+	var total_disc_final = 1 - (1-dpl_disc) * (1-dpl_disc1) * (1-disc_off)
 
-	var nf = Intl.NumberFormat('id-ID');
-	frm.doc[o.parentfield][o.idx-1].total_disc = (total_disc * 100).toFixed(2)
-	frm.doc[o.parentfield][o.idx-1].nsv1_ppn = nf.format((frm.doc[o.parentfield][o.idx-1].hna * (1-dpl_disc) * (1-dpl_disc1) * ppn).toFixed(0))
-	frm.doc[o.parentfield][o.idx-1].nsv2_ppn = nf.format((frm.doc[o.parentfield][o.idx-1].hna * (1-dpl_disc) * (1-dpl_disc1) * (1-disc_off) * ppn).toFixed(0))
+	var nf = Intl.NumberFormat('id-ID'); //nf.format(
+	dc.total_disc = flt((total_disc * 100),2)
+	dc.total_disc_final = flt((total_disc_final * 100),2)
+	dc.nsv_ppn = flt((dc.hna * (1-dpl_disc) * ppn).toFixed(0))
+	dc.nsv2_ppn = flt((dc.hna * (1-dpl_disc) * (1-dpl_disc1) * ppn).toFixed(0))
+	dc.nsv3_ppn = flt((dc.hna * (1-dpl_disc) * (1-dpl_disc1) * (1-disc_off) * ppn).toFixed(0))
 
-	frappe.db.get_value('Item', frm.doc[o.parentfield][o.idx-1].item_code, ['hjm_sm','hjm_gsm','hjm_fin'], function(res){
-		if(res != undefined){
-			let total_disc = frm.doc[o.parentfield][o.idx-1].total_disc
-			if([res.hjm_sm, res.hjm_gsm, res.hjm_fin].every(o=> o > 0)){
-				set_total_disc_color(total_disc, res)
-			}
-		}
-	})
+	if (dc.nsv3_ppn < dc.hjm_3){
+		frm.set_value("over_hjm", 3)
+	} else if(dc.nsv3_ppn > dc.hjm_3 && dc.nsv3_ppn < dc.hjm_2 && frm.doc.over_hjm < 2){
+		frm.set_value("over_hjm", 2)
+	} else if(dc.nsv3_ppn > dc.hjm_2 && dc.nsv3_ppn < dc.hjm_1 && frm.doc.over_hjm < 1){
+		frm.set_value("over_hjm", 1)
+	} else frm.set_value("over_hjm", 0)
+
+	try {
+		paint_over_hjm(frm)
+	}catch(error){console.log(error)}
+	try {
+		paint_over_hjm_item(frm, o)
+	}catch(error){console.log(error)}
+
+	// frappe.db.get_value('Item', dc.item_code, ['hjm_1','hjm_2','hjm_3'], function(res){
+	// 	if(res != undefined){
+	// 		let total_disc = dc.total_disc
+	// 		if([res.hjm_1, res.hjm_2, res.hjm_3].every(o=> o > 0)){
+	// 			set_total_disc_color(frm, total_disc, res)
+	// 		}
+	// 	}
+	// })
 	frm.refresh_field(o.parentfield)
 }
 
-function set_total_disc_color(total_disc, res){
-	if(frappe.user.has_role("SM") && total_disc > res.hjm_sm
-		|| frappe.user.has_role("GSM") && total_disc > res.hjm_gsm
-		|| frappe.user.has_role("Accounts Manager") && total_disc > res.hjm_fin){
-			$("[data-fieldname='total_disc']>div>.control-input-wrapper>.control-value").css({"background-color":"red","color":"white"})
-	} else
-		$("[data-fieldname='total_disc']>div>.control-input-wrapper>.control-value").css({"background-color":"#f5f7fa","color":"black"})
+function paint_over_hjm(frm){
+	frm.doc.items.forEach(o=>{
+		if(frappe.user.has_role("SM") && o.nsv3_ppn < o.hjm_1
+		|| frappe.user.has_role("GSM") && o.nsv3_ppn < o.hjm_2
+		|| frappe.user.has_role("Accounts Manager") && o.nsv3_ppn < o.hjm_1){
+			// $("[data-fieldname='total_disc']>div>.control-input-wrapper>.control-value").css({"background-color":"red","color":"white"})
+			// $(`[data-idx=${o.idx}] > .data-row > [data-fieldname=item_name]`).css('background-color', '#ffcccc');
+			// frm.fields_dict.items.grid.grid_rows[o.idx-1].columns.item_code.css("background-color","#ffcccc")
+			// frm.fields_dict.items.grid.grid_rows[o.idx-1].columns.item_name.css("background-color","#ffcccc")
+			// cur_frm.fields_dict.items.grid.grid_rows[o.idx-1].grid_form.fields_dict.nsv3_ppn.$input_wrapper.css({'color':'#f00'})
+			cur_frm.fields_dict.items.grid.grid_rows[o.idx-1].row_index.css({"background-color":"#ffcccc"})
+		} else{
+			// $("[data-fieldname='total_disc']>div>.control-input-wrapper>.control-value").css({"background-color":"#f5f7fa","color":"black"})
+			// frm.fields_dict.items.grid.grid_rows[o.idx-1].columns.item_code.css("background-color","#fff")
+			// frm.fields_dict.items.grid.grid_rows[o.idx-1].columns.item_name.css("background-color","#ffcccc")
+			// cur_frm.fields_dict.items.grid.grid_rows[o.idx-1].grid_form.fields_dict.nsv3_ppn.$input_wrapper.css({'color':'#36414c'})
+			cur_frm.fields_dict.items.grid.grid_rows[o.idx-1].row_index.css({"background-color":"#fff"})
+		}
+	})
 }
+
+function paint_over_hjm_item(frm, o){
+	if(frappe.user.has_role("SM") && o.nsv3_ppn < o.hjm_1
+	|| frappe.user.has_role("GSM") && o.nsv3_ppn < o.hjm_2
+	|| frappe.user.has_role("Accounts Manager") && o.nsv3_ppn < o.hjm_1){
+		frappe.ui.form.get_open_grid_form().grid_form.fields_dict.nsv3_ppn.$input_wrapper.css({'color':'#f00'})
+	} else{
+		frappe.ui.form.get_open_grid_form().grid_form.fields_dict.nsv3_ppn.$input_wrapper.css({'color':'#f00'}).css({'color':'#36414c'})
+	}
+}
+
 
 function set_start_end_date(frm){
 	if(frm.doc.month){
@@ -145,34 +235,34 @@ function set_start_end_date(frm){
 	}
 }
 
-function set_filter_by_territory(frm, territory){
-    for(var i=1;i<=10;i++){
-        frm.set_query("d"+i, function(doc) {
-			return {
-				filters: {
-					'territory': territory
-				}
-			};
-		});
-    }
-    frm.set_query("outid", function(doc) {
-		return {
-			filters: {
-				'territory': territory
-			}
-		};
-	});
-}
+// function set_filter_by_territory(frm, territory){
+//     for(var i=1;i<=10;i++){
+//         frm.set_query("d"+i, function(doc) {
+// 			return {
+// 				filters: {
+// 					'territory': territory
+// 				}
+// 			};
+// 		});
+//     }
+//     frm.set_query("outid", function(doc) {
+// 		return {
+// 			filters: {
+// 				'territory': territory
+// 			}
+// 		};
+// 	});
+// }
 
-function set_filter_by_comid(frm, comid){
-    frm.set_query("outid", function(doc) {
-		return {
-			filters: {
-				'comid': comid
-			}
-		};
-	});
-}
+// function set_filter_by_comid(frm, comid){
+//     frm.set_query("outid", function(doc) {
+// 		return {
+// 			filters: {
+// 				'comid': comid
+// 			}
+// 		};
+// 	});
+// }
 
 function set_parseXls_btn(frm){
     frm.add_custom_button(__('Get XLS'), function(){
@@ -204,7 +294,7 @@ function set_parseXls_btn(frm){
         open_url_post(method, {
 			doctype: frm.doctype,
 			file_type: "Excel",
-			export_fields: {"DPL":["name","outid","month","year","distributor","line","is_outlet_id"],"items":["name","item_code","item_name","hna","dpl_disc","hna1","dpl_disc1","nsv1_ppn","off_faktur","nsv2_ppn","total_disc"]},
+			export_fields: {"DPL":["name","outid","month","year","distributor","line"],"items":["name","item_code","item_name","hna","dpl_disc","hna2","dpl_disc1","nsv2_ppn","off_faktur","nsv3_ppn","total_disc"]},
 			export_filters: filters,
 			export_protect_area: [2, 11, 12],
 		});
@@ -219,7 +309,7 @@ function set_parseXls_btn(frm){
         open_url_post(method, {
 			doctype: frm.doctype,
 			file_type: "Excel",
-			export_fields: {"DPL":["name","outid", "start_date", "end_date", "distributor","line","is_outlet_id"].concat(dpl_extras),"items":["name","item_code","item_name","hna","dpl_disc","hna1","dpl_disc1","nsv1_ppn"].concat(item_extras)},
+			export_fields: {"DPL":["name","outid", "start_date", "end_date", "distributor","line"].concat(dpl_extras),"items":["name","item_code","item_name","hna","dpl_disc","hna2","dpl_disc1","nsv2_ppn"].concat(item_extras)},
 			export_filters: filters,
 			export_protect_area: [2, 12, 13],
 		});
@@ -234,3 +324,62 @@ function download_template(frm) {
 			);
 		});
 	}
+
+function load_org_code(frm)	{
+	if(frm.doc.distributor){
+		frm.set_df_property("org_code", "options", []);
+
+		frm.call('get_linked_org', { throw_if_missing: true })
+			.then(r => {
+					if (r.message) {
+							let dist = r.message.split(',').join('\n');
+							frm.set_df_property("org_code", "options", dist);
+					}
+			})
+	}
+}
+
+
+function load_outid(frm, val){
+	frappe.call({
+		method: "bo.bo.bo_integration.tsj_integration.get_customers",
+		args: {
+			"orgCode": frm.doc.org_code,
+			"type": frm.doc.type,
+			"customerName" : val,
+			"customerNumber": ""
+		},
+		callback: function(r) {
+			if (r.results) {
+				frm.set_value("outlet_name", "")
+				frm.set_value("outlet_address", "")
+
+				let outlets = {}
+				r.results.forEach(o=>{
+					outlets[o.value] = o
+				})
+				frm.var = {outid: r.results, outlets: outlets}
+				let outid_list = r.results.map(o=>{
+					return {label: o.name + ', '+ o.address, value: o.value}
+				})
+				// frappe.show_alert(outid_list.length + " Outlets loaded")
+				console.log(outid_list.length + " Outlets loaded")
+				if(frm.fields_dict.outid.awesomplete){
+					frm.fields_dict.outid.awesomplete.destroy()
+				}
+				frm.fields_dict.outid.awesomplete = new Awesomplete(frm.fields_dict.outid.input, {
+					list: outid_list,
+					maxItems: 15,
+				});
+				frm.fields_dict.outid.input.focus()
+				frm.fields_dict.outid.awesomplete.evaluate()
+			}
+		}
+	});
+}
+
+
+function set_readonly_fixed_price(frm){
+	let editable = cur_frm.doc.type.substr(-11) == 'Fixed Price' ? 0: 1
+	frm.fields_dict.items.grid.toggle_enable("dpl_disc", editable);
+}

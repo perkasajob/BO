@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2022, Sistem Koperasi and Contributors
+# Copyright (c) 2023, Sistem Koperasi and Contributors
 # See license.txt
 from __future__ import unicode_literals
 
 # import frappe
 import unittest
 
-class TestDPPUSettings(unittest.TestCase):
+class TestMP(unittest.TestCase):
 	pass

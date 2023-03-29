@@ -12,15 +12,57 @@ from frappe.desk.form.load import get_attachments
 from frappe.utils import get_hook_method, get_files_path
 # from bo.bo.doctype.lpd.exporter import Importer
 from bo.bo.utils.exporter import Exporter
+from bo.bo.bo_integration.tsj_integration import TSJConnect
 from frappe.utils.background_jobs import enqueue
 from frappe.utils.csvutils import validate_google_sheets_url
 from frappe import _
+import requests, textwrap
+from frappe.utils.user import get_user_fullname
 import re
 
 
 class DPL(Document):
+	def __init__(self, *args, **kwargs):
+		super(DPL, self).__init__(*args, **kwargs)
+
 	def validate(self):
-		pass
+			pass
+
+	def before_submit(self):
+		if self.distributor == "TSJ":
+			conn = TSJConnect(role='adm')
+		else:
+			return
+
+		def min_qty(disc):
+				if disc > 0:
+					return 1
+				else:
+					return 0
+		def max_qty(disc):
+				if disc > 0:
+					return 99999
+				else:
+					return 0
+
+		if self.type[0:3] == "DPL":
+			details = [{"ItemCode": i.item_code, "D1":i.total_disc, "D3":0, "D1QtyMin":min_qty(i.dpl_disc), "D1QtyMax":max_qty(i.dpl_disc), "D3QtyMin":0, "D3QtyMax":0} for i in self.items]
+			res = conn.post_dpl(self.outid, self.start_date, self.end_date, details)
+		elif self.type[0:3] == "DPF":
+			details = [{'ItemCode': i.item_code, 'ItemQty': i.qty, 'ItemPrice': i.hna, 'ItemE1': 0, 'ItemD1': i.total_disc} for i in self.items]
+			res = conn.post_dpf(self.name, self.outid, self.approver_1_name, self.approver_2_name ,details)
+
+		if res["status"] == "200 - OK":
+			frappe.msgprint(res["message"][0])
+
+			if self.distributor == "TSJ":
+				if self.type[0:3] == "DPL":
+					self.reference = res["data"]["qpNumber"]
+				elif self.type[0:3] == "DPF":
+					self.reference = res["data"]["dpfNumber"]
+		else:
+			frappe.throw(res["message"][0])
+
 
 	def parseXLS(self):
 		file_url = self.get_full_path() # file attachment only the first one attached
@@ -38,7 +80,7 @@ class DPL(Document):
 			data = rows
 			return {"columns": columns, "data": data}
 		else:
-			return {"status" : "Error", "filename": fname, "doctype": self.doctype}	
+			return {"status" : "Error", "filename": fname, "doctype": self.doctype}
 
 
 	def get_full_path(self):
@@ -47,7 +89,7 @@ class DPL(Document):
 			if att:
 				file_path = att[0].file_url or att[0].file_name
 			else:
-				frappe.throw("No Attachment found")	
+				frappe.throw("No Attachment found")
 
 			if "/" not in file_path:
 				file_path = "/files/" + file_path
@@ -115,7 +157,27 @@ class DPL(Document):
 		return self.get_importer().export_errored_rows()
 
 	def get_importer(self):
-		return Importer(self.reference_doctype, data_import=self)		
+		return Importer(self.reference_doctype, data_import=self)
+
+
+	@frappe.whitelist()
+	def get_linked_org(self, throw_if_missing=False):
+			# if not frappe.db.exists("Sales Partner", self.distributor):
+			# 		if throw_if_missing:
+			# 				frappe.throw('Sales Partner not found')
+
+			# return [org.code for org in frappe.get_doc("Sales Partner", self.distributor).organization]
+			return frappe.get_doc('MP', self.dm).get(self.distributor.lower() + '_org_code')
+
+
+
+def has_permission(doc, ptype="read", user=None):
+	user = user or frappe.session.user
+	full_name = get_user_fullname(frappe.session['user'])
+	if doc.approver_1_name == full_name or doc.approver_2_name == full_name or doc.dm_name == full_name:
+		return True
+	else:
+		return False
 
 
 def get_mop_query(doctype, txt, searchfield, start, page_len, filters):
@@ -181,12 +243,12 @@ def download_template(
 		:param export_filters: Filter dict
 		:param file_type: File type to export into
 	"""
-	
+
 	export_fields = frappe.parse_json(export_fields)
 	export_filters = frappe.parse_json(export_filters)
 	export_data = export_records != "blank_template"
 	export_protect_area = frappe.parse_json(export_protect_area)
-		
+
 	e = Exporter(
 		doctype,
 		export_fields=export_fields,
@@ -196,7 +258,7 @@ def download_template(
 		export_protect_area=export_protect_area,
 		export_page_length=5 if export_records == "5_records" else None,
 	)
-	
+
 	e.build_response()
 
 @frappe.whitelist()
@@ -211,12 +273,12 @@ def download_list(
 		:param export_filters: Filter dict
 		:param file_type: File type to export into
 	"""
-	
+
 	export_fields = frappe.parse_json(export_fields)
 	export_filters = {"name": ["in", names]}
 	export_data = export_records != "blank_template"
 	export_protect_area = frappe.parse_json(export_protect_area)
-		
+
 	e = Exporter(
 		doctype,
 		export_fields=export_fields,
@@ -226,7 +288,7 @@ def download_list(
 		export_protect_area=export_protect_area,
 		export_page_length=5 if export_records == "5_records" else None,
 	)
-	
+
 	e.build_response()
 
 
@@ -361,4 +423,9 @@ def export_csv(doctype, path):
 	with open(path, "wb") as csvfile:
 		export_data(doctype=doctype, all_doctypes=True, template=True, with_data=True)
 		csvfile.write(frappe.response.result.encode("utf-8"))
-	
+
+
+
+
+
+

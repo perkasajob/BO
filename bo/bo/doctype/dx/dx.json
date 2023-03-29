@@ -7,8 +7,18 @@
  "engine": "InnoDB",
  "field_order": [
   "dx_name",
+  "is_verified",
+  "hp",
+  "spec",
   "territory",
+  "kota",
+  "mp",
+  "area51",
   "saldo",
+  "column_break_4",
+  "img",
+  "img_url",
+  "outlets",
   "sal_sb",
   "saldo_ql1",
   "saldo_ql2",
@@ -84,25 +94,29 @@
   {
    "fieldname": "saldo_history_n1",
    "fieldtype": "Long Text",
-   "label": "History N1"
+   "label": "History N1",
+   "permlevel": 1
   },
   {
    "fieldname": "loan_n1",
    "fieldtype": "Table",
    "label": "Acc N1",
-   "options": "SP"
+   "options": "SP",
+   "permlevel": 1
   },
   {
    "fieldname": "adv_n1",
    "fieldtype": "Table",
    "label": "Adv N1",
-   "options": "Adv Item"
+   "options": "Adv Item",
+   "permlevel": 1
   },
   {
    "fieldname": "mkt_n1",
    "fieldtype": "Table",
    "label": "Mkt N1",
-   "options": "Mkt Item"
+   "options": "Mkt Item",
+   "permlevel": 1
   },
   {
    "default": "{}",
@@ -122,13 +136,15 @@
    "fieldname": "adv_ql1",
    "fieldtype": "Table",
    "label": "Adv 1",
-   "options": "Adv Item"
+   "options": "Adv Item",
+   "permlevel": 1
   },
   {
    "fieldname": "mkt_ql1",
    "fieldtype": "Table",
    "label": "Mkt 1",
-   "options": "Mkt Item"
+   "options": "Mkt Item",
+   "permlevel": 1
   },
   {
    "fieldname": "saldo_history_ql2",
@@ -147,36 +163,42 @@
    "fieldname": "adv_ql2",
    "fieldtype": "Table",
    "label": "Adv 2",
-   "options": "Adv Item"
+   "options": "Adv Item",
+   "permlevel": 1
   },
   {
    "fieldname": "mkt_ql2",
    "fieldtype": "Table",
    "label": "Mkt 2",
-   "options": "Mkt Item"
+   "options": "Mkt Item",
+   "permlevel": 1
   },
   {
    "fieldname": "saldo_history_ql3",
    "fieldtype": "Long Text",
-   "label": "History 3"
+   "label": "History 3",
+   "permlevel": 1
   },
   {
    "fieldname": "loan_ql3",
    "fieldtype": "Table",
    "label": "Acc 3",
-   "options": "SP"
+   "options": "SP",
+   "permlevel": 1
   },
   {
    "fieldname": "adv_ql3",
    "fieldtype": "Table",
    "label": "Adv 3",
-   "options": "Adv Item"
+   "options": "Adv Item",
+   "permlevel": 1
   },
   {
    "fieldname": "mkt_ql3",
    "fieldtype": "Table",
    "label": "Mkt 3",
-   "options": "Mkt Item"
+   "options": "Mkt Item",
+   "permlevel": 1
   },
   {
    "default": "0",
@@ -200,9 +222,67 @@
    "fieldname": "saldo_n1",
    "fieldtype": "Read Only",
    "label": "Sal N1"
+  },
+  {
+   "fieldname": "img",
+   "fieldtype": "Image",
+   "label": "Img",
+   "options": "img_url",
+   "permlevel": 1
+  },
+  {
+   "fieldname": "kota",
+   "fieldtype": "Link",
+   "label": "Kota",
+   "options": "Kota"
+  },
+  {
+   "fieldname": "img_url",
+   "fieldtype": "Attach Image",
+   "label": "Img Url",
+   "permlevel": 1
+  },
+  {
+   "fieldname": "column_break_4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "spec",
+   "fieldtype": "Link",
+   "label": "Spec",
+   "options": "Spec"
+  },
+  {
+   "fieldname": "hp",
+   "fieldtype": "Data",
+   "label": "HP"
+  },
+  {
+   "fieldname": "area51",
+   "fieldtype": "Link",
+   "label": "Area51",
+   "options": "Area51"
+  },
+  {
+   "fieldname": "outlets",
+   "fieldtype": "Table",
+   "label": "Outlets",
+   "options": "Dx Outlet"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_verified",
+   "fieldtype": "Check",
+   "label": "Is Verified"
+  },
+  {
+   "fieldname": "mp",
+   "fieldtype": "Link",
+   "label": "MP",
+   "options": "MP"
   }
  ],
- "modified": "2021-02-06 20:28:28.211975",
+ "modified": "2023-03-17 13:54:51.904984",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "Dx",
@@ -221,31 +301,16 @@
    "write": 1
   },
   {
-   "email": 1,
-   "export": 1,
-   "print": 1,
    "read": 1,
-   "report": 1,
-   "role": "DM",
-   "share": 1
+   "role": "DM"
   },
   {
-   "email": 1,
-   "export": 1,
-   "print": 1,
    "read": 1,
-   "report": 1,
-   "role": "SM",
-   "share": 1
+   "role": "SM"
   },
   {
-   "email": 1,
-   "export": 1,
-   "print": 1,
    "read": 1,
-   "report": 1,
-   "role": "GSM",
-   "share": 1
+   "role": "GSM"
   },
   {
    "create": 1,
@@ -293,6 +358,15 @@
    "role": "ARCO",
    "share": 1,
    "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "MSS",
+   "share": 1
   }
  ],
  "sort_field": "modified",

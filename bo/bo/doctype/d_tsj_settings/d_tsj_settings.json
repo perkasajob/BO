@@ -1,0 +1,74 @@
+{
+ "creation": "2023-01-10 10:04:36.566934",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "api_key",
+  "user",
+  "user_password",
+  "adm",
+  "adm_password",
+  "user_token",
+  "adm_token"
+ ],
+ "fields": [
+  {
+   "fieldname": "api_key",
+   "fieldtype": "Data",
+   "label": "API Key"
+  },
+  {
+   "fieldname": "adm",
+   "fieldtype": "Data",
+   "label": "Adm"
+  },
+  {
+   "fieldname": "adm_password",
+   "fieldtype": "Password",
+   "label": "Adm Password"
+  },
+  {
+   "fieldname": "adm_token",
+   "fieldtype": "Small Text",
+   "label": "Adm Token"
+  },
+  {
+   "fieldname": "user",
+   "fieldtype": "Data",
+   "label": "User"
+  },
+  {
+   "fieldname": "user_token",
+   "fieldtype": "Small Text",
+   "label": "User Token"
+  },
+  {
+   "fieldname": "user_password",
+   "fieldtype": "Password",
+   "label": "Password"
+  }
+ ],
+ "issingle": 1,
+ "modified": "2023-01-25 23:54:21.738436",
+ "modified_by": "Administrator",
+ "module": "BO",
+ "name": "D TSJ Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

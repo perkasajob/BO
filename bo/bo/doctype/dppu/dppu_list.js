@@ -26,7 +26,7 @@ frappe.listview_settings['DPPU'] = {
 					open_url_post(method, {
 						doctype: listview.doctype,
 						file_type: "Excel",
-						export_fields: {[listview.doctype]:["name","workflow_state","blanko_nr","dm_user","territory","mr_user", "dx_user", "saldo", "cash_transfer","number","date","comment","jml_ccln"]},
+						export_fields: {[listview.doctype]:["name","workflow_state","blanko_nr","dm_user", "dm", "dm_area", "approver_1", "approver_1_name", "approver_2", "approver_2_name", "mss", "mss_name", "tp", "tp_name", "kota", "territory","mr_user", "dx_user", "saldo", "cash_transfer","number","date","comment","jml_ccln", "jv_type", "jv_date", "jv_in", "jv_out", "note", "dm_v", "tp_v", "extra_v", "approver_1_v"]},
 						export_filters: export_filters,
 						export_protect_area: [2, 10, 11],
 					});

@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2020, Sistem Koperasi and contributors
+# Copyright (c) 2023, Sistem Koperasi and contributors
 # For license information, please see license.txt
 
 from __future__ import unicode_literals
 # import frappe
+from frappe.model.document import Document
 from frappe.model.document import Document
 from frappe import _, scrub, ValidationError
 import frappe, json, re
@@ -39,8 +40,11 @@ def book_transfer(docname, check=0):
 		return {"status": "Not Authorized"}
 
 	dppu = frappe.get_doc('DPPU', docname)
-	# line = dppu.mr_user[-1]
-	line = re.search(r'(?<=_)\w+', dppu.mr_user).group().lower()
+	try:
+		line = dppu.line.replace('Line','ql').lower() #re.search(r'(?<=_)\w+', dppu.tp).group().lower()
+	except:
+		frappe.throw("Check TP/MR User name convention")
+
 	ct = 'C' if dppu.cash_transfer == 'Cash' else 'T'
 	sp = frappe.db.sql("select * from `tabSP` where dppu='{}' and number < 0".format(docname))
 	if len(sp) > 0:
@@ -54,7 +58,7 @@ def book_transfer(docname, check=0):
 	dx.append('mkt_'+line ,{'date':today(),'number': amount, 'dppu': dppu.name, 'type':ct, 'line': line, 'note': "by " + frappe.session.user, 'territory': dx.territory})
 
 	dx.save()
-	mkt = frappe.get_doc({'doctype': 'Mkt','date':today(),'number': amount, 'dppu': dppu.name, 'line': line, 'note': "by " + frappe.session.user, 'territory': dx.territory, 'dx': dppu.dx_user, 'dm': dppu.dm_user, 'sm': dppu.sm_user, 'mr': dppu.mr_user}).insert(ignore_permissions=True)
+	mkt = frappe.get_doc({'doctype': 'Mkt','date':today(),'number': amount, 'dppu': dppu.name, 'line': line, 'note': "by " + frappe.session.user, 'territory': dx.territory, 'dx': dppu.dx_user, 'dm': dppu.dm, 'sm': dppu.approver_1, 'mr': dppu.tp}).insert(ignore_permissions=True)
 	mkt.submit()
 
 	# TODO: below is for auto adv booking mutation trough 3 acc
@@ -67,10 +71,10 @@ def book_transfer(docname, check=0):
 
 	# for i in range(0, len(number)):
 	# 	amount = -1*number[i] if number[i] > 0 else number[i]
-	# 	line = cstr(i) + 1 if len(number) > 1 else dppu.mr_user[-1]
+	# 	line = cstr(i) + 1 if len(number) > 1 else dppu.tp[-1]
 	# 	dx.append('loan'+line,{'date':today(),'number': amount, 'dppu': dppu.name, 'type':ct, 'line': line, 'note': "by " + frappe.session.user})
 	# 	dx.append('mkt'+line ,{'date':today(),'number': amount, 'dppu': dppu.name, 'type':ct, 'line': line, 'note': "by " + frappe.session.user, 'territory': dx.territory})
-	# 	mkt = frappe.get_doc({'doctype': 'Mkt','date':today(),'number': amount, 'dppu': dppu.name, 'line': line, 'note': "by " + frappe.session.user, 'territory': dx.territory, 'dx': dppu.dx_user, 'dm': dppu.dm_user, 'sm': dppu.sm_user, 'mr': dppu.mr_user}).insert(ignore_permissions=True)
+	# 	mkt = frappe.get_doc({'doctype': 'Mkt','date':today(),'number': amount, 'dppu': dppu.name, 'line': line, 'note': "by " + frappe.session.user, 'territory': dx.territory, 'dx': dppu.dx_user, 'dm': dppu.dm, 'sm': dppu.approver_1, 'mr': dppu.tp}).insert(ignore_permissions=True)
 	# 	mkt.submit()
 
 	dx.save()
@@ -81,8 +85,8 @@ def book_transfer(docname, check=0):
 @frappe.whitelist()
 def refund(docname):
 	dppu = frappe.get_doc('DPPU', docname)
-	# line = dppu.mr_user[-1] if dppu.mr_user[-3:-1] == 'QL' else dppu.mr_user[-2:].lower() #(?<=_)\w+$
-	line = re.search(r'(?<=_)\w+', dppu.mr_user).group().lower()
+	# line = dppu.tp[-1] if dppu.tp[-3:-1] == 'QL' else dppu.tp[-2:].lower() #(?<=_)\w+$
+	line = dppu.line.replace('Line','ql').lower() #re.search(r'(?<=_)\w+', dppu.tp).group().lower()
 	ct = 'RC' if dppu.cash_transfer == 'Cash' else 'RT'
 	sp = frappe.db.sql("select * from `tabSP` where dppu='{}' and number > 0".format(docname))
 	if len(sp) > 0:
@@ -104,11 +108,11 @@ def refund(docname):
 	mkt.note = "RFun by " + frappe.session.user
 	mkt.territory = dx.territory
 	mkt.dx = dppu.dx_user
-	mkt.dm = dppu.dm_user
-	mkt.sm = dppu.sm_user
-	mkt.mr = dppu.mr_user
+	mkt.dm = dppu.dm
+	mkt.sm = dppu.approver_1
+	mkt.mr = dppu.tp
 	mkt.submit()
-	# {'doctype': 'Mkt','date':today(),'number': amount, 'dppu': dppu.name, 'line': line, 'note': "RFun by " + frappe.session.user, 'territory': dx.territory, 'dx': dppu.dx_user, 'dm': dppu.dm_user, 'sm': dppu.sm_user, 'mr': dppu.mr_user}).insert(ignore_permissions=True)
+	# {'doctype': 'Mkt','date':today(),'number': amount, 'dppu': dppu.name, 'line': line, 'note': "RFun by " + frappe.session.user, 'territory': dx.territory, 'dx': dppu.dx_user, 'dm': dppu.dm, 'sm': dppu.approver_1, 'mr': dppu.tp}).insert(ignore_permissions=True)
 	# mkt.submit()
 	dx.save()
 	frappe.db.commit()
@@ -123,8 +127,8 @@ def adv_transfer(docname, check=0):
 		return {"status": "Not Authorized"}
 
 	dppu = frappe.get_doc('DPPU', docname)
-	# line = dppu.mr_user[-1]
-	line = re.search(r'(?<=_)\w+', dppu.mr_user).group().lower()
+	# line = dppu.tp[-1]
+	line = dppu.line.replace('Line','ql').lower() #re.search(r'(?<=_)\w+', dppu.tp).group().lower()
 	ct = 'AC' if dppu.cash_transfer == 'Cash' else 'AT'
 
 	if cint(dppu.get_value('saldo_' + line)) > dppu.number:
@@ -162,3 +166,6 @@ def adv_transfer(docname, check=0):
 	dx.save()
 	frappe.db.commit()
 	return {"status": "Success"}
+
+
+

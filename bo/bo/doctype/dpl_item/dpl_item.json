@@ -21,13 +21,13 @@
   "apl_item_name",
   "tsj_item_code",
   "tsj_item_name",
-  "hjm_sm",
-  "hjm_gsm",
-  "hjm_fin"
+  "hjm_1",
+  "hjm_2",
+  "hjm_3"
  ],
  "fields": [
   {
-   "columns": 1,
+   "columns": 2,
    "fieldname": "item_code",
    "fieldtype": "Link",
    "in_filter": 1,
@@ -50,21 +50,19 @@
    "reqd": 1
   },
   {
-   "columns": 2,
-   "fetch_from": "item_code.standard_rate",
+   "fetch_from": "item_code.hna",
    "fieldname": "hna",
    "fieldtype": "Currency",
-   "in_list_view": 1,
    "label": "HNA",
    "precision": "0"
   },
   {
-   "columns": 2,
+   "columns": 1,
    "default": "0",
    "fieldname": "dpl_disc",
    "fieldtype": "Percent",
    "in_list_view": 1,
-   "label": "DPL",
+   "label": "DPL (%)",
    "precision": "2"
   },
   {
@@ -103,8 +101,10 @@
    "label": "TSJ Item Name"
   },
   {
+   "columns": 2,
    "fieldname": "hna1",
    "fieldtype": "Currency",
+   "in_list_view": 1,
    "label": "HNA 1",
    "precision": "0"
   },
@@ -134,36 +134,35 @@
    "precision": "2"
   },
   {
+   "columns": 1,
    "default": "0",
    "fieldname": "dpl_disc1",
    "fieldtype": "Percent",
-   "label": "DPL 1",
+   "in_list_view": 1,
+   "label": "DPL 1 (%)",
    "precision": "2"
   },
   {
-   "fetch_from": "item_code.hjm_sm",
-   "fieldname": "hjm_sm",
-   "fieldtype": "Percent",
-   "label": "HJM SM",
-   "print_hide": 1
+   "fetch_from": "item_code.hjm_1",
+   "fieldname": "hjm_1",
+   "fieldtype": "Currency",
+   "label": "HJM 1"
   },
   {
-   "fetch_from": "item_code.hjm_gsm",
-   "fieldname": "hjm_gsm",
-   "fieldtype": "Percent",
-   "label": "HJM GSM",
-   "print_hide": 1
+   "fetch_from": "item_code.hjm_2",
+   "fieldname": "hjm_2",
+   "fieldtype": "Currency",
+   "label": "HJM 2"
   },
   {
-   "fetch_from": "item_code.hjm_fin",
-   "fieldname": "hjm_fin",
-   "fieldtype": "Percent",
-   "label": "HJM FIN",
-   "print_hide": 1
+   "fetch_from": "item_code.hjm_3",
+   "fieldname": "hjm_3",
+   "fieldtype": "Currency",
+   "label": "HJM 3"
   }
  ],
  "istable": 1,
- "modified": "2020-11-03 17:13:58.471271",
+ "modified": "2023-01-13 16:11:33.346506",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "DPL Item",
