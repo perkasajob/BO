@@ -59,6 +59,7 @@ frappe.ui.form.on('DPPU', {
 	},
 	before_workflow_action: async function(frm){
 		console.log(frm.selected_workflow_action);
+		// frappe.throw(__("PUT ERROR HERE"), "Error");
 		frappe.validated = true;
 		if((frm.doc.workflow_state == "FIN Approved")
 			&& (frappe.user.has_role("CSD")||frappe.user.has_role("Accounts Manager"))){
@@ -72,6 +73,13 @@ frappe.ui.form.on('DPPU', {
 						throw("Error !")
 				}]);
 		}
+
+		if(frm.doc.workflow_state == "Approved 1" && ![frm.doc.approver_3_name, frm.doc.approver_2_name].includes(frappe.user.full_name()))
+			frappe.throw(__("User not allowed, only approver 2 or 3 !"), "Error");
+
+		if(frm.doc.workflow_state == "Approved 2" && frm.doc.approver_3_name != frappe.user.full_name())
+			frappe.throw(__("User not allowed, only approver 3 !"), "Error");
+
 		if(frm.doc.workflow_state == "JV" && frm.doc.jv_note.length < 5)
 				frappe.throw(__("JV Note cannot be empty !"), "Error");
 

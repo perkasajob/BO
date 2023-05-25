@@ -51,12 +51,12 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "DPPU",
-   "options": "DPPU",
+   "options": "DPPUv1",
    "reqd": 1
   }
  ],
  "is_submittable": 1,
- "modified": "2020-09-30 16:44:24.429945",
+ "modified": "2023-02-23 15:18:39.344467",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "Adv Install",

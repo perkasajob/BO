@@ -84,12 +84,14 @@ website_context = {
 # }
 permission_query_conditions = {
 	"DPPU": "bo.bo.permission.dppu_get_permission_query_conditions",
-	"DKH": "bo.bo.permission.dkh_get_permission_query_conditions"
+	"DKH": "bo.bo.permission.dkh_get_permission_query_conditions",
+	"DPL": "bo.bo.permission.dpl_get_permission_query_conditions"
 }
 
 # has_permission = {
-# 	"DPPU": "bo.bo.dppu_has_permission"
+# 	"DPL": "bo.bo.doctype.dpl.dpl.has_permission"
 # }
+
 # Document Events
 # ---------------
 # Hook on document methods and events

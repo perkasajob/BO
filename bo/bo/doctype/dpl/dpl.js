@@ -25,8 +25,10 @@ frappe.ui.form.on('DPL', {
 				frm.set_value('outid', e.target.value)
 				if(frm?.var?.outlets !== undefined
 					&& frm.var.outlets[e.target.value] !== undefined ){
+						console.log(frm.var.outlets[e.target.value])
 					frm.set_value("outlet_name", frm.var.outlets[e.target.value].name)
 					frm.set_value("outlet_address", frm.var.outlets[e.target.value].address)
+					frm.set_value("outlet_type", frm.var.outlets[e.target.value].sales_chn)
 				}
 			} catch (error) {console.log(error)}
 		})
@@ -109,11 +111,8 @@ frappe.ui.form.on('DPL Item', {
 	hna: function(frm, dt, dn) {
 		calc_item(frm, dt, dn)
 	},
-	hna2: function(frm, dt, dn) {
+	hna1: function(frm, dt, dn) {
 		calc_item(frm, dt, dn)
-	},
-	dpl_disc: function(frm, dt, dn) {
-		dpl_disc_calc(frm, dt, dn)
 	},
 	dpl_disc1: function(frm, dt, dn) {
 		calc_item(frm, dt, dn)
@@ -145,11 +144,11 @@ function calc_item(frm, dt, dn){
 	let o = locals[dt][dn];
 	let dc = frm.doc[o.parentfield][o.idx-1]
 	let dpl_disc = dc.dpl_disc?dc.dpl_disc/100:0
-	if (dc.hna2){
-		dpl_disc = 1-dc.hna2 /dc.hna
+	if (dc.hna){
+		dpl_disc = 1-dc.hna /dc.hna0
 		dc.dpl_disc = dpl_disc * 100
 	} else {
-		dc.hna2 =  dc.hna * (1-dpl_disc)
+		dc.hna =  dc.hna0 * (1-dpl_disc)
 	}
 
 	let dpl_disc1 = dc.dpl_disc1/100
@@ -157,18 +156,31 @@ function calc_item(frm, dt, dn){
 	var total_disc = 1 - (1-dpl_disc) * (1-dpl_disc1)
 	var total_disc_final = 1 - (1-dpl_disc) * (1-dpl_disc1) * (1-disc_off)
 
-	var nf = Intl.NumberFormat('id-ID'); //nf.format(
-	dc.total_disc = flt((total_disc * 100),2)
-	dc.total_disc_final = flt((total_disc_final * 100),2)
-	dc.nsv_ppn = flt((dc.hna * (1-dpl_disc) * ppn).toFixed(0))
-	dc.nsv2_ppn = flt((dc.hna * (1-dpl_disc) * (1-dpl_disc1) * ppn).toFixed(0))
-	dc.nsv3_ppn = flt((dc.hna * (1-dpl_disc) * (1-dpl_disc1) * (1-disc_off) * ppn).toFixed(0))
+	dc.hna1 =  dc.hna0 * (1-total_disc)
 
-	if (dc.nsv3_ppn < dc.hjm_3){
+	var nf = Intl.NumberFormat('id-ID'); //nf.format(
+	dc.hna_ppn = flt((dc.hna0 * (1-dpl_disc) * ppn).toFixed(0))
+	dc.hna1_ppn = flt((dc.hna1 * ppn).toFixed(0))
+	dc.hna2_ppn = flt((dc.hna0 * (1 - total_disc_final) * ppn).toFixed(0))
+	dc.total_disc = flt((100 * total_disc), 2)
+	dc.total_disc_final = flt((100 * total_disc_final), 2)
+
+	let hjm_1 = dc.hjm_1
+	let hjm_2 = dc.hjm_2
+	let hjm_3 = dc.hjm_3
+
+	if(["Apotik", "PBF"].includes(frm.doc.outlet_type)){
+		// Override for wholesaler
+		hjm_1 = dc.hjm_grosir_1
+		hjm_2 = dc.hjm_grosir_2
+		hjm_3 = dc.hjm_grosir_3
+	}
+
+	if (dc.hna2_ppn < hjm_3){
 		frm.set_value("over_hjm", 3)
-	} else if(dc.nsv3_ppn > dc.hjm_3 && dc.nsv3_ppn < dc.hjm_2 && frm.doc.over_hjm < 2){
+	} else if(dc.hna2_ppn > hjm_3 && dc.hna2_ppn < hjm_2 && frm.doc.over_hjm < 2){
 		frm.set_value("over_hjm", 2)
-	} else if(dc.nsv3_ppn > dc.hjm_2 && dc.nsv3_ppn < dc.hjm_1 && frm.doc.over_hjm < 1){
+	} else if(dc.hna2_ppn > hjm_2 && dc.hna2_ppn < hjm_1 && frm.doc.over_hjm < 1){
 		frm.set_value("over_hjm", 1)
 	} else frm.set_value("over_hjm", 0)
 
@@ -192,32 +204,32 @@ function calc_item(frm, dt, dn){
 
 function paint_over_hjm(frm){
 	frm.doc.items.forEach(o=>{
-		if(frappe.user.has_role("SM") && o.nsv3_ppn < o.hjm_1
-		|| frappe.user.has_role("GSM") && o.nsv3_ppn < o.hjm_2
-		|| frappe.user.has_role("Accounts Manager") && o.nsv3_ppn < o.hjm_1){
+		if(frappe.user.has_role("SM") && o.hna2_ppn < o.hjm_1
+		|| frappe.user.has_role("GSM") && o.hna2_ppn < o.hjm_2
+		|| frappe.user.has_role("Accounts Manager") && o.hna2_ppn < o.hjm_1){
 			// $("[data-fieldname='total_disc']>div>.control-input-wrapper>.control-value").css({"background-color":"red","color":"white"})
 			// $(`[data-idx=${o.idx}] > .data-row > [data-fieldname=item_name]`).css('background-color', '#ffcccc');
 			// frm.fields_dict.items.grid.grid_rows[o.idx-1].columns.item_code.css("background-color","#ffcccc")
 			// frm.fields_dict.items.grid.grid_rows[o.idx-1].columns.item_name.css("background-color","#ffcccc")
-			// cur_frm.fields_dict.items.grid.grid_rows[o.idx-1].grid_form.fields_dict.nsv3_ppn.$input_wrapper.css({'color':'#f00'})
+			// cur_frm.fields_dict.items.grid.grid_rows[o.idx-1].grid_form.fields_dict.hna2_ppn.$input_wrapper.css({'color':'#f00'})
 			cur_frm.fields_dict.items.grid.grid_rows[o.idx-1].row_index.css({"background-color":"#ffcccc"})
 		} else{
 			// $("[data-fieldname='total_disc']>div>.control-input-wrapper>.control-value").css({"background-color":"#f5f7fa","color":"black"})
 			// frm.fields_dict.items.grid.grid_rows[o.idx-1].columns.item_code.css("background-color","#fff")
 			// frm.fields_dict.items.grid.grid_rows[o.idx-1].columns.item_name.css("background-color","#ffcccc")
-			// cur_frm.fields_dict.items.grid.grid_rows[o.idx-1].grid_form.fields_dict.nsv3_ppn.$input_wrapper.css({'color':'#36414c'})
+			// cur_frm.fields_dict.items.grid.grid_rows[o.idx-1].grid_form.fields_dict.hna2_ppn.$input_wrapper.css({'color':'#36414c'})
 			cur_frm.fields_dict.items.grid.grid_rows[o.idx-1].row_index.css({"background-color":"#fff"})
 		}
 	})
 }
 
 function paint_over_hjm_item(frm, o){
-	if(frappe.user.has_role("SM") && o.nsv3_ppn < o.hjm_1
-	|| frappe.user.has_role("GSM") && o.nsv3_ppn < o.hjm_2
-	|| frappe.user.has_role("Accounts Manager") && o.nsv3_ppn < o.hjm_1){
-		frappe.ui.form.get_open_grid_form().grid_form.fields_dict.nsv3_ppn.$input_wrapper.css({'color':'#f00'})
+	if(frappe.user.has_role("SM") && o.hna2_ppn < o.hjm_1
+	|| frappe.user.has_role("GSM") && o.hna2_ppn < o.hjm_2
+	|| frappe.user.has_role("Accounts Manager") && o.hna2_ppn < o.hjm_1){
+		frappe.ui.form.get_open_grid_form().grid_form.fields_dict.hna2_ppn.$input_wrapper.css({'color':'#f00'})
 	} else{
-		frappe.ui.form.get_open_grid_form().grid_form.fields_dict.nsv3_ppn.$input_wrapper.css({'color':'#f00'}).css({'color':'#36414c'})
+		frappe.ui.form.get_open_grid_form().grid_form.fields_dict.hna2_ppn.$input_wrapper.css({'color':'#f00'}).css({'color':'#36414c'})
 	}
 }
 
@@ -294,7 +306,7 @@ function set_parseXls_btn(frm){
         open_url_post(method, {
 			doctype: frm.doctype,
 			file_type: "Excel",
-			export_fields: {"DPL":["name","outid","month","year","distributor","line"],"items":["name","item_code","item_name","hna","dpl_disc","hna2","dpl_disc1","nsv2_ppn","off_faktur","nsv3_ppn","total_disc"]},
+			export_fields: {"DPL":["name","outid","month","year","distributor","line"],"items":["name","item_code","item_name","hna","dpl_disc","hna2","dpl_disc1","hna1_ppn","off_faktur","hna2_ppn","total_disc"]},
 			export_filters: filters,
 			export_protect_area: [2, 11, 12],
 		});
@@ -309,7 +321,7 @@ function set_parseXls_btn(frm){
         open_url_post(method, {
 			doctype: frm.doctype,
 			file_type: "Excel",
-			export_fields: {"DPL":["name","outid", "start_date", "end_date", "distributor","line"].concat(dpl_extras),"items":["name","item_code","item_name","hna","dpl_disc","hna2","dpl_disc1","nsv2_ppn"].concat(item_extras)},
+			export_fields: {"DPL":["name","outid", "start_date", "end_date", "distributor","line"].concat(dpl_extras),"items":["name","item_code","item_name","hna","dpl_disc","hna2","dpl_disc1","hna1_ppn"].concat(item_extras)},
 			export_filters: filters,
 			export_protect_area: [2, 12, 13],
 		});
@@ -325,8 +337,8 @@ function download_template(frm) {
 		});
 	}
 
-function load_org_code(frm)	{
-	if(frm.doc.distributor){
+function load_org_code(frm)	{``
+	if(frm.doc.distributor && frm.doc.dm){
 		frm.set_df_property("org_code", "options", []);
 
 		frm.call('get_linked_org', { throw_if_missing: true })

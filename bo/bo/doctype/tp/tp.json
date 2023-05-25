@@ -1,6 +1,5 @@
 {
  "allow_rename": 1,
- "autoname": "Prompt",
  "creation": "2021-07-06 15:09:34.475329",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -9,7 +8,6 @@
   "full_name",
   "email",
   "berno_id",
-  "dm_id",
   "territory"
  ],
  "fields": [
@@ -35,12 +33,6 @@
    "label": "IS ID"
   },
   {
-   "fieldname": "dm_id",
-   "fieldtype": "Link",
-   "label": "DM",
-   "options": "DM"
-  },
-  {
    "fetch_from": "dm_id.territory",
    "fieldname": "territory",
    "fieldtype": "Read Only",
@@ -48,76 +40,13 @@
    "label": "Territory"
   }
  ],
- "modified": "2021-07-06 15:09:34.475329",
+ "istable": 1,
+ "modified": "2023-01-19 11:27:49.356604",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "TP",
  "owner": "Administrator",
- "permissions": [
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "System Manager",
-   "share": 1,
-   "write": 1
-  },
-  {
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "DM",
-   "share": 1
-  },
-  {
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "SM",
-   "share": 1
-  },
-  {
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "GSM",
-   "share": 1
-  },
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "MSD",
-   "share": 1,
-   "write": 1
-  },
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "CSD",
-   "share": 1,
-   "write": 1
-  }
- ],
+ "permissions": [],
  "quick_entry": 1,
  "sort_field": "modified",
  "sort_order": "DESC",

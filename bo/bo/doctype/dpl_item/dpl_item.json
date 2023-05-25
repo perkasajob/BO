@@ -6,14 +6,18 @@
  "field_order": [
   "item_code",
   "item_name",
-  "hna",
+  "qty",
+  "hna0",
   "dpl_disc",
-  "hna1",
+  "hna",
+  "hna_ppn",
   "dpl_disc1",
-  "nsv1_ppn",
-  "off_faktur",
-  "nsv2_ppn",
+  "hna1",
+  "hna1_ppn",
   "total_disc",
+  "off_faktur",
+  "hna2_ppn",
+  "total_disc_final",
   "inc_sb",
   "ppg_item_code",
   "ppg_item_name",
@@ -21,9 +25,14 @@
   "apl_item_name",
   "tsj_item_code",
   "tsj_item_name",
+  "hjm_section",
   "hjm_1",
   "hjm_2",
-  "hjm_3"
+  "hjm_3",
+  "column_break_25",
+  "hjm_grosir_1",
+  "hjm_grosir_2",
+  "hjm_grosir_3"
  ],
  "fields": [
   {
@@ -50,20 +59,20 @@
    "reqd": 1
   },
   {
-   "fetch_from": "item_code.hna",
+   "columns": 1,
    "fieldname": "hna",
    "fieldtype": "Currency",
+   "in_list_view": 1,
    "label": "HNA",
    "precision": "0"
   },
   {
-   "columns": 1,
    "default": "0",
    "fieldname": "dpl_disc",
    "fieldtype": "Percent",
-   "in_list_view": 1,
    "label": "DPL (%)",
-   "precision": "2"
+   "precision": "2",
+   "read_only": 1
   },
   {
    "fieldname": "inc_sb",
@@ -73,46 +82,38 @@
   {
    "fieldname": "ppg_item_code",
    "fieldtype": "Data",
-   "label": "PPG Item Code"
+   "label": "PPG Item Code",
+   "read_only": 1
   },
   {
    "fieldname": "ppg_item_name",
    "fieldtype": "Data",
-   "label": "PPG Item Name"
+   "label": "PPG Item Name",
+   "read_only": 1
   },
   {
    "fieldname": "apl_item_code",
    "fieldtype": "Data",
-   "label": "APL Item Code"
+   "label": "APL Item Code",
+   "read_only": 1
   },
   {
    "fieldname": "apl_item_name",
    "fieldtype": "Data",
-   "label": "APL Item Name"
+   "label": "APL Item Name",
+   "read_only": 1
   },
   {
    "fieldname": "tsj_item_code",
    "fieldtype": "Data",
-   "label": "TSJ Item Code"
+   "label": "TSJ Item Code",
+   "read_only": 1
   },
   {
    "fieldname": "tsj_item_name",
    "fieldtype": "Data",
-   "label": "TSJ Item Name"
-  },
-  {
-   "columns": 2,
-   "fieldname": "hna1",
-   "fieldtype": "Currency",
-   "in_list_view": 1,
-   "label": "HNA 1",
-   "precision": "0"
-  },
-  {
-   "fieldname": "nsv1_ppn",
-   "fieldtype": "Read Only",
-   "label": "NSV1+PPN",
-   "precision": "1"
+   "label": "TSJ Item Name",
+   "read_only": 1
   },
   {
    "default": "0",
@@ -122,16 +123,95 @@
    "precision": "2"
   },
   {
-   "fieldname": "nsv2_ppn",
-   "fieldtype": "Read Only",
-   "label": "NSV2+PPN",
-   "precision": "1"
+   "fieldname": "total_disc",
+   "fieldtype": "Percent",
+   "label": "Total Disc",
+   "precision": "2",
+   "read_only": 1
   },
   {
-   "fieldname": "total_disc",
-   "fieldtype": "Read Only",
-   "label": "Total Disc",
-   "precision": "2"
+   "fetch_from": "item_code.hjm_1",
+   "fieldname": "hjm_1",
+   "fieldtype": "Currency",
+   "label": "HJM 1",
+   "permlevel": 1,
+   "read_only": 1
+  },
+  {
+   "fetch_from": "item_code.hjm_2",
+   "fieldname": "hjm_2",
+   "fieldtype": "Currency",
+   "label": "HJM 2",
+   "permlevel": 2,
+   "read_only": 1
+  },
+  {
+   "fetch_from": "item_code.hjm_3",
+   "fieldname": "hjm_3",
+   "fieldtype": "Currency",
+   "label": "HJM 3",
+   "permlevel": 3,
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:parent.type === \"DPF\"",
+   "fieldname": "qty",
+   "fieldtype": "Float",
+   "label": "Qty"
+  },
+  {
+   "fieldname": "total_disc_final",
+   "fieldtype": "Percent",
+   "label": "Total Disc Final"
+  },
+  {
+   "fieldname": "hjm_section",
+   "fieldtype": "Section Break",
+   "label": "HJM"
+  },
+  {
+   "fieldname": "column_break_25",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "item_code.hjm_grosir_1",
+   "fieldname": "hjm_grosir_1",
+   "fieldtype": "Currency",
+   "label": "HJM Grosir 1",
+   "permlevel": 1,
+   "read_only": 1
+  },
+  {
+   "fetch_from": "item_code.hjm_grosir_2",
+   "fieldname": "hjm_grosir_2",
+   "fieldtype": "Currency",
+   "label": "HJM Grosir 2",
+   "permlevel": 2,
+   "read_only": 1
+  },
+  {
+   "fetch_from": "item_code.hjm_grosir_3",
+   "fieldname": "hjm_grosir_3",
+   "fieldtype": "Currency",
+   "label": "HJM Grosir 3",
+   "permlevel": 3,
+   "read_only": 1
+  },
+  {
+   "columns": 1,
+   "fetch_from": "item_code.hna",
+   "fieldname": "hna0",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "HNA Default",
+   "precision": "0",
+   "read_only": 1
+  },
+  {
+   "fieldname": "hna_ppn",
+   "fieldtype": "Currency",
+   "label": "HNA+PPN",
+   "read_only": 1
   },
   {
    "columns": 1,
@@ -143,27 +223,29 @@
    "precision": "2"
   },
   {
-   "fetch_from": "item_code.hjm_1",
-   "fieldname": "hjm_1",
+   "fieldname": "hna1",
    "fieldtype": "Currency",
-   "label": "HJM 1"
+   "label": "HNA 1"
   },
   {
-   "fetch_from": "item_code.hjm_2",
-   "fieldname": "hjm_2",
+   "columns": 1,
+   "fieldname": "hna1_ppn",
    "fieldtype": "Currency",
-   "label": "HJM 2"
+   "in_list_view": 1,
+   "label": "HNA1+PPN",
+   "read_only": 1
   },
   {
-   "fetch_from": "item_code.hjm_3",
-   "fieldname": "hjm_3",
+   "fieldname": "hna2_ppn",
    "fieldtype": "Currency",
-   "label": "HJM 3"
+   "label": "HNA2+PPN",
+   "precision": "1",
+   "read_only": 1
   }
  ],
  "istable": 1,
- "modified": "2023-01-13 16:11:33.346506",
- "modified_by": "Administrator",
+ "modified": "2023-04-10 11:50:01.181375",
+ "modified_by": "dwi@ksp.ksp",
  "module": "BO",
  "name": "DPL Item",
  "owner": "Administrator",

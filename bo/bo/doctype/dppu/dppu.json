@@ -12,21 +12,23 @@
   "mss",
   "mss_name",
   "sb_mkt",
-  "dm",
-  "dm_name",
-  "dm_area",
-  "approver_1",
-  "approver_1_name",
-  "column_break_8",
-  "approver_2",
-  "approver_2_name",
   "line",
   "tp",
   "tp_name",
+  "column_break_9",
+  "dm",
+  "dm_name",
+  "dm_area",
+  "column_break_13",
+  "approver_1",
+  "approver_1_name",
+  "approver_2",
+  "approver_2_name",
   "sb_sal",
   "dx_user",
   "kota",
   "saldo",
+  "column_break_8",
   "saldo_ql1",
   "saldo_ql2",
   "saldo_ql3",
@@ -343,7 +345,7 @@
    "fieldname": "line",
    "fieldtype": "Select",
    "label": "Line",
-   "options": "Line2\nLine1\nN1",
+   "options": "Line2",
    "reqd": 1
   },
   {
@@ -371,10 +373,18 @@
    "fieldname": "unconfirmed",
    "fieldtype": "Check",
    "label": "Unconfirmed"
+  },
+  {
+   "fieldname": "column_break_9",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_13",
+   "fieldtype": "Column Break"
   }
  ],
  "is_submittable": 1,
- "modified": "2023-03-14 15:12:54.339594",
+ "modified": "2023-05-03 15:00:16.987897",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "DPPU",
@@ -493,18 +503,6 @@
    "role": "MSS",
    "share": 1,
    "submit": 1,
-   "write": 1
-  },
-  {
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "permlevel": 4,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "MSS",
-   "share": 1,
    "write": 1
   }
  ],

@@ -23,21 +23,21 @@ def make_xlsx(data, sheet_name, protect_area=None, wb=None ):
 	row1 = ws.row_dimensions[1]
 	row1.font = Font(name='Calibri',bold=True)
 
-	
+
 	for row in data:
 		clean_row = []
 		column_widths = []
 		for i, cell in enumerate(row):
-			
+
 			if len(column_widths) > i:
 				if len(cell) > column_widths[i]:
 					column_widths[i] = len(cell)
-			else:				
+			else:
 				if isinstance(cell, string_types):
 					cell_length = len(cell)
 					column_widths += [cell_length+1 if cell_length > 11 else 11]
 				else:
-					column_widths += [10]					
+					column_widths += [10]
 
 		for item in row:
 			if isinstance(item, string_types) and (sheet_name not in ['Data Import Template', 'Data Export']):
@@ -56,7 +56,7 @@ def make_xlsx(data, sheet_name, protect_area=None, wb=None ):
 	for i, column_width in enumerate(column_widths):
 		ws.column_dimensions[get_column_letter(i+1)].width = column_width
 
-	if isinstance(protect_area, list):		
+	if isinstance(protect_area, list):
 		# Set Protection on cell not intended to be edited
 		for col in ws.iter_cols(min_row=protect_area[0], min_col = protect_area[1], max_col=protect_area[2], max_row=len(data)+1):
 			for cell in col:
@@ -102,7 +102,7 @@ def handle_html(data):
 
 	return value
 
-def read_xlsx_file_from_attached_file(file_url=None, fcontent=None, filepath=None):
+def read_xlsx_file_from_attached_file(file_url=None, fcontent=None, filepath=None, sheet=None):
 	if file_url:
 		_file = frappe.get_doc("File", {"file_url": file_url})
 		filename = _file.get_full_path()
@@ -116,7 +116,10 @@ def read_xlsx_file_from_attached_file(file_url=None, fcontent=None, filepath=Non
 
 	rows = []
 	wb1 = load_workbook(filename=filename, read_only=True, data_only=True)
-	ws1 = wb1.active
+	if sheet:
+		ws1 = wb1[sheet]
+	else:
+		ws1 = wb1.active
 	for row in ws1.iter_rows():
 		tmp_list = []
 		for cell in row:
@@ -133,7 +136,7 @@ def read_xls_file_from_attached_file(content):
 		rows.append(sheet.row_values(i))
 	return rows
 
-def build_xlsx_response(data, filename, protect_area):	
+def build_xlsx_response(data, filename, protect_area):
 	xlsx_file = make_xlsx(data, filename, protect_area)
 	# write out response as a xlsx type
 	frappe.response['filename'] = filename + '.xlsx'

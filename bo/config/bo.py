@@ -52,8 +52,13 @@ def get_data():
 				},
 				{
 					"type": "doctype",
-					"name": "MR"
-				}
+					"name": "MP"
+				},
+				{
+					"type": "doctype",
+					"name": "SFA",
+					"onboard": 1,
+				},
 			]
 		}, {
 			"label": _("Settings"),

@@ -1,0 +1,49 @@
+{
+ "add_total_row": 0,
+ "creation": "2022-11-19 12:12:33.746657",
+ "disable_prepared_report": 0,
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "idx": 0,
+ "is_standard": "Yes",
+ "modified": "2022-11-19 12:12:33.746657",
+ "modified_by": "Administrator",
+ "module": "BO",
+ "name": "JV Performance",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "query": "SELECT mss AS \"MSS:Data:120\", dx_user AS \"Dx:Link/Dx:350\", workflow_state as \"Status:Data:100\", ROUND(COUNT(*)*100/SUM(COUNT(*)) OVER(PARTITION BY YEAR(DATE),dx_user), 2) AS \"Percent:Percent:70\", COUNT(*) as \"DPPU:Int:70\", YEAR(DATE) AS \"Year:Int:70\" from tabDPPU where workflow_state IN ('Closed', 'JV has Issue', 'JV') GROUP BY YEAR(date),mss,dx_user, workflow_state ORDER BY YEAR(date) DESC, mss \r\n#SELECT workflow_state as \"Status:Data:100\", ROUND(COUNT(*)*100/SUM(COUNT(*)) OVER(PARTITION BY MONTH(DATE),YEAR(DATE)), 2) AS \"Percent:Percent:70\", COUNT(*) as Sum, MONTH(DATE) AS Month, YEAR(DATE) AS Year from tabDPPU where workflow_state IN ('Closed', 'JV has Issue', 'JV') GROUP BY MONTH(date),workflow_state ORDER BY creation DESC\r\n\r\n# SELECT workflow_state as \"Status:Data:100\", COUNT(*) as \"Total:Int:100\", ROUND(COUNT(*)*100/SUM(COUNT(*)) OVER(), 2) AS percent from tabDPPU where workflow_state IN ('Closed', 'JV has Issue', 'JV') GROUP BY workflow_state\r\n",
+ "ref_doctype": "DPPU",
+ "report_name": "JV Performance",
+ "report_type": "Script Report",
+ "roles": [
+  {
+   "role": "MSD"
+  },
+  {
+   "role": "GSM"
+  },
+  {
+   "role": "DM"
+  },
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "SM"
+  },
+  {
+   "role": "ARCO"
+  },
+  {
+   "role": "CSD"
+  },
+  {
+   "role": "Accounts Manager"
+  },
+  {
+   "role": "MSS"
+  }
+ ]
+}

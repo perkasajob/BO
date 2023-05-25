@@ -48,7 +48,7 @@
    "label": "Territory"
   }
  ],
- "modified": "2021-07-06 15:20:42.736806",
+ "modified": "2022-09-12 14:58:22.629992",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "MR",
@@ -116,6 +116,24 @@
    "role": "CSD",
    "share": 1,
    "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts Manager",
+   "share": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "MSS",
+   "share": 1
   }
  ],
  "quick_entry": 1,

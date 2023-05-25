@@ -6,8 +6,13 @@
  "engine": "InnoDB",
  "field_order": [
   "outlet_id",
-  "comid",
   "outlet_name",
+  "type",
+  "comid",
+  "tsj_outlet_id",
+  "tsj_outlet_name",
+  "tsj_outlet_address",
+  "dm",
   "ppg_outid",
   "ppg_outlet_name",
   "apl_outid",
@@ -65,9 +70,36 @@
    "fieldname": "apl_outlet_name",
    "fieldtype": "Data",
    "label": "APL Outlet"
+  },
+  {
+   "fieldname": "tsj_outlet_id",
+   "fieldtype": "Data",
+   "label": "TSJ Outlet ID"
+  },
+  {
+   "fieldname": "tsj_outlet_name",
+   "fieldtype": "Data",
+   "label": "TSJ Outlet Name"
+  },
+  {
+   "fieldname": "tsj_outlet_address",
+   "fieldtype": "Data",
+   "label": "TSJ Outlet Address"
+  },
+  {
+   "fieldname": "dm",
+   "fieldtype": "Link",
+   "label": "DM",
+   "options": "MP"
+  },
+  {
+   "fieldname": "type",
+   "fieldtype": "Select",
+   "label": "Type",
+   "options": "Apt\nRS"
   }
  ],
- "modified": "2020-11-16 15:37:26.821143",
+ "modified": "2023-03-07 17:19:58.681923",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "Outlet",

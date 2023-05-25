@@ -1,4 +1,5 @@
 {
+ "allow_rename": 1,
  "autoname": "Prompt",
  "creation": "2020-07-20 19:07:02.780937",
  "doctype": "DocType",
@@ -10,13 +11,14 @@
   "dm_name",
   "full_name",
   "berno_id",
-  "sm_user"
+  "sm_user",
+  "sm_name",
+  "mss"
  ],
  "fields": [
   {
    "fieldname": "dm_name",
    "fieldtype": "Link",
-   "in_list_view": 1,
    "label": "DM Name",
    "options": "User",
    "reqd": 1,
@@ -46,6 +48,7 @@
   {
    "fieldname": "sm_user",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "SM",
    "options": "User"
   },
@@ -53,9 +56,23 @@
    "fieldname": "comid",
    "fieldtype": "Int",
    "label": "Comid"
+  },
+  {
+   "fieldname": "mss",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "MSS",
+   "options": "MSS",
+   "permlevel": 1
+  },
+  {
+   "fetch_from": "sm_user.full_name",
+   "fieldname": "sm_name",
+   "fieldtype": "Read Only",
+   "label": "SM Name"
   }
  ],
- "modified": "2020-10-24 10:50:36.021105",
+ "modified": "2022-11-07 14:26:05.882513",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "DM",
@@ -136,6 +153,15 @@
    "role": "Accounts Manager",
    "share": 1,
    "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "MSS",
+   "share": 1
   }
  ],
  "quick_entry": 1,

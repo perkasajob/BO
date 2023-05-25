@@ -46,7 +46,7 @@ class DPL(Document):
 					return 0
 
 		if self.type[0:3] == "DPL":
-			details = [{"ItemCode": i.item_code, "D1":i.total_disc, "D3":0, "D1QtyMin":min_qty(i.dpl_disc), "D1QtyMax":max_qty(i.dpl_disc), "D3QtyMin":0, "D3QtyMax":0} for i in self.items]
+			details = [{"ItemCode": i.item_code, "D1":i.total_disc, "D3":0, "D1QtyMin":min_qty(i.total_disc), "D1QtyMax":max_qty(i.total_disc), "D3QtyMin":0, "D3QtyMax":0} for i in self.items]
 			res = conn.post_dpl(self.outid, self.start_date, self.end_date, details)
 		elif self.type[0:3] == "DPF":
 			details = [{'ItemCode': i.item_code, 'ItemQty': i.qty, 'ItemPrice': i.hna, 'ItemE1': 0, 'ItemD1': i.total_disc} for i in self.items]

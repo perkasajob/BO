@@ -1,15 +1,18 @@
 from __future__ import unicode_literals
 from frappe import _
-import frappe
+import frappe, json
 from frappe.utils.background_jobs import enqueue
 from frappe.utils import nowdate
 from frappe.desk.doctype.notification_log.notification_log import enqueue_create_notification,\
 	get_title, get_title_html
+from bo.bo.bo_integration.tsj_integration import TSJConnect;
 from datetime import datetime
 
 def daily():
 	set_DPPU_overdue(14) # 14 days
 	expire_dx_adv()
+	tsj = TSJConnect()
+	tsj.get_dpf_status()
 
 def set_DPPU_overdue(period):
 	from frappe.desk.doctype.event.event import get_events
