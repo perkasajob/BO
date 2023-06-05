@@ -9,8 +9,6 @@ def execute(filters=None):
 	data = get_items(filters)
 	return columns, data
 
-
-
 def get_columns(filters):
 	"""return columns"""
 	columns = [
@@ -24,12 +22,12 @@ def get_columns(filters):
 
 def get_items(filters):
 	conditions = []
-	if filters.get("year"):
-		conditions.append("YEAR(date)=%(year)s")
+	if filters.get("start_date") and filters.get("end_date"):
+		conditions.append("date between {} and {}".format(frappe.db.escape(filters.get('start_date')), frappe.db.escape(filters.get('end_date'))))
 
 	items = []
 	if conditions:
-		items = frappe.db.sql("""with dppu as( SELECT * from tabDPPU where workflow_state IN ('DM Received', 'DM Send Out', 'DM Recap', 'JV Closed', 'JV has Issue', 'JV') AND jv_date IS not NULL {}),
+		items = frappe.db.sql("""with dppu as( SELECT * from tabDPPU where workflow_state IN ('DM Recap', 'JV', 'JV Closed', 'JV has Issue') AND jv_date IS not NULL AND cash_transfer IN ('Cash', 'Transfer') {}),
 			dp as (SELECT mss, COUNT(*) as cnt, SUM(number) as nr from dppu GROUP BY mss),
 			dpx as (SELECT COUNT(DISTINCT dx_user)*100/COUNT(DISTINCT dx_user) as cnt, mss as mssx FROM dppu WHERE workflow_state IN ('JV Closed', 'JV has Issue') GROUP BY mss),
 			dpp as (SELECT COUNT(*) as cnt, mss as mssp FROM dppu WHERE workflow_state IN ('JV Closed', 'JV has Issue') GROUP BY mss),
@@ -37,7 +35,6 @@ def get_items(filters):
 			SELECT mss, ROUND(dpx.cnt, 2) AS dx_p,
 			ROUND(dpp.cnt*100/dp.cnt, 2) AS dp_p,
 			ROUND(dnr.nr*100/dp.nr, 2) AS nr_p
-				from dp, dpx, dpp, dnr WHERE dpx.mssx = dpp.mssp AND dpp.mssp = dp.mss AND dnr.mssr = dp.mss"""
+				from dp, dpx, dpp, dnr   WHERE dpx.mssx = dpp.mssp AND dpp.mssp = dp.mss AND dnr.mssr = dp.mss"""
 						.format("and "+" and ".join(conditions)), filters)
 	return items
-

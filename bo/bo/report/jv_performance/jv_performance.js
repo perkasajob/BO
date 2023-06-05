@@ -5,11 +5,17 @@
 frappe.query_reports["JV Performance"] = {
 	"filters": [
 		{
-			"fieldname":"year",
-			"label": __("Year"),
-			"fieldtype": "Data",
-			"width": "70",
-			"default": frappe.datetime.get_today().slice(0,4),
+			'fieldname': 'start_date',
+			'fieldtype': 'Date',
+			'label': 'Start Date',
+			'reqd': 1,
+			'default': frappe.datetime.add_months(frappe.datetime.nowdate(), -3)
+		},{
+			'fieldname': 'end_date',
+			'fieldtype': 'Date',
+			'label': 'End Date',
+			'reqd': 1,
+			'default': frappe.datetime.nowdate()
 		}
 	],
 
