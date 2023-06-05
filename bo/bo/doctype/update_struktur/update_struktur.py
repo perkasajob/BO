@@ -85,8 +85,8 @@ class UpdateStruktur(Document):
 		return file_path
 
 @frappe.whitelist(allow_guest=True)
-def readXLS():
-	file_url = "/home/frappe/frappe-bench/sites/demo99.sistemkoperasi.com/private/files/STRUKTUR_MARET_2023 REV3759802.xlsx"
+def readXLS(path):
+	file_url = "/home/frappe/frappe-bench/sites/demo99.sistemkoperasi.com" + path
 	fname = os.path.basename(file_url)
 	with open( file_url , "rb") as upfile:
 		fcontent = upfile.read()
@@ -130,7 +130,7 @@ def cleanRow(row, columns):
 						row[i]['level'] = "TP"
 						row[i]['user'] = '{}_{}'.format(r.group(2), r.group(3)) #"TP" + str(tpmap.index(r.group(2))+1).zfill(3)
 						row[i]['user_id'] = ''
-			elif columns[i] in["area", "desc", "TSJ ORG CODE"]:
+			elif columns[i] in["area", "desc", "TSJ ORG CODE", "MSS"]:
 						row[i] = o
 
 		else:
@@ -154,7 +154,7 @@ def reformatData(row):
 		try:
 			d[str(r['GSMID'])] = { 'name': r['GSMNAME']['user'], 'level': r['GSMNAME']['level'], 'full_name': r['GSMNAME']['name'], 'is_id':r['GSMID'], 'user_id': r['GSMNAME']['user_id'], 'active': r['GSMNAME']['active'], 'is_group':1,'line':'' }
 			d[str(r['SMID'])] = { 'name': r['SMNAME']['user'], 'level': r['SMNAME']['level'], 'full_name': r['SMNAME']['name'], 'is_id':r['SMID'], 'parent_mp':str(r['GSMID']), 'user_id': r['SMNAME']['user_id'], 'active': r['GSMNAME']['active'], 'is_group':1,'line':'' }
-			d[str(r['DMID'])] = { 'name': r['DMNAME']['user'], 'level': r['DMNAME']['level'], 'full_name': r['DMNAME']['name'], 'is_id':r['DMID'], 'area':r['DMNAME']['code'], 'parent_mp':str(r['SMID']), 'user_id': r['DMNAME']['user_id'], 'active': r['GSMNAME']['active'], 'is_group':1, 'line': r['desc'].title(), 'tsj_org_code':r['TSJ ORG CODE']}
+			d[str(r['DMID'])] = { 'name': r['DMNAME']['user'], 'level': r['DMNAME']['level'], 'full_name': r['DMNAME']['name'], 'is_id':r['DMID'], 'area':r['DMNAME']['code'], 'parent_mp':str(r['SMID']), 'user_id': r['DMNAME']['user_id'], 'active': r['GSMNAME']['active'], 'is_group':1, 'line': r['desc'].title(), 'tsj_org_code':r['TSJ ORG CODE'], 'mss':r['MSS']}
 			d[str(r['TPID'])] = { 'name': r['TPNAME']['user'], 'level': r['TPNAME']['level'], 'full_name': r['TPNAME']['name'], 'is_id':r['TPID'], 'area':r['TPNAME']['code'], 'parent_mp':str(r['DMID']), 'user_id': '', 'active': r['GSMNAME']['active'], 'is_group':0, 'sub-area': r['area'], 'line': r['desc'].title()}
 			if r['DMNAME']['code'] not in area:
 				area.append(r['DMNAME']['code'])
@@ -186,6 +186,8 @@ def updateDoc(r, usr, areas):
 	# 		doc = frappe.get_doc("Area", dm_area)
 	# 	except frappe.DoesNotExistError:
 	# 		doc = frappe.get_doc({"doctype":"Area", "area_code" : dm_area}).insert()
+
+	frappe.db.sql("UPDATE tabMP set active=0")
 
 	for area in areas:
 		try:
@@ -231,6 +233,7 @@ def _updateDoc(r, level):
 
 			area = r[k]['area'] if 'area' in r[k] else ''
 			tsj_org_code = r[k]['tsj_org_code'] if 'tsj_org_code' in r[k] else ''
+			mss = r[k]['mss'] if 'mss' in r[k] else ''
 			parent_mp = r[k]['parent_mp'] if 'parent_mp' in r[k] else ''
 			if level in ['GSM', 'SM', 'AM'] or (level == "TP" and r[k]['full_name'].startswith('Vacant')):
 				title = r[k]['full_name']
@@ -255,6 +258,12 @@ def _updateDoc(r, level):
 				doc.area = area
 				doc.parent_mp = parent_mp
 				doc.tsj_org_code = tsj_org_code
+				doc.mss = mss
+				print(parent_mp)
+				print(area)
+				print(tsj_org_code)
+				print(mss)
+
 				doc.save()
 			except frappe.DoesNotExistError:
 				print(r[k])
