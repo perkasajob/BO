@@ -16,12 +16,12 @@ def dppu_get_permission_query_conditions(user):
 		return
 
 	t_roles = ["CSD", "Accounts Manager", "System Manager"]
-	user_match_role = [x for x in t_roles if x in frappe.get_roles(frappe.session.user)]
+	user_match_role = [x for x in t_roles if x in frappe.get_roles(user)]
 	if user_match_role:
 		return
 
 	full_name = get_user_fullname(user)
-	return """(`tabDPPU`.approver_1_name='{0}' or `tabDPPU`.approver_2_name='{0}')""".format(full_name)
+	return """(`tabDPPU`.approver_1_name='{0}' or `tabDPPU`.approver_2_name='{0}' or `tabDPPU`.approver_1_name='{1}' or `tabDPPU`.approver_2_name='{1}')""".format(full_name, user)
 	# mps = frappe.db.get_list('MP', filters={'user_id':user}, fields=('name'))
 
 	# fields = frappe.get_meta("DPPU").get("fields", {
