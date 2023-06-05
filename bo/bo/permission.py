@@ -15,15 +15,21 @@ def dppu_get_permission_query_conditions(user):
 	if user == "Administrator":
 		return
 
-	full_name = get_user_fullname(user)
-	mps = frappe.db.get_list('MP', filters={'user_id':user}, fields=('name'))
+	t_roles = ["CSD", "Accounts Manager", "System Manager"]
+	user_match_role = [x for x in t_roles if x in frappe.get_roles(frappe.session.user)]
+	if user_match_role:
+		return
 
-	fields = frappe.get_meta("DPPU").get("fields", {
-		"fieldtype":"Link",
-		"options": ("MP")
-	})
-	for mp in mps:
-		return  ' or '.join(["`tabDPPU`.{}='{}'".format(f.fieldname, mp.name) for f in fields] + ["`tabDPPU`.{}_name='{}'".format(f.fieldname, full_name) for f in fields])
+	full_name = get_user_fullname(user)
+	return """(`tabDPPU`.approver_1_name='{0}' or `tabDPPU`.approver_2_name='{0}')""".format(full_name)
+	# mps = frappe.db.get_list('MP', filters={'user_id':user}, fields=('name'))
+
+	# fields = frappe.get_meta("DPPU").get("fields", {
+	# 	"fieldtype":"Link",
+	# 	"options": ("MP")
+	# })
+	# for mp in mps:
+	# 	return  ' or '.join(["`tabDPPU`.{}='{}'".format(f.fieldname, mp.name) for f in fields] + ["`tabDPPU`.{}_name='{}'".format(f.fieldname, full_name) for f in fields])
 
 def dkh_get_permission_query_conditions(user):
 	if not user: user = frappe.session.user
