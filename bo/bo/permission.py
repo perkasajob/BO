@@ -15,7 +15,7 @@ def dppu_get_permission_query_conditions(user):
 	if user == "Administrator":
 		return
 
-	t_roles = ["DM", "CSD", "Accounts Manager", "MSS", "System Manager"]
+	t_roles = ["DM", "CSD", "ARCO", "Accounts Manager", "MSS", "System Manager"]
 	user_match_role = [x for x in t_roles if x in frappe.get_roles(user)]
 	if user_match_role:
 		return
