@@ -23,7 +23,7 @@ frappe.query_reports["JV Performance"] = {
 		value = default_formatter(value, row, column, data);
 
 		if (column.fieldname == "mss" && data) {
-			value = `<a href='/desk#List/DPPU/List?mss=${value}&workflow_state=JV'>` + value + "</a>";
+			value = `<a href='/desk#List/DPPU/List?mss=${value}&workflow_state=["in",["DM Recap","JV","JV Closed","JV has Issue"]]'>` + value + "</a>";
 		}
 
 		return value;
