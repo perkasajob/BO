@@ -27,7 +27,7 @@ def get_items(filters):
 
 	items = []
 	if conditions:
-		items = frappe.db.sql("""with dppu as( SELECT * from tabDPPU where workflow_state IN ('DM Recap', 'JV', 'JV Closed', 'JV has Issue') AND jv_date IS not NULL AND cash_transfer IN ('Cash', 'Transfer') {}),
+		items = frappe.db.sql("""with dppu as( SELECT * from tabDPPU where workflow_state IN ('DM Recap', 'JV', 'JV Closed', 'JV has Issue') AND jv_date IS NULL AND cash_transfer IN ('Cash', 'Transfer') {}),
 			dp as (SELECT mss, COUNT(*) as cnt, SUM(number) as nr, COUNT(DISTINCT dx_user) as dxtotal from dppu GROUP BY mss),
 			dpx as (SELECT COUNT(DISTINCT dx_user) as cnt, mss as mssx FROM dppu WHERE workflow_state IN ('JV Closed', 'JV has Issue') GROUP BY mss),
 			dpp as (SELECT COUNT(*) as cnt, mss as mssp FROM dppu WHERE workflow_state IN ('JV Closed', 'JV has Issue') GROUP BY mss),
