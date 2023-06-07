@@ -142,9 +142,10 @@ def reformatData(row):
 	d = {}; usr ={}; area = []
 	for i,r in enumerate(row):
 
-		if r['TPNAME']['name'].lower().strip() == "vacant" or r['DMNAME']['name'].lower().strip() == "vacant":
-			r['DMNAME']['name'] = "Vacant({})".format(r['DMNAME']['user'].lower().replace(" ", ""))
+		if r['TPNAME']['name'].lower().strip() == "vacant":
 			r['TPNAME']['name'] = "Vacant({})".format(r['TPNAME']['user'].lower().replace(" ", ""))
+		if r['DMNAME']['name'].lower().strip() == "vacant":
+			r['DMNAME']['name'] = "Vacant({})".format(r['DMNAME']['user'].lower().replace(" ", ""))
 
 		usr[r['GSMNAME']['user_id']] = {'full_name': r['GSMNAME']['name'], 'role': r['GSMNAME']['level'], 'email': r['GSMNAME']['user_id']}
 		usr[r['SMNAME']['user_id']] = {'full_name': r['SMNAME']['name'], 'role': r['SMNAME']['level'], 'email': r['SMNAME']['user_id']}
