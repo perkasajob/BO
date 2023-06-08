@@ -214,7 +214,7 @@ def _updateDoc(r, level):
 			if r[k]['user_id']:
 				print('user id: ' + r[k]['user_id'].strip().lower())
 				r[k]['full_name'] = re.sub("_.*\)$", ')', r[k]['full_name'])
-				usr_lst = frappe.get_all(doctype='User', filters={"full_name": r[k]['full_name']})
+				usr_lst = frappe.get_all(doctype='User', filters={"email": r[k]['user_id']})
 				if usr_lst:
 					try:
 						usr = frappe.get_doc('User', usr_lst[0].name)
