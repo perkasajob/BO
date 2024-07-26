@@ -54,7 +54,7 @@ frappe.ui.form.on('Update Struktur', {
 	},
 	refresh(frm) {
 		set_btns(frm)
-		frm.set_intro('Columns: GSMID, GSMNAME, SMID, SMNAME, AMID, AMNAME, DMID, DMNAME, SPVID, SPVNAME, TPID, TPNAME, divid, desc, area, TSJ ORG CODE');
+		frm.set_intro('Columns: GSMID, GSMNAME, SMID, SMNAME, AMID, AMNAME, DMID, DMNAME, SPVID, SPVNAME, TPID, TPNAME, divid, desc, area, TSJ ORG CODE, MSS');
 	}
 });
 function set_btns(frm){

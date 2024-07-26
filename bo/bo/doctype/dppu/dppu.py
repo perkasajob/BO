@@ -13,9 +13,19 @@ from frappe.utils import today, flt
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 from frappe.utils import nowdate, flt, cstr, cint, comma_and
+from frappe.website.render import clear_cache
 
 class DPPU(Document):
-	pass
+	def after_rename(self, olddn, newdn, merge=False):
+
+		# if self.route:
+		# 	clear_cache(self.route)
+		frappe.msgprint(newdn)
+
+		frappe.rename_doc(self.doctype, olddn, newdn, force=1)
+
+		frappe.db.sql("""update `tabSP` set dppu=%s
+			where dppu=%s""", (newdn, olddn))
 
 
 @frappe.whitelist()

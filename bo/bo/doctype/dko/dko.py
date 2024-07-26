@@ -27,7 +27,8 @@ def book_transfer(docname, check=0):
 	dko = frappe.get_doc('DKO', docname)
 	# line = dko.mr_user[-1]
 	line = re.search(r'(?<=_)\w+', dko.mr_user).group().lower()
-	ct = 'C' if dko.cash_transfer == 'Cash' else 'T'
+
+	ct = codify_ct(dko.cash_transfer)
 	sp = frappe.db.sql("select * from `tabSP` where dko='{}' and number < 0".format(docname))
 	if len(sp) > 0:
 		return {"status": "Booked", "date": str(sp[0][10])}
@@ -69,7 +70,7 @@ def refund(docname):
 	dko = frappe.get_doc('DKO', docname)
 	# line = dko.mr_user[-1] if dko.mr_user[-3:-1] == 'QL' else dko.mr_user[-2:].lower() #(?<=_)\w+$
 	line = re.search(r'(?<=_)\w+', dko.mr_user).group().lower()
-	ct = 'RC' if dko.cash_transfer == 'Cash' else 'RT'
+	ct = 'R' + codify_ct(dko.cash_transfer)
 	sp = frappe.db.sql("select * from `tabSP` where dko='{}' and number > 0".format(docname))
 	if len(sp) > 0:
 		return {"status": "Refunded", "date": str(sp[0][10])}
@@ -111,7 +112,7 @@ def adv_transfer(docname, check=0):
 	dko = frappe.get_doc('DKO', docname)
 	# line = dko.mr_user[-1]
 	line = re.search(r'(?<=_)\w+', dko.mr_user).group().lower()
-	ct = 'AC' if dko.cash_transfer == 'Cash' else 'AT'
+	ct = 'A' + codify_ct(dko.cash_transfer)
 
 	if cint(dko.get_value('saldo_' + line)) > dko.number:
 		return {"status": "Saldo is sufficient"}
@@ -148,3 +149,12 @@ def adv_transfer(docname, check=0):
 	dx.save()
 	frappe.db.commit()
 	return {"status": "Success"}
+
+def codify_ct(arg):
+	switcher = {
+			"Cash": "C",
+			"Transfer": "T",
+			"Ent": "E",
+			"Subsidi": "Sub",
+	}
+	return switcher.get(arg, "non")

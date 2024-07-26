@@ -56,6 +56,8 @@ frappe.ui.form.on('DPPU', {
 			frappe.msgprint(__("Approver 2 is required"));
             frappe.validated = false;
 		}
+
+		sanitize_blanko_nr(frm)
 	},
 	before_workflow_action: async function(frm){
 		console.log(frm.selected_workflow_action);
@@ -458,4 +460,8 @@ function set_query_TP(frm){
 			}
 		};
 	})
+}
+
+function sanitize_blanko_nr(frm){
+	frm.set_value("blanko_nr", frm.doc.blanko_nr.toLocaleUpperCase().replace(/ +/g, ''))
 }

@@ -9,6 +9,7 @@ from frappe import _, scrub, ValidationError
 import frappe, json
 from six import iteritems, string_types
 from frappe.utils import nowdate, flt, cstr
+from frappe.website.render import clear_cache
 
 class Dx(Document):
 	def save(self):
@@ -53,6 +54,12 @@ class Dx(Document):
 
 	def on_cancel(self):
 		pass
+
+	def after_rename(self, olddn, newdn, merge=False):
+
+		frappe.db.sql("""update `tabDPPU` set dx_user=%s
+			where dx_user=%s""", (newdn, olddn))
+
 
 	def toJSON(self):
 		return json.dumps(self, default=lambda o: o.__dict__,

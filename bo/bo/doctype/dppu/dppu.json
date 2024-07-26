@@ -97,7 +97,7 @@
    "fetch_from": "dx_user.kota",
    "fieldname": "kota",
    "fieldtype": "Read Only",
-   "label": "Kota"
+   "label": "Kota/Kabupaten"
   },
   {
    "fetch_from": "dx_user.saldo",
@@ -174,8 +174,7 @@
    "allow_on_submit": 1,
    "fieldname": "amount_refund",
    "fieldtype": "Int",
-   "label": "AMnt Ref",
-   "permlevel": 3
+   "label": "AMnt Ref"
   },
   {
    "allow_on_submit": 1,
@@ -290,9 +289,11 @@
    "set_only_once": 1
   },
   {
+   "columns": 1,
    "fetch_from": "dm.area",
    "fieldname": "dm_area",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "DM Area"
   },
   {
@@ -300,13 +301,15 @@
    "fieldname": "approver_1",
    "fieldtype": "Link",
    "label": "Approver 1",
-   "options": "MP"
+   "options": "MP",
+   "read_only": 1
   },
   {
    "fetch_from": "approver_1.full_name",
    "fieldname": "approver_1_name",
    "fieldtype": "Data",
-   "label": "Approver 1 Name"
+   "label": "Approver 1 Name",
+   "read_only": 1
   },
   {
    "fetch_from": "approver_1.parent_mp",
@@ -384,10 +387,11 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2023-05-03 15:00:16.987897",
- "modified_by": "Administrator",
+ "modified": "2024-06-07 11:17:11.329062",
+ "modified_by": "dwi@ksp.ksp",
  "module": "BO",
  "name": "DPPU",
+ "name_case": "UPPER CASE",
  "owner": "Administrator",
  "permissions": [
   {
