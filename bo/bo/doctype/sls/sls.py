@@ -15,29 +15,88 @@ from frappe.utils.background_jobs import enqueue
 from frappe.utils.csvutils import validate_google_sheets_url
 from frappe import _
 import re
+import pandas as pd
+import numpy as np
+from collections import defaultdict
 
 class SLS(Document):
 	def validate(self):
 		pass
 
 	def parseXLS(self):
-		file_url = self.get_full_path() # file attachment only the first one attached
-		fname = os.path.basename(file_url)
-		fxlsx = re.search("^{}.*\.xlsx".format(self.doctype), fname)
+		file_doc = frappe.get_doc("File", {"file_url": self.file})
+		file_content = file_doc.get_content()
 
-		if(fxlsx): # match
-			with open( file_url , "rb") as upfile:
-				fcontent = upfile.read()
-			if frappe.safe_encode(fname).lower().endswith("xlsx".encode('utf-8')):
-				from frappe.utils.xlsxutils import read_xlsx_file_from_attached_file
-				rows = read_xlsx_file_from_attached_file(fcontent=fcontent)
-			columns = rows[0]
-			rows.pop(0)
-			data = rows
-			return {"columns": columns, "data": data}
-		else:
-			return {"status" : "Error", "filename": fname, "doctype": self.doctype}	
+		from frappe.utils.xlsxutils import read_xlsx_file_from_attached_file
+		rows = read_xlsx_file_from_attached_file(fcontent=file_content)
 
+		df = pd.DataFrame(rows[1:], columns=rows[0])
+
+		lst = df.groupby(['TPID', 'outid', 'proid']).agg({
+    			'quantity': 'sum', 'value_net': 'sum', 'disc_p': 'max'})
+
+		cascaded_dict = defaultdict(lambda: defaultdict(lambda: defaultdict(dict)))
+
+		for (outer_key1, outer_key2, outer_key3), inner_dict in lst.to_dict(orient='index').items():
+			self.append("items", {
+				'tpid': outer_key1,
+				'outid': outer_key2,
+				'proid': outer_key3,
+				'qty' : inner_dict['quantity'],
+				'disc' : inner_dict['disc_p']*100,
+				'value_net': inner_dict['value_net'],
+			})
+			cascaded_dict[outer_key1][outer_key2][outer_key3] = {
+					'qty': inner_dict['quantity'],
+					'disc' : inner_dict['disc_p']*100,
+					'value_net': inner_dict['value_net']
+			}
+		# self.save()
+		# TODO: PJOB don't forget to activate save above & check the sql syntax
+		# NOTE:
+		# - dpl_sls = ON from Sales
+		# - qty_sls = Quantity sold in Sales
+		# - tnof_sls = Total Nominal Off Sales
+		# - .dpl = LPD ON sales
+		# - .tpdisc = LPD Total (On + Off) Discount in %
+		# - .tnof = LPD Total Nominal Off
+
+		sql	= '''
+				UPDATE tabLPD
+				JOIN `tabLPD Item` ON `tabLPD Item`.parent = tabLPD.name
+				JOIN (
+						SELECT
+								tabSLS.name AS SLS_name,
+								tabSLS.year,
+								tabSLS.month,
+								`tabSLS Item`.*
+						FROM tabSLS
+						JOIN `tabSLS Item` ON `tabSLS Item`.parent = tabSLS.name
+				) AS SLS ON SLS.month = tabLPD.month
+								AND SLS.year = tabLPD.year
+								AND SLS.outid = tabLPD.outid
+								AND SLS.proid = CONVERT(`tabLPD Item`.item_code, CHAR)
+				SET `tabLPD Item`.dpl_sls = SLS.disc,
+						`tabLPD Item`.qty_sls = SLS.qty,
+						`tabLPD Item`.tnof_sls =
+											CASE
+												WHEN SLS.disc >= `tabLPD Item`.tpdisc  THEN 0
+												WHEN `tabLPD Item`.dpl > SLS.disc THEN `tabLPD Item`.tnof
+												ELSE (`tabLPD Item`.tpdisc - SLS.disc)/100 * `tabLPD Item`.hna
+											END,
+						`tabLPD Item`.dpl_dt =`tabLPD Item`.dpl - SLS.disc,
+						`tabLPD Item`.debug =
+											CASE
+												WHEN SLS.disc >= `tabLPD Item`.tpdisc THEN CONCAT( CAST(SLS.disc as CHAR), " >= ", CAST(`tabLPD Item`.tpdisc as CHAR))
+												WHEN `tabLPD Item`.dpl > SLS.disc THEN CONCAT( CAST(`tabLPD Item`.dpl as CHAR), " > ", CAST(SLS.disc as CHAR))
+												ELSE "ELSE"
+											END
+
+				WHERE tabLPD.month = "{0}" AND tabLPD.year = {1};'''.format(self.month, self.year)
+		frappe.db.sql(sql)
+		frappe.db.commit()
+
+		return cascaded_dict
 
 	def get_full_path(self):
 			"""Returns file path from given file name"""
@@ -45,7 +104,7 @@ class SLS(Document):
 			if att:
 				file_path = att[0].file_url or att[0].file_name
 			else:
-				frappe.throw("No Attachment found")	
+				frappe.throw("No Attachment found")
 
 			if "/" not in file_path:
 				file_path = "/files/" + file_path
@@ -113,7 +172,7 @@ class SLS(Document):
 		return self.get_importer().export_errored_rows()
 
 	def get_importer(self):
-		return Importer(self.reference_doctype, data_import=self)		
+		return Importer(self.reference_doctype, data_import=self)
 
 
 def get_mop_query(doctype, txt, searchfield, start, page_len, filters):
@@ -179,12 +238,12 @@ def download_template(
 		:param export_filters: Filter dict
 		:param file_type: File type to export into
 	"""
-	
+
 	export_fields = frappe.parse_json(export_fields)
 	export_filters = frappe.parse_json(export_filters)
 	export_data = export_records != "blank_template"
 	export_protect_area = frappe.parse_json(export_protect_area)
-		
+
 	e = Exporter(
 		doctype,
 		export_fields=export_fields,
@@ -194,7 +253,7 @@ def download_template(
 		export_protect_area=export_protect_area,
 		export_page_length=5 if export_records == "5_records" else None,
 	)
-	
+
 	e.build_response()
 
 @frappe.whitelist()
@@ -209,12 +268,12 @@ def download_list(
 		:param export_filters: Filter dict
 		:param file_type: File type to export into
 	"""
-	
+
 	export_fields = frappe.parse_json(export_fields)
 	export_filters = {"name": ["in", names]}
 	export_data = export_records != "blank_template"
 	export_protect_area = frappe.parse_json(export_protect_area)
-		
+
 	e = Exporter(
 		doctype,
 		export_fields=export_fields,
@@ -224,7 +283,7 @@ def download_list(
 		export_protect_area=export_protect_area,
 		export_page_length=5 if export_records == "5_records" else None,
 	)
-	
+
 	e.build_response()
 
 

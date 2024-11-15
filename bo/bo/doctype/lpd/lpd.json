@@ -1,10 +1,11 @@
 {
- "autoname": "format:{month_code}{distributor}-{is_outlet_id}",
+ "autoname": "format:{month_code}{distributor}-{outid}",
  "creation": "2020-07-27 16:14:43.465071",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "file",
   "outid",
   "sb_2",
   "month",
@@ -15,6 +16,16 @@
   "distributor",
   "line",
   "tattoo",
+  "sb_apprv",
+  "dm",
+  "dm_name",
+  "dm_area",
+  "cb_sm",
+  "approver_1",
+  "approver_1_name",
+  "approver_2",
+  "approver_2_name",
+  "sb_3",
   "dx_sb",
   "d1",
   "d2",
@@ -31,8 +42,7 @@
   "items",
   "amended_from",
   "month_code",
-  "is_outlet_id",
-  "territory"
+  "over_hjm"
  ],
  "fields": [
   {
@@ -55,11 +65,12 @@
    "fieldname": "line",
    "fieldtype": "Select",
    "label": "Line",
-   "options": "\n1\n2",
+   "options": "\nLINE1\nLINE2",
    "reqd": 1
   },
   {
    "columns": 6,
+   "fetch_from": "outid.outlet_name",
    "fieldname": "outlet_name",
    "fieldtype": "Data",
    "in_list_view": 1,
@@ -84,14 +95,16 @@
    "fieldtype": "Select",
    "label": "Month",
    "options": "\n01\n02\n03\n04\n05\n06\n07\n08\n09\n10\n11\n12",
-   "reqd": 1
+   "reqd": 1,
+   "search_index": 1
   },
   {
    "fieldname": "year",
    "fieldtype": "Select",
    "label": "Year",
    "options": "2020\n2021\n2022\n2023\n2024\n2025\n2026\n2027\n2028\n2029\n2030",
-   "reqd": 1
+   "reqd": 1,
+   "search_index": 1
   },
   {
    "fieldname": "date_cb",
@@ -110,11 +123,6 @@
    "fieldtype": "Read Only",
    "hidden": 1,
    "label": "Month Code"
-  },
-  {
-   "fieldname": "is_outlet_id",
-   "fieldtype": "Read Only",
-   "label": "IS Outlet ID "
   },
   {
    "fieldname": "dx_sb",
@@ -190,19 +198,83 @@
    "fieldtype": "Section Break"
   },
   {
-   "fieldname": "territory",
-   "fieldtype": "Read Only",
-   "label": "Territory"
-  },
-  {
    "default": "0",
    "fieldname": "tattoo",
    "fieldtype": "Check",
    "label": "Tattoo"
+  },
+  {
+   "fieldname": "file",
+   "fieldtype": "Attach",
+   "label": "File"
+  },
+  {
+   "fieldname": "over_hjm",
+   "fieldtype": "Int",
+   "label": "Over HJM"
+  },
+  {
+   "fieldname": "sb_apprv",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "dm",
+   "fieldtype": "Link",
+   "label": "DM",
+   "options": "MP"
+  },
+  {
+   "fetch_from": "dm.full_name",
+   "fieldname": "dm_name",
+   "fieldtype": "Data",
+   "label": "DM Name"
+  },
+  {
+   "fetch_from": "dm.area",
+   "fieldname": "dm_area",
+   "fieldtype": "Data",
+   "label": "DM Area",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cb_sm",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "dm.parent_mp",
+   "fieldname": "approver_1",
+   "fieldtype": "Link",
+   "label": "Approver 1",
+   "options": "MP",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "approver_1.full_name",
+   "fieldname": "approver_1_name",
+   "fieldtype": "Data",
+   "label": "Approver 1 Name"
+  },
+  {
+   "fetch_from": "approver_1.parent_mp",
+   "fieldname": "approver_2",
+   "fieldtype": "Link",
+   "label": "Approver 2",
+   "options": "MP",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "approver_2.full_name",
+   "fieldname": "approver_2_name",
+   "fieldtype": "Data",
+   "label": "Approver 2 Name"
+  },
+  {
+   "fieldname": "sb_3",
+   "fieldtype": "Section Break"
   }
  ],
  "is_submittable": 1,
- "modified": "2020-08-26 09:23:38.613565",
+ "modified": "2024-11-09 10:56:51.422103",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "LPD",
@@ -272,6 +344,20 @@
    "read": 1,
    "report": 1,
    "role": "Accounts Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "CSD",
    "share": 1,
    "submit": 1,
    "write": 1

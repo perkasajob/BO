@@ -15,9 +15,6 @@
   "hna1",
   "hna1_ppn",
   "total_disc",
-  "off_faktur",
-  "hna2_ppn",
-  "total_disc_final",
   "inc_sb",
   "ppg_item_code",
   "ppg_item_name",
@@ -28,11 +25,7 @@
   "hjm_section",
   "hjm_1",
   "hjm_2",
-  "hjm_3",
-  "column_break_25",
-  "hjm_grosir_1",
-  "hjm_grosir_2",
-  "hjm_grosir_3"
+  "hjm_3"
  ],
  "fields": [
   {
@@ -116,13 +109,6 @@
    "read_only": 1
   },
   {
-   "default": "0",
-   "fieldname": "off_faktur",
-   "fieldtype": "Percent",
-   "label": "Off",
-   "precision": "2"
-  },
-  {
    "fieldname": "total_disc",
    "fieldtype": "Percent",
    "label": "Total Disc",
@@ -132,7 +118,7 @@
   {
    "fetch_from": "item_code.hjm_1",
    "fieldname": "hjm_1",
-   "fieldtype": "Currency",
+   "fieldtype": "Percent",
    "label": "HJM 1",
    "permlevel": 1,
    "read_only": 1
@@ -140,7 +126,7 @@
   {
    "fetch_from": "item_code.hjm_2",
    "fieldname": "hjm_2",
-   "fieldtype": "Currency",
+   "fieldtype": "Percent",
    "label": "HJM 2",
    "permlevel": 2,
    "read_only": 1
@@ -148,7 +134,7 @@
   {
    "fetch_from": "item_code.hjm_3",
    "fieldname": "hjm_3",
-   "fieldtype": "Currency",
+   "fieldtype": "Percent",
    "label": "HJM 3",
    "permlevel": 3,
    "read_only": 1
@@ -160,42 +146,9 @@
    "label": "Qty"
   },
   {
-   "fieldname": "total_disc_final",
-   "fieldtype": "Percent",
-   "label": "Total Disc Final"
-  },
-  {
    "fieldname": "hjm_section",
    "fieldtype": "Section Break",
    "label": "HJM"
-  },
-  {
-   "fieldname": "column_break_25",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fetch_from": "item_code.hjm_grosir_1",
-   "fieldname": "hjm_grosir_1",
-   "fieldtype": "Currency",
-   "label": "HJM Grosir 1",
-   "permlevel": 1,
-   "read_only": 1
-  },
-  {
-   "fetch_from": "item_code.hjm_grosir_2",
-   "fieldname": "hjm_grosir_2",
-   "fieldtype": "Currency",
-   "label": "HJM Grosir 2",
-   "permlevel": 2,
-   "read_only": 1
-  },
-  {
-   "fetch_from": "item_code.hjm_grosir_3",
-   "fieldname": "hjm_grosir_3",
-   "fieldtype": "Currency",
-   "label": "HJM Grosir 3",
-   "permlevel": 3,
-   "read_only": 1
   },
   {
    "columns": 1,
@@ -234,18 +187,11 @@
    "in_list_view": 1,
    "label": "HNA1+PPN",
    "read_only": 1
-  },
-  {
-   "fieldname": "hna2_ppn",
-   "fieldtype": "Currency",
-   "label": "HNA2+PPN",
-   "precision": "1",
-   "read_only": 1
   }
  ],
  "istable": 1,
- "modified": "2023-04-10 11:50:01.181375",
- "modified_by": "dwi@ksp.ksp",
+ "modified": "2024-11-14 10:45:45.869301",
+ "modified_by": "Administrator",
  "module": "BO",
  "name": "DPL Item",
  "owner": "Administrator",

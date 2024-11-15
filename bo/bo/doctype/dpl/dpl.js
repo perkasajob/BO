@@ -96,30 +96,20 @@ frappe.ui.form.on('DPL', {
 	}
 })
 
+const dfunc = (frm, cdt, cdn) => {
+	let o = locals[dt][dn]
+	calc_item(frm, o)
+}
+
 frappe.ui.form.on('DPL Item', {
 	form_render(frm, dt, dn){
 		setTimeout(paint_over_hjm_item, 3000, frm, locals[dt][dn]);
 	},
-	refresh(frm) {
-
-	},
-	item_code: function(frm, dt, dn) {
-		let o = locals[dt][dn];
-		// frm.doc[o.parentfield][o.idx-1].add_fetch('hjm_sm','hjm_gsm','hjm_fin')
-		calc_item(frm, dt, dn)
-	},
-	hna: function(frm, dt, dn) {
-		calc_item(frm, dt, dn)
-	},
-	hna1: function(frm, dt, dn) {
-		calc_item(frm, dt, dn)
-	},
-	dpl_disc1: function(frm, dt, dn) {
-		calc_item(frm, dt, dn)
-	},
-	off_faktur: function(frm, dt, dn) {
-		calc_item(frm, dt, dn)
-	}
+	item_code: dfunc,
+	hna: dfunc,
+	dpl: dfunc,
+	hna1: dfunc,
+	dpl_disc1: dfunc
 })
 
 function set_DM(frm){
@@ -140,8 +130,7 @@ function dpl_disc_calc(frm, dt, dn){
 	calc_item(frm, dt, dn)
 }
 
-function calc_item(frm, dt, dn){
-	let o = locals[dt][dn];
+function calc_item(frm, o){
 	let dc = frm.doc[o.parentfield][o.idx-1]
 	let dpl_disc = dc.dpl_disc?dc.dpl_disc/100:0
 	if (dc.hna){
@@ -152,35 +141,23 @@ function calc_item(frm, dt, dn){
 	}
 
 	let dpl_disc1 = dc.dpl_disc1/100
-	let disc_off = dc.off_faktur/100
 	var total_disc = 1 - (1-dpl_disc) * (1-dpl_disc1)
-	var total_disc_final = 1 - (1-dpl_disc) * (1-dpl_disc1) * (1-disc_off)
-
 	dc.hna1 =  dc.hna0 * (1-total_disc)
 
 	var nf = Intl.NumberFormat('id-ID'); //nf.format(
 	dc.hna_ppn = flt((dc.hna0 * (1-dpl_disc) * ppn).toFixed(0))
 	dc.hna1_ppn = flt((dc.hna1 * ppn).toFixed(0))
-	dc.hna2_ppn = flt((dc.hna0 * (1 - total_disc_final) * ppn).toFixed(0))
 	dc.total_disc = flt((100 * total_disc), 2)
-	dc.total_disc_final = flt((100 * total_disc_final), 2)
 
 	let hjm_1 = dc.hjm_1
 	let hjm_2 = dc.hjm_2
 	let hjm_3 = dc.hjm_3
 
-	if(["Apotik", "PBF"].includes(frm.doc.outlet_type)){
-		// Override for wholesaler
-		hjm_1 = dc.hjm_grosir_1
-		hjm_2 = dc.hjm_grosir_2
-		hjm_3 = dc.hjm_grosir_3
-	}
-
-	if (dc.hna2_ppn < hjm_3){
+	if (dc.dpl_disc > hjm_3){
 		frm.set_value("over_hjm", 3)
-	} else if(dc.hna2_ppn > hjm_3 && dc.hna2_ppn < hjm_2 && frm.doc.over_hjm < 2){
+	} else if(dc.dpl_disc < hjm_3 && dc.dpl_disc > hjm_2 && frm.doc.over_hjm < 2){
 		frm.set_value("over_hjm", 2)
-	} else if(dc.hna2_ppn > hjm_2 && dc.hna2_ppn < hjm_1 && frm.doc.over_hjm < 1){
+	} else if(dc.dpl_disc < hjm_2 && dc.dpl_disc > hjm_1 && frm.doc.over_hjm < 1){
 		frm.set_value("over_hjm", 1)
 	} else frm.set_value("over_hjm", 0)
 
@@ -204,32 +181,32 @@ function calc_item(frm, dt, dn){
 
 function paint_over_hjm(frm){
 	frm.doc.items.forEach(o=>{
-		if(frappe.user.has_role("SM") && o.hna2_ppn < o.hjm_1
-		|| frappe.user.has_role("GSM") && o.hna2_ppn < o.hjm_2
-		|| frappe.user.has_role("Accounts Manager") && o.hna2_ppn < o.hjm_1){
+		if(frappe.user.has_role("SM") && o.hna1_ppn < o.hjm_1
+		|| frappe.user.has_role("GSM") && o.hna1_ppn < o.hjm_2
+		|| frappe.user.has_role("Accounts Manager") && o.hna1_ppn < o.hjm_1){
 			// $("[data-fieldname='total_disc']>div>.control-input-wrapper>.control-value").css({"background-color":"red","color":"white"})
 			// $(`[data-idx=${o.idx}] > .data-row > [data-fieldname=item_name]`).css('background-color', '#ffcccc');
 			// frm.fields_dict.items.grid.grid_rows[o.idx-1].columns.item_code.css("background-color","#ffcccc")
 			// frm.fields_dict.items.grid.grid_rows[o.idx-1].columns.item_name.css("background-color","#ffcccc")
-			// cur_frm.fields_dict.items.grid.grid_rows[o.idx-1].grid_form.fields_dict.hna2_ppn.$input_wrapper.css({'color':'#f00'})
+			// cur_frm.fields_dict.items.grid.grid_rows[o.idx-1].grid_form.fields_dict.hna1_ppn.$input_wrapper.css({'color':'#f00'})
 			cur_frm.fields_dict.items.grid.grid_rows[o.idx-1].row_index.css({"background-color":"#ffcccc"})
 		} else{
 			// $("[data-fieldname='total_disc']>div>.control-input-wrapper>.control-value").css({"background-color":"#f5f7fa","color":"black"})
 			// frm.fields_dict.items.grid.grid_rows[o.idx-1].columns.item_code.css("background-color","#fff")
 			// frm.fields_dict.items.grid.grid_rows[o.idx-1].columns.item_name.css("background-color","#ffcccc")
-			// cur_frm.fields_dict.items.grid.grid_rows[o.idx-1].grid_form.fields_dict.hna2_ppn.$input_wrapper.css({'color':'#36414c'})
+			// cur_frm.fields_dict.items.grid.grid_rows[o.idx-1].grid_form.fields_dict.hna1_ppn.$input_wrapper.css({'color':'#36414c'})
 			cur_frm.fields_dict.items.grid.grid_rows[o.idx-1].row_index.css({"background-color":"#fff"})
 		}
 	})
 }
 
 function paint_over_hjm_item(frm, o){
-	if(frappe.user.has_role("SM") && o.hna2_ppn < o.hjm_1
-	|| frappe.user.has_role("GSM") && o.hna2_ppn < o.hjm_2
-	|| frappe.user.has_role("Accounts Manager") && o.hna2_ppn < o.hjm_1){
-		frappe.ui.form.get_open_grid_form().grid_form.fields_dict.hna2_ppn.$input_wrapper.css({'color':'#f00'})
+	if(frappe.user.has_role("SM") && o.hna1_ppn < o.hjm_1
+	|| frappe.user.has_role("GSM") && o.hna1_ppn < o.hjm_2
+	|| frappe.user.has_role("Accounts Manager") && o.hna1_ppn < o.hjm_1){
+		frappe.ui.form.get_open_grid_form().grid_form.fields_dict.hna1_ppn.$input_wrapper.css({'color':'#f00'})
 	} else{
-		frappe.ui.form.get_open_grid_form().grid_form.fields_dict.hna2_ppn.$input_wrapper.css({'color':'#f00'}).css({'color':'#36414c'})
+		frappe.ui.form.get_open_grid_form().grid_form.fields_dict.hna1_ppn.$input_wrapper.css({'color':'#f00'}).css({'color':'#36414c'})
 	}
 }
 
@@ -306,7 +283,7 @@ function set_parseXls_btn(frm){
         open_url_post(method, {
 			doctype: frm.doctype,
 			file_type: "Excel",
-			export_fields: {"DPL":["name","outid","month","year","distributor","line"],"items":["name","item_code","item_name","hna","dpl_disc","hna2","dpl_disc1","hna1_ppn","off_faktur","hna2_ppn","total_disc"]},
+			export_fields: {"DPL":["name","outid","month","year","distributor","line"],"items":["name","item_code","item_name","hna","dpl_disc", "hna1", "dpl_disc1","hna1_ppn", "total_disc"]},
 			export_filters: filters,
 			export_protect_area: [2, 11, 12],
 		});
@@ -321,7 +298,7 @@ function set_parseXls_btn(frm){
         open_url_post(method, {
 			doctype: frm.doctype,
 			file_type: "Excel",
-			export_fields: {"DPL":["name","outid", "start_date", "end_date", "distributor","line"].concat(dpl_extras),"items":["name","item_code","item_name","hna","dpl_disc","hna2","dpl_disc1","hna1_ppn"].concat(item_extras)},
+			export_fields: {"DPL":["name","outid", "start_date", "end_date", "distributor","line"].concat(dpl_extras),"items":["name","item_code","item_name","hna","dpl_disc","hna1","dpl_disc1","hna1_ppn"].concat(item_extras)},
 			export_filters: filters,
 			export_protect_area: [2, 12, 13],
 		});
@@ -357,28 +334,31 @@ function load_outid(frm, val){
 		method: "bo.bo.bo_integration.tsj_integration.get_customers",
 		args: {
 			"orgCode": frm.doc.org_code,
-			"type": frm.doc.type,
 			"customerName" : val,
-			"customerNumber": ""
 		},
 		callback: function(r) {
 			if (r.results) {
 				frm.set_value("outlet_name", "")
 				frm.set_value("outlet_address", "")
 
-				let outlets = {}
+				let outlets = {};
 				r.results.forEach(o=>{
 					outlets[o.value] = o
 				})
 				frm.var = {outid: r.results, outlets: outlets}
 				let outid_list = r.results.map(o=>{
-					return {label: o.name + ', '+ o.address, value: o.value}
+					let address = o.address ? ', '+ o.address: ''
+					console.log(o.name + address)
+					return {label: o.name + address , value: o.value}
 				})
-				// frappe.show_alert(outid_list.length + " Outlets loaded")
+				outid_list = [ ...new Set(outid_list) ]
+				debugger
+				frappe.show_alert(r.results.length + " Outlets loaded")
 				console.log(outid_list.length + " Outlets loaded")
 				if(frm.fields_dict.outid.awesomplete){
 					frm.fields_dict.outid.awesomplete.destroy()
 				}
+
 				frm.fields_dict.outid.awesomplete = new Awesomplete(frm.fields_dict.outid.input, {
 					list: outid_list,
 					maxItems: 15,

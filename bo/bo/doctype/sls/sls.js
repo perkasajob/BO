@@ -116,6 +116,7 @@ function set_parseXls_btn(frm){
 		// 	})
 		// ).done(function( script, textStatus ) {
 		frm.call('parseXLS').then((res) => {
+			debugger
 			if(res != undefined){
 				if(res.message.data){
 					var data = []

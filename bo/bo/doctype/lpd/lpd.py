@@ -15,6 +15,7 @@ from bo.bo.utils.exporter import Exporter
 from frappe.utils.background_jobs import enqueue
 from frappe.utils.csvutils import validate_google_sheets_url
 from frappe import _
+import pprint
 import re
 
 
@@ -23,22 +24,60 @@ class LPD(Document):
 		pass
 
 	def parseXLS(self):
-		file_url = self.get_full_path() # file attachment only the first one attached
-		fname = os.path.basename(file_url)
-		fxlsx = re.search("^{}.*\.xlsx".format(self.doctype), fname)
+		file_doc = frappe.get_doc("File", {"file_url": self.file})
+		file_content = file_doc.get_content()
+		data = []
+		# return file_content
 
-		if(fxlsx): # match
-			with open( file_url , "rb") as upfile:
-				fcontent = upfile.read()
-			if frappe.safe_encode(fname).lower().endswith("xlsx".encode('utf-8')):
-				from frappe.utils.xlsxutils import read_xlsx_file_from_attached_file
-				rows = read_xlsx_file_from_attached_file(fcontent=fcontent)
-			columns = rows[0]
-			rows.pop(0)
-			data = rows
-			return {"columns": columns, "data": data}
-		else:
-			return {"status" : "Error", "filename": fname}	
+		from frappe.utils.xlsxutils import read_xlsx_file_from_attached_file
+		rows = read_xlsx_file_from_attached_file(fcontent=file_content)
+		dxname = frappe.db.sql('''SELECT name FROM tabDx
+								WHERE name LIKE "%%%s"''' % '" OR name LIKE "%'.join(rows[6][8:18]), as_list=True)
+		dx = self.match_and_replace(rows[6][8:18], dxname)
+
+		_rows = [r for r in  [r for r in rows[8:] if r] if r[1]] # cleaning empties
+
+		if _rows:
+			item_hjms = frappe.db.get_all(
+					'Item',
+					filters={'name': ['in', [str(r[1]) for r in _rows]]},
+					fields=['name', 'hjm_1','hjm_2','hjm_3']
+			)
+
+			# Create a dictionary for quick hjm lookup
+			hjm_dict = {item['name']: [item['hjm_1'], item['hjm_2'], item['hjm_3']] for item in item_hjms}
+			data = [d + hjm_dict[str(d[1])] for d in _rows if str(d[1]) in hjm_dict.keys()]
+
+		return {"year": rows[1][9], "month": rows[1][11], "tp": rows[1][15],
+					"outid": rows[3][9], "dx": dx,
+					"columns": rows[7], "data": data, "dxname": dxname}
+
+
+	def match_and_replace(self, var1, var2):
+		result = []
+		for item in var1:
+				# Find the match where item is the suffix
+				match = next((x[0] for x in var2 if x[0].endswith('-' + item)), None)
+				if match:
+						result.append(match)  # If match found, append it to result
+				else:
+						result.append(item)   # Otherwise, keep the original item
+
+		return result
+
+	def dump_variable_to_file(variable_content, filename="output.json"):
+		# You can use frappe.get_site_path to save it in the site folder
+		file_path = "output.json"
+
+		if isinstance(variable_content, bytes):
+			variable_content = variable_content.decode("utf-8")
+
+    # Open the file in write mode and dump the content
+		with open(file_path, "w") as file:
+				# file.write(str(variable_content))  # Convert to string if not already
+				pprint.pprint(variable_content, stream=file)
+
+
 
 
 	def get_full_path(self):
@@ -47,7 +86,7 @@ class LPD(Document):
 			if att:
 				file_path = att[0].file_url or att[0].file_name
 			else:
-				frappe.throw("No Attachment found")	
+				frappe.throw("No Attachment found")
 
 			if "/" not in file_path:
 				file_path = "/files/" + file_path
@@ -115,7 +154,7 @@ class LPD(Document):
 		return self.get_importer().export_errored_rows()
 
 	def get_importer(self):
-		return Importer(self.reference_doctype, data_import=self)		
+		return Importer(self.reference_doctype, data_import=self)
 
 
 def get_mop_query(doctype, txt, searchfield, start, page_len, filters):
@@ -196,7 +235,7 @@ def download_template(
 		export_protect_area=export_protect_area,
 		export_page_length=5 if export_records == "5_records" else None,
 	)
-	
+
 	e.build_response()
 
 
@@ -331,4 +370,4 @@ def export_csv(doctype, path):
 	with open(path, "wb") as csvfile:
 		export_data(doctype=doctype, all_doctypes=True, template=True, with_data=True)
 		csvfile.write(frappe.response.result.encode("utf-8"))
-	
+

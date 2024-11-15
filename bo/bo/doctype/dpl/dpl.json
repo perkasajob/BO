@@ -47,7 +47,10 @@
   "year",
   "sb_1",
   "items",
+  "sb_4",
   "month_code",
+  "cb_rmk",
+  "remark",
   "conv_sb",
   "over_hjm",
   "amended_from"
@@ -87,8 +90,7 @@
    "fieldname": "line",
    "fieldtype": "Select",
    "label": "Line",
-   "options": "Line2\nLine1\nN1",
-   "reqd": 1
+   "options": "Line2\nLine1\nN1"
   },
   {
    "fieldname": "items",
@@ -269,7 +271,10 @@
   {
    "fieldname": "po_status",
    "fieldtype": "Data",
-   "label": "PO Status"
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "PO Status",
+   "search_index": 1
   },
   {
    "fieldname": "po_status_description",
@@ -325,10 +330,23 @@
    "fieldtype": "Data",
    "label": "Outlet Type",
    "read_only": 1
+  },
+  {
+   "fieldname": "cb_rmk",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "remark",
+   "fieldtype": "Small Text",
+   "label": "Remark"
+  },
+  {
+   "fieldname": "sb_4",
+   "fieldtype": "Section Break"
   }
  ],
  "is_submittable": 1,
- "modified": "2023-04-08 11:28:36.403497",
+ "modified": "2024-11-14 10:20:46.428554",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "DPL",

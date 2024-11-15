@@ -4,11 +4,15 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "debug",
   "item_code",
   "item_name",
+  "qty",
+  "qty_sls",
   "cb1",
   "hna",
-  "dpl_disc",
+  "dpl",
+  "dpl_sls",
   "dx_sb1",
   "d1",
   "d2",
@@ -24,44 +28,49 @@
   "t_sb",
   "a1",
   "g1",
+  "p1",
   "a2",
   "g2",
+  "p2",
   "a3",
   "g3",
+  "p3",
   "a4",
   "g4",
+  "p4",
   "a5",
   "g5",
+  "p5",
   "t_cb",
   "a6",
   "g6",
+  "p6",
   "a7",
   "g7",
+  "p7",
   "a8",
   "g8",
+  "p8",
   "a9",
   "g9",
+  "p9",
   "a10",
   "g10",
-  "dt_sb",
-  "p1",
-  "p2",
-  "p3",
-  "p4",
-  "p5",
-  "dt_cb",
-  "p6",
-  "p7",
-  "p8",
-  "p9",
   "p10",
+  "dt_sb",
+  "dt_cb",
   "dpldt_sb",
-  "dpl",
+  "tpof",
+  "tnof_sls",
+  "tnof",
+  "tpdisc",
+  "tndisc",
   "dpl_cb",
   "dpl_dt",
-  "hjm_sm",
-  "hjm_gsm",
-  "hjm_fin"
+  "hjm_1",
+  "hjm_2",
+  "hjm_3",
+  "glossary"
  ],
  "fields": [
   {
@@ -92,13 +101,6 @@
    "in_list_view": 1,
    "label": "HNA",
    "precision": "0"
-  },
-  {
-   "columns": 1,
-   "fieldname": "dpl_disc",
-   "fieldtype": "Percent",
-   "in_list_view": 1,
-   "label": "DPL"
   },
   {
    "columns": 1,
@@ -171,9 +173,11 @@
    "label": "D10"
   },
   {
+   "columns": 1,
    "fieldname": "dpl",
    "fieldtype": "Percent",
-   "label": "DPL T"
+   "in_list_view": 1,
+   "label": "DPL"
   },
   {
    "fieldname": "dpl_dt",
@@ -219,102 +223,122 @@
   {
    "fieldname": "a1",
    "fieldtype": "Percent",
-   "label": "A1"
+   "label": "A1",
+   "read_only": 1
   },
   {
    "fieldname": "g1",
    "fieldtype": "Percent",
-   "label": "G1"
+   "label": "G1",
+   "read_only": 1
   },
   {
    "fieldname": "a2",
    "fieldtype": "Percent",
-   "label": "A2"
+   "label": "A2",
+   "read_only": 1
   },
   {
    "fieldname": "g2",
    "fieldtype": "Percent",
-   "label": "G2"
+   "label": "G2",
+   "read_only": 1
   },
   {
    "fieldname": "a3",
    "fieldtype": "Percent",
-   "label": "A3"
+   "label": "A3",
+   "read_only": 1
   },
   {
    "fieldname": "g3",
    "fieldtype": "Percent",
-   "label": "G3"
+   "label": "G3",
+   "read_only": 1
   },
   {
    "fieldname": "a4",
    "fieldtype": "Percent",
-   "label": "A4"
+   "label": "A4",
+   "read_only": 1
   },
   {
    "fieldname": "g4",
    "fieldtype": "Percent",
-   "label": "G4"
+   "label": "G4",
+   "read_only": 1
   },
   {
    "fieldname": "a5",
    "fieldtype": "Percent",
-   "label": "A5"
+   "label": "A5",
+   "read_only": 1
   },
   {
    "fieldname": "g5",
    "fieldtype": "Percent",
-   "label": "G5"
+   "label": "G5",
+   "read_only": 1
   },
   {
    "fieldname": "a6",
    "fieldtype": "Percent",
-   "label": "A6"
+   "label": "A6",
+   "read_only": 1
   },
   {
    "fieldname": "g6",
    "fieldtype": "Percent",
-   "label": "G6"
+   "label": "G6",
+   "read_only": 1
   },
   {
    "fieldname": "a7",
    "fieldtype": "Percent",
-   "label": "A7"
+   "label": "A7",
+   "read_only": 1
   },
   {
    "fieldname": "g7",
    "fieldtype": "Percent",
-   "label": "G7"
+   "label": "G7",
+   "read_only": 1
   },
   {
    "fieldname": "a8",
    "fieldtype": "Percent",
-   "label": "A8"
+   "label": "A8",
+   "read_only": 1
   },
   {
    "fieldname": "g8",
    "fieldtype": "Percent",
-   "label": "G8"
+   "label": "G8",
+   "read_only": 1
   },
   {
    "fieldname": "a9",
    "fieldtype": "Percent",
-   "label": "A9"
+   "label": "A9",
+   "read_only": 1
   },
   {
    "fieldname": "g9",
    "fieldtype": "Percent",
-   "label": "G9"
+   "label": "G9",
+   "read_only": 1
   },
   {
    "fieldname": "a10",
    "fieldtype": "Percent",
-   "label": "A10"
+   "label": "A10",
+   "read_only": 1
   },
   {
    "fieldname": "g10",
    "fieldtype": "Percent",
-   "label": "G10"
+   "label": "G10",
+   "read_only": 1
   },
   {
    "fieldname": "p1",
@@ -367,29 +391,86 @@
    "label": "P10"
   },
   {
+   "fieldname": "tpdisc",
+   "fieldtype": "Percent",
+   "label": "TPDisc",
+   "read_only": 1
+  },
+  {
+   "fieldname": "tndisc",
+   "fieldtype": "Int",
+   "label": "TNDisc",
+   "read_only": 1
+  },
+  {
+   "fieldname": "dpl_sls",
+   "fieldtype": "Percent",
+   "label": "DPL SLS"
+  },
+  {
+   "fieldname": "tpof",
+   "fieldtype": "Percent",
+   "label": "TPOf",
+   "read_only": 1
+  },
+  {
+   "fieldname": "tnof",
+   "fieldtype": "Int",
+   "label": "TNOf",
+   "read_only": 1
+  },
+  {
+   "fieldname": "qty",
+   "fieldtype": "Int",
+   "label": "Qty"
+  },
+  {
+   "fieldname": "qty_sls",
+   "fieldtype": "Int",
+   "label": "Qty SLS",
+   "read_only": 1
+  },
+  {
+   "fieldname": "debug",
+   "fieldtype": "Data",
+   "label": "Debug"
+  },
+  {
+   "fieldname": "tnof_sls",
+   "fieldtype": "Int",
+   "label": "TNOf SLS",
+   "read_only": 1
+  },
+  {
    "fetch_from": "item_code.hjm_sm",
-   "fieldname": "hjm_sm",
+   "fieldname": "hjm_1",
    "fieldtype": "Read Only",
-   "label": "HJM SM",
+   "label": "HJM 1",
    "permlevel": 1
   },
   {
    "fetch_from": "item_code.hjm_gsm",
-   "fieldname": "hjm_gsm",
+   "fieldname": "hjm_2",
    "fieldtype": "Read Only",
-   "label": "HJM GSM",
+   "label": "HJM 2",
    "permlevel": 1
   },
   {
-   "fetch_from": "item_code.hjm_fin",
-   "fieldname": "hjm_fin",
+   "fetch_from": "item_code.hjm_3",
+   "fieldname": "hjm_3",
    "fieldtype": "Read Only",
-   "label": "HJM FIN",
+   "label": "HJM 3",
    "permlevel": 1
+  },
+  {
+   "fieldname": "glossary",
+   "fieldtype": "HTML",
+   "label": "Glossary",
+   "options": "<table>\n\t<tbody><tr>\n        <td>DPL</td>\n        <td>On</td>\n    </tr>\n    <tr>\n        <td>DPL SLS</td>\n        <td>On dari Sales</td>\n    </tr>\n    <tr>\n        <td>QTY SLS</td>\n        <td>Quantity dari Sales</td>\n    </tr>\n    <tr>\n        <td>A</td>\n        <td>Pro rata Off(%) Dx</td>\n    </tr>\n    <tr>\n        <td>G</td>\n        <td>On+Off(%) per Dx</td>\n    </tr>\n    <tr>\n        <td>P</td>\n        <td>Nominal Off per Dx</td>\n    </tr>\n    <tr>\n        <td></td>\n        <td></td>\n    </tr>\n    <tr>\n        <td>TPOf</td>\n        <td>Total Percent Off</td>\n    </tr>\n    <tr>\n        <td>TNOf SLS: &nbsp;</td>\n        <td>Total Nominal Off dari Sales</td>\n    </tr>\n    <tr>\n        <td>TNOf</td>\n        <td>Total Nominal Off LPD</td>\n    </tr>\n    <tr>\n        <td>TPDisc</td>\n        <td>Total % On+Off</td>\n    </tr>\n    <tr>\n        <td>TNDisc</td>\n        <td>Total Nominal On+Off</td>\n    </tr>\n    <tr>\n        <td>DPL Dt</td>\n        <td>Selisih On LPD vs ON Sales</td>\n    </tr>\n\t<tr>\n        <td></td>\n        <td></td>\n    </tr>\n</tbody></table>"
   }
  ],
  "istable": 1,
- "modified": "2020-08-22 10:49:40.800426",
+ "modified": "2024-11-08 11:29:51.912890",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "LPD Item",
