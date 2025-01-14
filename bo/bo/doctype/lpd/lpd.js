@@ -18,7 +18,7 @@ frappe.ui.form.on('LPD', {
 	refresh: function(frm) {
 	    set_parseXls_btn(frm)
 	},
-	file_url: function(frm){
+	file: function(frm){
 		console.log("a file is uploaded")
 		parseXLS(frm);
 	},
@@ -34,26 +34,26 @@ frappe.ui.form.on('LPD', {
 	start_date: function(frm){
 	},
 	line: function(frm){
-	    if(frm.doc.line == "")
-	        return
-		var items = frappe.db.get_list("Item", {filters:{"line":frm.doc.line, "is_group": 1},fields: ["item_code","item_name","hna","hjm_1","hjm_2","hjm_3"], limit: 200})
+	  // if(frm.doc.line == "")
+	  //       return
+		// var items = frappe.db.get_list("Item", {filters:{"line":frm.doc.line, "is_group": 1},fields: ["item_code","item_name","hna","hjm_1","hjm_2","hjm_3"], limit: 200})
 
-		items.then((list)=>{
-			list.forEach((o,i)=>{
-				var ch = frm.add_child('items')
-				ch.item_code = o.item_code
-				ch.item_name = o.item_name
-				ch.hna = o.hna
-				ch.hjm_1 = o.hjm_1
-				ch.hjm_2 = o.hjm_2
-				ch.hjm_3 = o.hjm_3
-			})
-		  frm.refresh_field('items');
-		})
+		// items.then((list)=>{
+		// 	list.forEach((o,i)=>{
+		// 		var ch = frm.add_child('items')
+		// 		ch.item_code = o.item_code
+		// 		ch.item_name = o.item_name
+		// 		ch.hna = o.hna
+		// 		ch.hjm_1 = o.hjm_1
+		// 		ch.hjm_2 = o.hjm_2
+		// 		ch.hjm_3 = o.hjm_3
+		// 	})
+		//   frm.refresh_field('items');
+		// })
 	},
 	items_on_form_rendered: function(frm, cdt, cdn){
 		let row = locals[cdt][cdn]
-		const $labels = $('div.clearfix > label.control-label');
+		const $labels = $('div[data-fieldname="items"] div[data-fieldname^="d"] label');
 		for (let i = 1; i <= 10; i++) {
 			$labels.filter(function() {
 					return $(this).text().trim() === `D${i}`;
@@ -124,32 +124,36 @@ function updatePercentages(frm, o) {
 			o[`p${i}`] = Math.round((disc_real_off) * o.hna)
 	}
 
+
 	frm.refresh_field('items');
 
 
-	if (o.tpdisc > o.hjm_3){
-		frm.set_value("over_hjm", 3)
-	} else if(o.tpdisc < o.hjm_3 && o.tpdisc > o.hjm_2 && frm.doc.over_hjm < 2){
-		frm.set_value("over_hjm", 2)
-	} else if(o.tpdisc < o.hjm_2 && o.tpdisc > o.hjm_1 && frm.doc.over_hjm < 1){
-		frm.set_value("over_hjm", 1)
-	} else frm.set_value("over_hjm", 0)
+	const over_hjm =
+  o.tndisc > o.hjm_3 ? 3 :
+  o.tndisc < o.hjm_3 && o.tndisc > o.hjm_2 && frm.doc.over_hjm < 2 ? 2 :
+  o.tndisc < o.hjm_2 && o.tndisc > o.hjm_1 && frm.doc.over_hjm < 1 ? 1 : 0;
+
+	frm.set_value("over_hjm", over_hjm);
+
+
+	// if (o.tpdisc > o.hjm_3){
+	// 	frm.set_value("over_hjm", 3)
+	// } else if(o.tpdisc < o.hjm_3 && o.tpdisc > o.hjm_2 && frm.doc.over_hjm < 2){
+	// 	frm.set_value("over_hjm", 2)
+	// } else if(o.tpdisc < o.hjm_2 && o.tpdisc > o.hjm_1 && frm.doc.over_hjm < 1){
+	// 	frm.set_value("over_hjm", 1)
+	// } else frm.set_value("over_hjm", 0)
 
 	try {
 		paint_over_hjm(frm)
-	}catch(error){console.log(error)}
-	try {
-		paint_over_hjm_item(frm, o)
-	}catch(error){console.log(error)}
+	}catch(error){
+		console.log(error)
+		try {
+			paint_over_hjm_item(frm, o)
+		}catch(error){console.log(error)}
+	}
 
-	// frappe.db.get_value('Item', dc.item_code, ['hjm_1','hjm_2','hjm_3'], function(res){
-	// 	if(res != undefined){
-	// 		let total_disc = dc.total_disc
-	// 		if([res.hjm_1, res.hjm_2, res.hjm_3].every(o=> o > 0)){
-	// 			set_total_disc_color(frm, total_disc, res)
-	// 		}
-	// 	}
-	// })
+
 	frm.refresh_field(o.parentfield)
 }
 
@@ -174,7 +178,11 @@ function set_filter_by_territory(frm, territory){
 
 function set_parseXls_btn(frm){
 	frm.add_custom_button(__('Get XLS'), function(){
+		if(frm.doc.file){
 			parseXLS(frm);
+		} else {
+			frappe.msgprint('Please upload the LPD File First')
+		}
 	});
 
 	frm.add_custom_button(__('Download XLS'), function(){
@@ -199,6 +207,7 @@ function parseXLS(frm) {
 		console.log(res);
 		if (res != undefined) {
 			res = res.message;
+			frm.doc.items = []
 			frm.set_value("year", res.year);
 			frm.set_value("month", res.month);
 			frm.set_value("outid", res.outid);
@@ -207,13 +216,13 @@ function parseXLS(frm) {
 			}
 
 			res.data.forEach((d) => {
-				if (d[8] != null) {
+				if (d[8] != null && d[1] in res.item_set) {
 					frm.add_child('items', {
 						'item_code': d[1],
 						'item_name': d[2],
 						'hna': d[3],
 						'qty': d[5],
-						'dpl': d[7],
+						'dpl': res.item_set[d[1]].disc, //[7]
 						'd1': d[8],
 						'd2': d[9],
 						'd3': d[10],
@@ -229,14 +238,11 @@ function parseXLS(frm) {
 						'hjm_3': d[35],
 					});
 				}
-			}, frm);
-			console.log("Done");
+			}, frm, res);
 			frm.doc.items.forEach((o) => {
 				updatePercentages(frm, o);
 			}, frm);
-			frm.trigger("items")
-			console.log("Items Updated");
-
+			frm.refresh_field('items');
 		}
 	});
 }

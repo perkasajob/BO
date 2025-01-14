@@ -85,7 +85,8 @@ website_context = {
 permission_query_conditions = {
 	"DPPU": "bo.bo.permission.dppu_get_permission_query_conditions",
 	"DKH": "bo.bo.permission.dkh_get_permission_query_conditions",
-	"DPL": "bo.bo.permission.dpl_get_permission_query_conditions"
+	"DPL": "bo.bo.permission.dpl_get_permission_query_conditions",
+  "DPF": "bo.bo.permission.dpf_get_permission_query_conditions"
 }
 
 # has_permission = {
@@ -107,7 +108,10 @@ permission_query_conditions = {
 # Scheduled Tasks
 # ---------------
 scheduler_events = {
-	"daily": [
+	# "all": [
+	# 	"bo.bo.tasks.all"
+	# ],
+  "hourly": [
 		"bo.bo.tasks.daily"
 	]
 }

@@ -8,6 +8,9 @@ from frappe.desk.doctype.notification_log.notification_log import enqueue_create
 from bo.bo.bo_integration.tsj_integration import TSJConnect;
 from datetime import datetime
 
+def all():
+	pass
+
 def daily():
 	set_DPPU_overdue(14) # 14 days
 	expire_dx_adv()

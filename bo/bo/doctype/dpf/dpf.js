@@ -6,7 +6,7 @@ var username = frappe.user.full_name()
 var ppn = 1.11;
 var old_outid = null
 
-frappe.ui.form.on('DPL', {
+frappe.ui.form.on('DPF', {
 	onload: function(frm){
 		load_org_code(frm)
 		// set_readonly_fixed_price(frm)
@@ -101,7 +101,7 @@ const dfunc = (frm, dt, dn) => {
 	calc_item(frm, o)
 }
 
-frappe.ui.form.on('DPL Item', {
+frappe.ui.form.on('DPF Item', {
 	form_render(frm, dt, dn){
 		setTimeout(paint_over_hjm_item, 3000, frm, locals[dt][dn]);
 	},
@@ -278,19 +278,19 @@ function set_parseXls_btn(frm){
 			});
     });
     frm.add_custom_button(__('Download XLS'), function(){
-        var method = '/api/method/bo.bo.doctype.dpl.dpl.download_template';
+        var method = '/api/method/bo.bo.doctype.dpf.dpf.download_template';
         var filters = [['name','=', frm.docname]];
         open_url_post(method, {
 			doctype: frm.doctype,
 			file_type: "Excel",
-			export_fields: {"DPL":["name","outid","month","year","distributor","line"],"items":["name","item_code","item_name","hna","dpl_disc", "hna1", "dpl_disc1","hna1_ppn", "total_disc"]},
+			export_fields: {"DPF":["name","outid","month","year","distributor","line"],"items":["name","item_code","item_name","hna","dpl_disc", "hna1", "dpl_disc1","hna1_ppn", "total_disc"]},
 			export_filters: filters,
 			export_protect_area: [2, 11, 12],
 		});
 	});
 
 	frm.add_custom_button(__('Dwnld Distro XLS'), function(){
-        var method = '/api/method/bo.bo.doctype.dpl.dpl.download_template';
+        var method = '/api/method/bo.bo.doctype.dpf.dpf.download_template';
 		var distributor = frm.doc.distributor.toLowerCase()
 		var dpl_extras = [ distributor+"_outid" ]
 		var item_extras = [distributor +"_item_code", distributor +"_item_name" ]
@@ -298,7 +298,7 @@ function set_parseXls_btn(frm){
         open_url_post(method, {
 			doctype: frm.doctype,
 			file_type: "Excel",
-			export_fields: {"DPL":["name","outid", "start_date", "end_date", "distributor","line"].concat(dpl_extras),"items":["name","item_code","item_name","hna","dpl_disc","hna1","dpl_disc1","hna1_ppn"].concat(item_extras)},
+			export_fields: {"DPF":["name","outid", "start_date", "end_date", "distributor","line"].concat(dpl_extras),"items":["name","item_code","item_name","hna","dpl_disc","hna1","dpl_disc1","hna1_ppn"].concat(item_extras)},
 			export_filters: filters,
 			export_protect_area: [2, 12, 13],
 		});
@@ -308,7 +308,7 @@ function set_parseXls_btn(frm){
 function download_template(frm) {
 		frappe.require('/assets/js/data_import_tools.min.js', () => {
 			frm.data_exporter = new frappe.data_import.DataExporter(
-				"DPL",
+				"DPF",
 				"Insert New Records"
 			);
 		});

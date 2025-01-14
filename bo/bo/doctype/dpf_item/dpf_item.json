@@ -1,11 +1,12 @@
 {
- "creation": "2020-08-07 11:51:16.502087",
+ "creation": "2025-01-11 11:02:05.264418",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
   "item_code",
   "item_name",
+  "qty",
   "hna0",
   "dpl_disc",
   "hna",
@@ -51,6 +52,30 @@
    "reqd": 1
   },
   {
+   "fieldname": "qty",
+   "fieldtype": "Float",
+   "label": "Qty",
+   "reqd": 1
+  },
+  {
+   "columns": 1,
+   "fetch_from": "item_code.hna",
+   "fieldname": "hna0",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "HNA Default",
+   "precision": "0",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "dpl_disc",
+   "fieldtype": "Read Only",
+   "label": "DPL (%)",
+   "precision": "2",
+   "read_only": 1
+  },
+  {
    "columns": 1,
    "fieldname": "hna",
    "fieldtype": "Currency",
@@ -59,10 +84,37 @@
    "precision": "0"
   },
   {
+   "fieldname": "hna_ppn",
+   "fieldtype": "Currency",
+   "label": "HNA+PPN",
+   "read_only": 1
+  },
+  {
+   "columns": 1,
    "default": "0",
-   "fieldname": "dpl_disc",
-   "fieldtype": "Read Only",
-   "label": "DPL (%)",
+   "fieldname": "dpl_disc1",
+   "fieldtype": "Percent",
+   "in_list_view": 1,
+   "label": "DPL 1 (%)",
+   "precision": "2"
+  },
+  {
+   "fieldname": "hna1",
+   "fieldtype": "Currency",
+   "label": "HNA 1"
+  },
+  {
+   "columns": 1,
+   "fieldname": "hna1_ppn",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "HNA1+PPN",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_disc",
+   "fieldtype": "Percent",
+   "label": "Total Disc",
    "precision": "2",
    "read_only": 1
   },
@@ -108,11 +160,9 @@
    "read_only": 1
   },
   {
-   "fieldname": "total_disc",
-   "fieldtype": "Percent",
-   "label": "Total Disc",
-   "precision": "2",
-   "read_only": 1
+   "fieldname": "hjm_section",
+   "fieldtype": "Section Break",
+   "label": "HJM"
   },
   {
    "fetch_from": "item_code.hjm_1",
@@ -137,56 +187,13 @@
    "label": "HJM 3",
    "permlevel": 3,
    "read_only": 1
-  },
-  {
-   "fieldname": "hjm_section",
-   "fieldtype": "Section Break",
-   "label": "HJM"
-  },
-  {
-   "columns": 1,
-   "fetch_from": "item_code.hna",
-   "fieldname": "hna0",
-   "fieldtype": "Currency",
-   "in_list_view": 1,
-   "label": "HNA Default",
-   "precision": "0",
-   "read_only": 1
-  },
-  {
-   "fieldname": "hna_ppn",
-   "fieldtype": "Currency",
-   "label": "HNA+PPN",
-   "read_only": 1
-  },
-  {
-   "columns": 1,
-   "default": "0",
-   "fieldname": "dpl_disc1",
-   "fieldtype": "Percent",
-   "in_list_view": 1,
-   "label": "DPL 1 (%)",
-   "precision": "2"
-  },
-  {
-   "fieldname": "hna1",
-   "fieldtype": "Currency",
-   "label": "HNA 1"
-  },
-  {
-   "columns": 1,
-   "fieldname": "hna1_ppn",
-   "fieldtype": "Currency",
-   "in_list_view": 1,
-   "label": "HNA1+PPN",
-   "read_only": 1
   }
  ],
  "istable": 1,
- "modified": "2025-01-11 13:13:14.217694",
+ "modified": "2025-01-11 13:12:41.374185",
  "modified_by": "Administrator",
  "module": "BO",
- "name": "DPL Item",
+ "name": "DPF Item",
  "owner": "Administrator",
  "permissions": [],
  "quick_entry": 1,

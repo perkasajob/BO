@@ -1,14 +1,12 @@
 {
- "autoname": "naming_series:",
+ "autoname": "format:DPL-{distributor}{outid}-{###}",
  "creation": "2020-08-07 09:11:44.234354",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "naming_series",
   "sources",
   "sb_3",
-  "type",
   "line",
   "distributor",
   "org_code",
@@ -18,18 +16,6 @@
   "outlet_address",
   "outlet_type",
   "reference",
-  "sb_dst_stat",
-  "po_status",
-  "po_status_description",
-  "po_date",
-  "po_processed_date",
-  "column_break_18",
-  "sales_order",
-  "sales_order_date",
-  "invoice_number",
-  "invoice_date",
-  "delivery_number",
-  "delivery_date",
   "sb_users",
   "dm",
   "dm_name",
@@ -87,6 +73,7 @@
    "reqd": 1
   },
   {
+   "default": "Line2",
    "fieldname": "line",
    "fieldtype": "Select",
    "label": "Line",
@@ -125,8 +112,6 @@
    "read_only": 1
   },
   {
-   "collapsible": 1,
-   "depends_on": "eval: doc.type === \"DPL\"",
    "fieldname": "sb_2",
    "fieldtype": "Section Break"
   },
@@ -144,7 +129,8 @@
    "fieldname": "year",
    "fieldtype": "Select",
    "label": "Year",
-   "options": "2023\n2024\n2025\n2026\n2027\n2028\n2029\n2030"
+   "options": "2025\n2026\n2027\n2028\n2029\n2030",
+   "reqd": 1
   },
   {
    "fieldname": "sb_1",
@@ -156,24 +142,8 @@
    "label": "Conversion"
   },
   {
-   "default": "DPL",
-   "fieldname": "type",
-   "fieldtype": "Select",
-   "label": "Type",
-   "options": "DPL\nDPF\nDPL Fixed Price\nDPF Fixed Price"
-  },
-  {
    "fieldname": "cb_01",
    "fieldtype": "Column Break"
-  },
-  {
-   "default": ".type.-.distributor.outid.-.###",
-   "fieldname": "naming_series",
-   "fieldtype": "Select",
-   "hidden": 1,
-   "label": "Series",
-   "options": ".type.-.distributor.outid.-.###",
-   "reqd": 1
   },
   {
    "fetch_from": "dm.parent_mp",
@@ -204,7 +174,8 @@
    "allow_on_submit": 1,
    "fieldname": "reference",
    "fieldtype": "Data",
-   "label": "Reference"
+   "label": "Reference",
+   "no_copy": 1
   },
   {
    "fieldname": "outlet_address",
@@ -262,70 +233,6 @@
    "fieldtype": "Column Break"
   },
   {
-   "collapsible": 1,
-   "collapsible_depends_on": "eval:doc.po_status",
-   "depends_on": "eval:doc.po_status",
-   "fieldname": "sb_dst_stat",
-   "fieldtype": "Section Break"
-  },
-  {
-   "fieldname": "po_status",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "PO Status",
-   "search_index": 1
-  },
-  {
-   "fieldname": "po_status_description",
-   "fieldtype": "Data",
-   "label": "PO Status Description"
-  },
-  {
-   "fieldname": "sales_order",
-   "fieldtype": "Data",
-   "label": "Sales Order"
-  },
-  {
-   "fieldname": "sales_order_date",
-   "fieldtype": "Datetime",
-   "label": "Sales Order Date"
-  },
-  {
-   "fieldname": "column_break_18",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "invoice_number",
-   "fieldtype": "Data",
-   "label": "Invoice Number"
-  },
-  {
-   "fieldname": "invoice_date",
-   "fieldtype": "Datetime",
-   "label": "Invoice Date"
-  },
-  {
-   "fieldname": "delivery_number",
-   "fieldtype": "Data",
-   "label": "Delivery Number"
-  },
-  {
-   "fieldname": "delivery_date",
-   "fieldtype": "Datetime",
-   "label": "Delivery Date"
-  },
-  {
-   "fieldname": "po_date",
-   "fieldtype": "Datetime",
-   "label": "PO Date"
-  },
-  {
-   "fieldname": "po_processed_date",
-   "fieldtype": "Datetime",
-   "label": "PO Processed Date"
-  },
-  {
    "fieldname": "outlet_type",
    "fieldtype": "Data",
    "label": "Outlet Type",
@@ -346,7 +253,7 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2024-11-14 10:20:46.428554",
+ "modified": "2025-01-13 16:12:22.449678",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "DPL",

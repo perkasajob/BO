@@ -47,44 +47,23 @@ class DPL(Document):
 
 		group_ids = [i.item_code for i in self.items]
 		items = frappe.db.get_list('Item', fields=['tsj_item_code as productCode', 'group_proid'], filters={'group_proid': ['in', group_ids],'tsj_item_code':['!=', ""]})
-		if self.type[0:3] == "DPL":
-			group_disc = {int(i.item_code): {"d1":i.total_disc, "d1QtyMin":min_qty(i.total_disc), "d1QtyMax":max_qty(i.total_disc)} for i in self.items}
-			for item in items:
-				if item['group_proid'] in group_disc:
-						item.update({'d1': group_disc[item['group_proid']]['d1'],
-												'e1': 0,
-												'd1QtyMin': group_disc[item['group_proid']]['d1QtyMin'],
-												'd1QtyMax': group_disc[item['group_proid']]['d1QtyMax'],
-												'e1QtyMin':0, 'e1QtyMax':0
-												})
-						# item.pop('group_proid', None)
-			# frappe.throw(group_disc)
+		group_disc = {int(i.item_code): {"d1":i.total_disc, "d1QtyMin":min_qty(i.total_disc), "d1QtyMax":max_qty(i.total_disc)} for i in self.items}
+		for item in items:
+			if item['group_proid'] in group_disc:
+					item.update({'d1': group_disc[item['group_proid']]['d1'],
+											'e1': 0,
+											'd1QtyMin': group_disc[item['group_proid']]['d1QtyMin'],
+											'd1QtyMax': group_disc[item['group_proid']]['d1QtyMax'],
+											'e1QtyMin':0, 'e1QtyMax':0
+											})
+					# item.pop('group_proid', None)
+		# frappe.throw(group_disc)
 
-			# details = [{"ItemCode": i.item_code, "d1":i.total_disc, "D3":0, "d1QtyMin":min_qty(i.total_disc), "d1QtyMax":max_qty(i.total_disc), "D3QtyMin":0, "D3QtyMax":0} for i in self.items]
-			res = conn.post_dpl(self.name, self.outid, self.start_date, self.end_date, self.remark, items)
-		elif self.type[0:3] == "DPF":
-			group_disc = {int(i.item_code): {'productQty': i.qty, 'ItemPrice': i.hna, 'ItemD1': i.total_disc} for i in self.items}
-			# details = [{'ItemCode': i.item_code, 'productQty': i.qty, 'ItemPrice': i.hna, 'ItemE1': 0, 'ItemD1': i.total_disc} for i in self.items]
-			for item in items:
-				if item['group_proid'] in group_disc:
-						item.update({'productQty': group_disc[item['group_proid']]['productQty'],
-									 			'priceList': '555',
-												'discountE1': 0,
-												'discountD1': group_disc[item['group_proid']]['ItemD1']
-												})
-						# item.pop('group_proid', None)
-			res = conn.post_dpf(self.name, self.outid, self.approver_1_name, self.approver_2_name, self.remark, items)
-
-		if res["statusCode"] in ["TTPM_CQL_000", "DPF_COR_000"]:
-			frappe.msgprint(res["message"])
-
-			if self.distributor == "TSJ":
-				if self.type[0:3] == "DPL":
-					self.reference = res["data"]["spkNumber"]
-				elif self.type[0:3] == "DPF":
-					self.reference = res["data"]["dpfNumber"]
-		else:
-			frappe.throw(res["message"])
+		# details = [{"ItemCode": i.item_code, "d1":i.total_disc, "D3":0, "d1QtyMin":min_qty(i.total_disc), "d1QtyMax":max_qty(i.total_disc), "D3QtyMin":0, "D3QtyMax":0} for i in self.items]
+		res = conn.post_dpl(self.name, self.outid, self.start_date, self.end_date, self.remark, items)
+		frappe.msgprint(res["message"])
+		if self.distributor == "TSJ" and res["statusCode"] == "TTPM_CQL_000":
+			self.reference = res["data"]["spkNumber"]
 
 
 	def parseXLS(self):
@@ -226,6 +205,13 @@ def get_supplier_query(doctype, txt, searchfield, start, page_len, filters):
 
 
 ###############################
+
+@frappe.whitelist()
+def refresh_po_status():
+	tsj = TSJConnect()
+	tsj.get_dpf_status()
+	return {"status": "OK"}
+
 @frappe.whitelist()
 def get_preview_from_template(data_import, import_file=None, google_sheets_url=None):
 	return frappe.get_doc("Data Import", data_import).get_preview_from_template(
@@ -446,9 +432,3 @@ def export_csv(doctype, path):
 	with open(path, "wb") as csvfile:
 		export_data(doctype=doctype, all_doctypes=True, template=True, with_data=True)
 		csvfile.write(frappe.response.result.encode("utf-8"))
-
-
-
-
-
-

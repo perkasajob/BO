@@ -51,6 +51,7 @@ class SLS(Document):
 					'disc' : inner_dict['disc_p']*100,
 					'value_net': inner_dict['value_net']
 			}
+
 		# self.save()
 		# TODO: PJOB don't forget to activate save above & check the sql syntax
 		# NOTE:
@@ -93,10 +94,13 @@ class SLS(Document):
 											END
 
 				WHERE tabLPD.month = "{0}" AND tabLPD.year = {1};'''.format(self.month, self.year)
-		frappe.db.sql(sql)
-		frappe.db.commit()
+		# frappe.db.sql(sql)
+		# frappe.db.commit()
 
 		return cascaded_dict
+
+	def create_dpl(self):
+		return {'data':'test'}
 
 	def get_full_path(self):
 			"""Returns file path from given file name"""

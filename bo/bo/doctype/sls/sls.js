@@ -66,6 +66,7 @@ frappe.ui.form.on('SLS', {
 	},
 	refresh: function(frm) {
 		set_parseXls_btn(frm)
+		set_createDPL_btn(frm)
 
 	}
 });
@@ -116,7 +117,6 @@ function set_parseXls_btn(frm){
 		// 	})
 		// ).done(function( script, textStatus ) {
 		frm.call('parseXLS').then((res) => {
-			debugger
 			if(res != undefined){
 				if(res.message.data){
 					var data = []
@@ -198,6 +198,24 @@ function set_parseXls_btn(frm){
 			}
 		});
 	});
+}
+
+function set_createDPL_btn(frm){
+	frm.add_custom_button(__('Create DPL'), function(){
+		// $.when(
+		// 	$.getScript( "/assets/bo/js/bo-datatable.js" ),
+		// 	$.Deferred(function( deferred ){
+		// 		$( deferred.resolve );
+		// 	})
+		// ).done(function( script, textStatus ) {
+		frm.call('create_dpl').then((res) => {
+
+			if(res != undefined && res.message.data){
+				console.log(res.message)
+
+			}
+		})
+	})
 }
 
 function totalCols(dat, columns,total_col_nr){

@@ -53,3 +53,19 @@ def dpl_get_permission_query_conditions(user):
 	})
 	for mp in mps:
 		return  ' or '.join(["`tabDPL`.{}='{}'".format(f.fieldname, mp.name) for f in fields] + ["`tabDPL`.{}_name='{}'".format(f.fieldname, full_name) for f in fields])
+
+def dpf_get_permission_query_conditions(user):
+	if not user: user = frappe.session.user
+
+	if user == "Administrator":
+		return
+
+	full_name = get_user_fullname(user)
+	mps = frappe.db.get_list('MP', filters={'user_id':user}, fields=('name'))
+
+	fields = frappe.get_meta("DPF").get("fields", {
+		"fieldtype":"Link",
+		"options": ("MP")
+	})
+	for mp in mps:
+		return  ' or '.join(["`tabDPF`.{}='{}'".format(f.fieldname, mp.name) for f in fields] + ["`tabDPF`.{}_name='{}'".format(f.fieldname, full_name) for f in fields])

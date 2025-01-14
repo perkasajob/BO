@@ -18,6 +18,11 @@ def get_data():
 				},
 				{
 					"type": "doctype",
+					"name": "DPF",
+					"onboard": 1,
+				},
+				{
+					"type": "doctype",
 					"name": "LPD",
 					"onboard": 1,
 				},

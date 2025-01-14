@@ -120,32 +120,31 @@ class TSJConnect(Document):
 	# 	return res
 
 	def get_dpf_status(self):
-		res = []
-		dpfs = frappe.get_all('DPL', {'type':'DPF', 'workflow_state':'sent', 'po_status':['not in',['SJ','C','E']]},['name','creation'])
+		dpfs = frappe.get_all('DPF', {'type':'DPF', 'workflow_state':'sent', 'po_status':['not in',['SJ','C','E']]},['name','creation','reference'])
 		endpoint, headers = self.get_endpoint('dpf/v1/order')
 		for dpf in dpfs:
 			# payload = {'startDate': str(dpf['creation'].date()), 'endDate': today(), 'poNumber': 'QTM-{}'.format(dpf['name'])}
-			result = self._get(endpoint + f"/QTM-{dpf['name']}")
+			result = self._get(endpoint + f"/{dpf['reference']}")
 			result.raise_for_status()
-			if res["statusCode"] == "DPF_STS_000":
-				for data in result.json().get("data"):
-					frappe.db.set_value('DPL', dpf['name'], {
-							'po_status' :  data['poStatus'],
-							'po_status_description' :  data['poStatusDescription'],
-							'po_date' :  data['poDate'],
-							'po_processed_date' :  data['poProcessedDate'],
-							'sales_order' :  data['poSalesOrderNumber'],
-							'sales_order_date' :  data['poSalesOrderDate'],
-							'invoice_number' :  data['poInvoiceNumber'],
-							'invoice_date' :  data['poInvoiceDate'],
-							'delivery_number' :  data['poDeliveryNumber'],
-							'delivery_date' :  data['poDeliveryDate']
+			res = result.json()
+
+			if res['statusCode'] == "DPF_STS_000" and res['data']:
+					frappe.db.set_value('DPF', dpf['name'], {
+							'po_status' : res['data']['poStatus'],
+							'po_status_description' :  res['data']['poStatusDescription'],
+							'po_date' :  res['data']['poDate'],
+							'po_processed_date' :  res['data']['poProcessedDate'],
+							'sales_order' :  res['data']['poSalesOrderNumber'],
+							'sales_order_date' :  res['data']['poSalesOrderDate'],
+							'invoice_number' :  res['data']['poInvoiceNumber'],
+							'invoice_date' :  res['data']['poInvoiceDate'],
+							'delivery_number' :  res['data']['poDeliveryNumber'],
+							'delivery_date' :  res['data']['poDeliveryDate']
 					})
 
-					res.append({"poNumber": data['poNumber'], "poStatus": data['poStatus'],
-					"poSalesOrderDate": data['poSalesOrderDate'], "poSalesOrderNumber": data['poSalesOrderNumber'], 'poInvoiceNumber': data['poInvoiceNumber']})
-				frappe.db.commit()
-		return res
+					# res.append({"poNumber": res['data']['poNumber'], "poStatus": res['data']['poStatus'], \
+					# "poSalesOrderDate": res['data']['poSalesOrderDate'], "poSalesOrderNumber": res['data']['poSalesOrderNumber'], 'poInvoiceNumber': res['data']['poInvoiceNumber']})
+		frappe.db.commit()
 
 
 	def post_dpl(self, SpkNr, customerNumber, start_date, end_date, remarks, details):

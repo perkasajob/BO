@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2020, Sistem Koperasi and contributors
+# Copyright (c) 2025, Sistem Koperasi and contributors
 # For license information, please see license.txt
 
 from __future__ import unicode_literals
-# import frappe
 from frappe.model.document import Document
 from frappe import _, scrub, ValidationError
 import frappe, json, os
@@ -12,79 +11,62 @@ from frappe.desk.form.load import get_attachments
 from frappe.utils import get_hook_method, get_files_path
 # from bo.bo.doctype.lpd.exporter import Importer
 from bo.bo.utils.exporter import Exporter
+from bo.bo.bo_integration.tsj_integration import TSJConnect
 from frappe.utils.background_jobs import enqueue
 from frappe.utils.csvutils import validate_google_sheets_url
 from frappe import _
-import pprint
+import requests, textwrap
+from frappe.utils.user import get_user_fullname
 import re
 
+class DPF(Document):
+	def __init__(self, *args, **kwargs):
+		super(DPF, self).__init__(*args, **kwargs)
 
-class LPD(Document):
 	def validate(self):
-		pass
+			pass
+
+	def before_submit(self):
+		if self.distributor == "TSJ":
+			conn = TSJConnect()
+		else:
+			return
+
+		group_ids = [i.item_code for i in self.items]
+		items = frappe.db.get_list('Item', fields=['tsj_item_code as productCode', 'group_proid'], filters={'group_proid': ['in', group_ids],'tsj_item_code':['!=', ""]})
+		group_disc = {int(i.item_code): {'productQty': i.qty, 'ItemPrice': i.hna, 'ItemD1': i.total_disc} for i in self.items}
+		# details = [{'ItemCode': i.item_code, 'productQty': i.qty, 'ItemPrice': i.hna, 'ItemE1': 0, 'ItemD1': i.total_disc} for i in self.items]
+		for item in items:
+			if item['group_proid'] in group_disc:
+					item.update({'productQty': int(group_disc[item['group_proid']]['productQty']),
+											'priceList': '555',
+											'discountE1': 0,
+											'discountD1': group_disc[item['group_proid']]['ItemD1']
+											})
+					# item.pop('group_proid', None)
+		res = conn.post_dpf(self.name, self.outid, self.approver_1_name, self.approver_2_name, self.remark, items)
+		frappe.msgprint(res["message"])
+		if self.distributor == "TSJ" and res["statusCode"] == "DPF_COR_000":
+			self.reference = res["data"]["dpfNumber"]
+
 
 	def parseXLS(self):
-		file_doc = frappe.get_doc("File", {"file_url": self.file})
-		file_content = file_doc.get_content()
-		data = []
-		# return file_content
+		file_url = self.get_full_path() # file attachment only the first one attached
+		fname = os.path.basename(file_url)
+		fxlsx = re.search("^{}.*\.xlsx".format(self.doctype), fname)
 
-		from frappe.utils.xlsxutils import read_xlsx_file_from_attached_file
-		rows = read_xlsx_file_from_attached_file(fcontent=file_content)
-		dxname = frappe.db.sql('''SELECT name FROM tabDx
-								WHERE name LIKE "%%%s"''' % '" OR name LIKE "%'.join(rows[6][8:18]), as_list=True)
-		dx = self.match_and_replace(rows[6][8:18], dxname)
-
-		_rows = [r for r in  [r for r in rows[8:] if r] if r[1]] # cleaning empties
-
-		if _rows:
-			item_hjms = frappe.db.get_all(
-					'Item',
-					filters={'name': ['in', [str(r[1]) for r in _rows]]},
-					fields=['name', 'hjm_1','hjm_2','hjm_3']
-			)
-
-			# Create a dictionary for quick hjm lookup
-			hjm_dict = {item['name']: [item['hjm_1'], item['hjm_2'], item['hjm_3']] for item in item_hjms}
-			data = [d + hjm_dict[str(d[1])] for d in _rows if str(d[1]) in hjm_dict.keys()]
-
-		outid = str(rows[3][9])
-		sls_items = frappe.db.get_list('SLS Item',filters={
-						'outid': int(outid.replace('_', ''))
-				},
-				fields=['proid', 'disc', 'value_net'],
-				order_by='modified desc',)
-
-		item_set = {item['proid']: item for item in sls_items}
-
-		return {"year": rows[1][9], "month": str(rows[1][11]).zfill(2), "tp": rows[1][15],
-					"outid": outid, "dx": dx,
-					"columns": rows[7], "data": data, "dxname": dxname, 'item_set': item_set}
-
-
-	def match_and_replace(self, var1, var2):
-		result = []
-		for item in var1:
-				# Find the match where item is the suffix
-				match = next((x[0] for x in var2 if x[0].endswith('-' + item)), None)
-				if match:
-						result.append(match)  # If match found, append it to result
-				else:
-						result.append(item)   # Otherwise, keep the original item
-
-		return result
-
-	def dump_variable_to_file(variable_content, filename="output.json"):
-		# You can use frappe.get_site_path to save it in the site folder
-		file_path = "output.json"
-
-		if isinstance(variable_content, bytes):
-			variable_content = variable_content.decode("utf-8")
-
-    # Open the file in write mode and dump the content
-		with open(file_path, "w") as file:
-				# file.write(str(variable_content))  # Convert to string if not already
-				pprint.pprint(variable_content, stream=file)
+		if(fxlsx): # match
+			with open( file_url , "rb") as upfile:
+				fcontent = upfile.read()
+			if frappe.safe_encode(fname).lower().endswith("xlsx".encode('utf-8')):
+				from frappe.utils.xlsxutils import read_xlsx_file_from_attached_file
+				rows = read_xlsx_file_from_attached_file(fcontent=fcontent)
+			columns = rows[0]
+			rows.pop(0)
+			data = rows
+			return {"columns": columns, "data": data}
+		else:
+			return {"status" : "Error", "filename": fname, "doctype": self.doctype}
 
 
 	def get_full_path(self):
@@ -164,6 +146,26 @@ class LPD(Document):
 		return Importer(self.reference_doctype, data_import=self)
 
 
+	@frappe.whitelist()
+	def get_linked_org(self, throw_if_missing=False):
+			# if not frappe.db.exists("Sales Partner", self.distributor):
+			# 		if throw_if_missing:
+			# 				frappe.throw('Sales Partner not found')
+
+			# return [org.code for org in frappe.get_doc("Sales Partner", self.distributor).organization]
+			return frappe.get_doc('MP', self.dm).get(self.distributor.lower() + '_org_code')
+
+
+
+def has_permission(doc, ptype="read", user=None):
+	user = user or frappe.session.user
+	full_name = get_user_fullname(frappe.session['user'])
+	if doc.approver_1_name == full_name or doc.approver_2_name == full_name or doc.dm_name == full_name:
+		return True
+	else:
+		return False
+
+
 def get_mop_query(doctype, txt, searchfield, start, page_len, filters):
 	return frappe.db.sql(""" select mode_of_payment from `tabPayment Order Reference`
 		where parent = %(parent)s and mode_of_payment like %(txt)s
@@ -187,6 +189,13 @@ def get_supplier_query(doctype, txt, searchfield, start, page_len, filters):
 
 
 ###############################
+
+@frappe.whitelist()
+def refresh_po_status():
+	tsj = TSJConnect()
+	tsj.get_dpf_status()
+	return {"status": "OK"}
+
 @frappe.whitelist()
 def get_preview_from_template(data_import, import_file=None, google_sheets_url=None):
 	return frappe.get_doc("Data Import", data_import).get_preview_from_template(
@@ -230,6 +239,36 @@ def download_template(
 
 	export_fields = frappe.parse_json(export_fields)
 	export_filters = frappe.parse_json(export_filters)
+	export_data = export_records != "blank_template"
+	export_protect_area = frappe.parse_json(export_protect_area)
+
+	e = Exporter(
+		doctype,
+		export_fields=export_fields,
+		export_data=export_data,
+		export_filters=export_filters,
+		file_type=file_type,
+		export_protect_area=export_protect_area,
+		export_page_length=5 if export_records == "5_records" else None,
+	)
+
+	e.build_response()
+
+@frappe.whitelist()
+def download_list(
+	doctype="LPD", export_fields=None, export_records=None, names=None, export_protect_area=None, file_type="Excel"
+):
+	"""
+	Download template from Exporter
+		:param doctype: Document Type
+		:param export_fields=None: Fields to export as dict {'Sales Invoice': ['name', 'customer'], 'Sales Invoice Item': ['item_code']}
+		:param export_records=None: One of 'all', 'by_filter', 'blank_template'
+		:param export_filters: Filter dict
+		:param file_type: File type to export into
+	"""
+
+	export_fields = frappe.parse_json(export_fields)
+	export_filters = {"name": ["in", names]}
 	export_data = export_records != "blank_template"
 	export_protect_area = frappe.parse_json(export_protect_area)
 
@@ -377,4 +416,3 @@ def export_csv(doctype, path):
 	with open(path, "wb") as csvfile:
 		export_data(doctype=doctype, all_doctypes=True, template=True, with_data=True)
 		csvfile.write(frappe.response.result.encode("utf-8"))
-

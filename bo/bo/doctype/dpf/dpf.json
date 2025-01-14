@@ -1,0 +1,409 @@
+{
+ "autoname": "format:DPF-{distributor}{outid}-{###}",
+ "creation": "2025-01-11 11:01:44.169580",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "sources",
+  "sb_3",
+  "line",
+  "distributor",
+  "org_code",
+  "cb_01",
+  "outid",
+  "outlet_name",
+  "outlet_address",
+  "outlet_type",
+  "reference",
+  "sb_dst_stat",
+  "po_status",
+  "po_status_description",
+  "po_date",
+  "po_processed_date",
+  "column_break_18",
+  "sales_order",
+  "sales_order_date",
+  "invoice_number",
+  "invoice_date",
+  "delivery_number",
+  "delivery_date",
+  "sb_users",
+  "dm",
+  "dm_name",
+  "dm_area",
+  "cb_usr1",
+  "approver_1",
+  "approver_1_name",
+  "approver_2",
+  "approver_2_name",
+  "sb_2",
+  "start_date",
+  "end_date",
+  "date_cb",
+  "month",
+  "year",
+  "sb_1",
+  "items",
+  "sb_4",
+  "month_code",
+  "cb_rmk",
+  "remark",
+  "conv_sb",
+  "over_hjm",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "sources",
+   "fieldtype": "HTML",
+   "label": "Sources",
+   "options": "<a href=\"https://www.freecodecamp.org/\" rel=\"noopener noreferrer\" target=\"_blank\"> Customer List\n  </a>"
+  },
+  {
+   "fieldname": "sb_3",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "line",
+   "fieldtype": "Select",
+   "label": "Line",
+   "options": "Line2\nLine1\nN1"
+  },
+  {
+   "fieldname": "distributor",
+   "fieldtype": "Link",
+   "label": "Dist",
+   "options": "Sales Partner",
+   "reqd": 1
+  },
+  {
+   "fieldname": "org_code",
+   "fieldtype": "Select",
+   "label": "Org Code"
+  },
+  {
+   "fieldname": "cb_01",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "outid",
+   "fieldtype": "Data",
+   "label": "Outid",
+   "reqd": 1
+  },
+  {
+   "fieldname": "outlet_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Outlet Name"
+  },
+  {
+   "fieldname": "outlet_address",
+   "fieldtype": "Data",
+   "label": "Outlet Address"
+  },
+  {
+   "fieldname": "outlet_type",
+   "fieldtype": "Data",
+   "label": "Outlet Type",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "reference",
+   "fieldtype": "Data",
+   "label": "Reference"
+  },
+  {
+   "collapsible": 1,
+   "collapsible_depends_on": "eval:doc.po_status",
+   "depends_on": "eval:doc.po_status",
+   "fieldname": "sb_dst_stat",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "po_status",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "PO Status",
+   "search_index": 1
+  },
+  {
+   "fieldname": "po_status_description",
+   "fieldtype": "Data",
+   "label": "PO Status Description"
+  },
+  {
+   "fieldname": "po_date",
+   "fieldtype": "Datetime",
+   "label": "PO Date"
+  },
+  {
+   "fieldname": "po_processed_date",
+   "fieldtype": "Datetime",
+   "label": "PO Processed Date"
+  },
+  {
+   "fieldname": "column_break_18",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sales_order",
+   "fieldtype": "Data",
+   "label": "Sales Order"
+  },
+  {
+   "fieldname": "sales_order_date",
+   "fieldtype": "Datetime",
+   "label": "Sales Order Date"
+  },
+  {
+   "fieldname": "invoice_number",
+   "fieldtype": "Data",
+   "label": "Invoice Number"
+  },
+  {
+   "fieldname": "invoice_date",
+   "fieldtype": "Datetime",
+   "label": "Invoice Date"
+  },
+  {
+   "fieldname": "delivery_number",
+   "fieldtype": "Data",
+   "label": "Delivery Number"
+  },
+  {
+   "fieldname": "delivery_date",
+   "fieldtype": "Datetime",
+   "label": "Delivery Date"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "sb_users",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "dm",
+   "fieldtype": "Link",
+   "label": "DM",
+   "options": "MP"
+  },
+  {
+   "fetch_from": "dm.full_name",
+   "fieldname": "dm_name",
+   "fieldtype": "Data",
+   "label": "DM Name"
+  },
+  {
+   "fetch_from": "dm.area",
+   "fieldname": "dm_area",
+   "fieldtype": "Data",
+   "label": "DM Area"
+  },
+  {
+   "fieldname": "cb_usr1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "dm.parent_mp",
+   "fieldname": "approver_1",
+   "fieldtype": "Link",
+   "label": "Approver 1",
+   "options": "MP"
+  },
+  {
+   "fetch_from": "approver_1.full_name",
+   "fieldname": "approver_1_name",
+   "fieldtype": "Data",
+   "label": "Approver 1 Name",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "approver_1.parent_mp",
+   "fieldname": "approver_2",
+   "fieldtype": "Link",
+   "label": "Approver 2",
+   "options": "MP"
+  },
+  {
+   "fetch_from": "approver_2.full_name",
+   "fieldname": "approver_2_name",
+   "fieldtype": "Data",
+   "label": "Approver 2 Name"
+  },
+  {
+   "collapsible": 1,
+   "depends_on": "eval: doc.type === \"DPL\"",
+   "fieldname": "sb_2",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "start_date",
+   "fieldtype": "Date",
+   "label": "Start Date"
+  },
+  {
+   "fieldname": "end_date",
+   "fieldtype": "Date",
+   "label": "End Date"
+  },
+  {
+   "fieldname": "date_cb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "month",
+   "fieldtype": "Select",
+   "label": "Month",
+   "options": "\n01\n02\n03\n04\n05\n06\n07\n08\n09\n10\n11\n12"
+  },
+  {
+   "fieldname": "year",
+   "fieldtype": "Select",
+   "label": "Year",
+   "options": "2025\n2026\n2027\n2028\n2029\n2030"
+  },
+  {
+   "fieldname": "sb_1",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "items",
+   "fieldtype": "Table",
+   "label": "Items",
+   "options": "DPF Item",
+   "reqd": 1
+  },
+  {
+   "fieldname": "sb_4",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "month_code",
+   "fieldtype": "Read Only",
+   "hidden": 1,
+   "label": "Month Code",
+   "print_hide": 1
+  },
+  {
+   "fieldname": "cb_rmk",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "remark",
+   "fieldtype": "Small Text",
+   "label": "Remark"
+  },
+  {
+   "fieldname": "conv_sb",
+   "fieldtype": "Section Break",
+   "label": "Conversion"
+  },
+  {
+   "default": "0",
+   "fieldname": "over_hjm",
+   "fieldtype": "Int",
+   "label": "over HJM"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "DPF",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "DPF",
+   "print_hide": 1,
+   "read_only": 1
+  }
+ ],
+ "is_submittable": 1,
+ "modified": "2025-01-11 11:56:05.253626",
+ "modified_by": "Administrator",
+ "module": "BO",
+ "name": "DPF",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "DM",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "SM",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "GSM",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
