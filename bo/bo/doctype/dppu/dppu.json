@@ -15,6 +15,7 @@
   "line",
   "tp",
   "tp_name",
+  "tp_area",
   "column_break_9",
   "dm",
   "dm_name",
@@ -384,11 +385,18 @@
   {
    "fieldname": "column_break_13",
    "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "tp.area",
+   "fetch_if_empty": 1,
+   "fieldname": "tp_area",
+   "fieldtype": "Read Only",
+   "label": "TP Area"
   }
  ],
  "is_submittable": 1,
- "modified": "2024-06-07 11:17:11.329062",
- "modified_by": "dwi@ksp.ksp",
+ "modified": "2025-03-19 11:58:29.036446",
+ "modified_by": "Administrator",
  "module": "BO",
  "name": "DPPU",
  "name_case": "UPPER CASE",
