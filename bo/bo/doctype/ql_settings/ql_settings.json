@@ -1,0 +1,47 @@
+{
+ "creation": "2026-09-28 14:00:55.935249",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "ppn"
+ ],
+ "fields": [
+  {
+   "fieldname": "ppn",
+   "fieldtype": "Percent",
+   "in_list_view": 1,
+   "label": "PPN",
+   "reqd": 1
+  }
+ ],
+ "issingle": 1,
+ "modified": "2026-09-28 14:01:03.656959",
+ "modified_by": "Administrator",
+ "module": "BO",
+ "name": "QL Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "All",
+   "share": 1
+  }
+ ],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

@@ -27,7 +27,7 @@ web_include_css = "/assets/bo/css/qltheme.css"
 # page_js = {"page" : "public/js/file.js"}
 
 # include js in doctype views
-# doctype_js = {"doctype" : "public/js/doctype.js"}
+doctype_js = {"DPL" : "public/js/dpl.js"}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
@@ -137,7 +137,7 @@ scheduler_events = {
 
 default_mail_footer = """
     <div>
-        Sent via <a href="http://dev99.sistemkoperasi.com/" target="_blank">Sistem Koperasi</a>
+        Sent via <a href="http://dev99.sistemkoperasi.com/" target="_blank">Quantum Lab</a>
     </div>
 """
 

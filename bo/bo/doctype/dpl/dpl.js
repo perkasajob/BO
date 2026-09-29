@@ -1,40 +1,22 @@
 // Copyright (c) 2020, Sistem Koperasi and contributors
 // For license information, please see license.txt
 var comid = 0;
-// var username = frappe.session.user.replace(/@.*/g,"").toUpperCase()
 var username = frappe.user.full_name()
 var ppn = 1.11;
 var old_outid = null
 
 frappe.ui.form.on('DPL', {
 	onload: function(frm){
-		load_org_code(frm)
-		// set_readonly_fixed_price(frm)
+		// load_org_code(frm)
 	},
 	onload_post_render(frm){
 		set_DM(frm)
 		paint_over_hjm(frm)
-		frm.fields_dict.outid.$input.on('input', function (e) {
-			let val = e.target.value
-			if(val.length > 2 && !val.startsWith(old_outid)){ // pull list
-				load_outid(frm, val)
-				old_outid = val
-			}
-		}).on('awesomplete-selectcomplete', function(e){
-			try {
-				frm.set_value('outid', e.target.value)
-				if(frm?.var?.outlets !== undefined
-					&& frm.var.outlets[e.target.value] !== undefined ){
-						console.log(frm.var.outlets[e.target.value])
-					frm.set_value("outlet_name", frm.var.outlets[e.target.value].name)
-					frm.set_value("outlet_address", frm.var.outlets[e.target.value].address)
-					frm.set_value("outlet_type", frm.var.outlets[e.target.value].sales_chn)
-				}
-			} catch (error) {console.log(error)}
-		})
 	},
 	refresh: function(frm) {
 	    set_parseXls_btn(frm)
+		set_download_xls_apl(frm)
+		set_show_hjm(frm)
 	},
 	validate(frm){
 		if(!frm.doc.dm){
@@ -55,10 +37,7 @@ frappe.ui.form.on('DPL', {
 	},
 	month: function(frm){
 		set_start_end_date(frm)
-	},
-	start_date: function(frm){
-	   // frm.set_value("month_code", moment(frm.doc.start_date).format("YYMM"))
-	},
+	},	
 	type: function(frm){
 	  set_readonly_fixed_price(frm)
 	},
@@ -66,33 +45,11 @@ frappe.ui.form.on('DPL', {
 		old_outid = null
 	},
 	distributor: function(frm){
-		load_org_code(frm)
-		// let dist_outlet = frm.doc.distributor.toLowerCase() + "_outlet_name"
-		// let dist_outid = frm.doc.distributor.toLowerCase() + "_outid"
-		// frappe.db.get_value("Outlet",frm.doc.outid,[dist_outlet, dist_outid],function(res){
-		// 	if(res != undefined){
-		// 		frm.set_value("dist_outlet_name", res[dist_outlet])
-		// 		frm.set_value("dist_outid", res[dist_outid])
-		// 	}
-	  //  })
+		load_org_code(frm)	
 	},
 	line: function(frm){
 		// frappe.validated = true;
-		set_DM(frm)
-		// let distributor = frm.doc.distributor.toLowerCase()
-		// var items = frappe.db.get_list("Item", {filters:{"line":frm.doc.line},fields: ["item_code","item_name","standard_rate",distributor +"_item_code",distributor +"_item_name"], limit: 200})
-		// items.then((list)=>{
-		//     list.forEach((o,i)=>{
-		//         var ch = frm.add_child('items')
-		//         ch.item_code = o.item_code
-		// 		ch.item_name = o.item_name
-		// 		ch.ppg_item_code = o.ppg_item_code
-		// 		ch.ppg_item_name = o.ppg_item_name
-		//         ch.hna = o.standard_rate
-		//         ch.line = frm.doc.line
-		//     })
-		//     frm.refresh_field('items');
-		// })
+		set_DM(frm)		
 	}
 })
 
@@ -102,7 +59,7 @@ const dfunc = (frm, dt, dn) => {
 }
 
 frappe.ui.form.on('DPL Item', {
-	form_render(frm, dt, dn){
+	form_render(frm, dt, dn){		
 		setTimeout(paint_over_hjm_item, 3000, frm, locals[dt][dn]);
 	},
 	item_code: dfunc,
@@ -130,85 +87,131 @@ function dpl_disc_calc(frm, dt, dn){
 	calc_item(frm, dt, dn)
 }
 
-function calc_item(frm, o){
-	let dc = frm.doc[o.parentfield][o.idx-1]
-	let dpl_disc = dc.dpl_disc?dc.dpl_disc/100:0
-	if (dc.hna){
-		dpl_disc = 1-dc.hna /dc.hna0
-		dc.dpl_disc = dpl_disc * 100
-	} else {
-		dc.hna =  dc.hna0 * (1-dpl_disc)
-	}
-
-	let dpl_disc1 = dc.dpl_disc1/100
-	var total_disc = 1 - (1-dpl_disc) * (1-dpl_disc1)
-	dc.hna1 =  dc.hna0 * (1-total_disc)
-
-	var nf = Intl.NumberFormat('id-ID'); //nf.format(
-	dc.hna_ppn = flt((dc.hna0 * (1-dpl_disc) * ppn).toFixed(0))
-	dc.hna1_ppn = flt((dc.hna1 * ppn).toFixed(0))
-	dc.total_disc = flt((100 * total_disc), 2)
-
-	let hjm_1 = dc.hjm_1
-	let hjm_2 = dc.hjm_2
-	let hjm_3 = dc.hjm_3
-
-	if (dc.dpl_disc > hjm_3){
-		frm.set_value("over_hjm", 3)
-	} else if(dc.dpl_disc < hjm_3 && dc.dpl_disc > hjm_2 && frm.doc.over_hjm < 2){
-		frm.set_value("over_hjm", 2)
-	} else if(dc.dpl_disc < hjm_2 && dc.dpl_disc > hjm_1 && frm.doc.over_hjm < 1){
-		frm.set_value("over_hjm", 1)
-	} else frm.set_value("over_hjm", 0)
-
-	try {
-		paint_over_hjm(frm)
-	}catch(error){console.log(error)}
-	try {
-		paint_over_hjm_item(frm, o)
-	}catch(error){console.log(error)}
-
-	// frappe.db.get_value('Item', dc.item_code, ['hjm_1','hjm_2','hjm_3'], function(res){
-	// 	if(res != undefined){
-	// 		let total_disc = dc.total_disc
-	// 		if([res.hjm_1, res.hjm_2, res.hjm_3].every(o=> o > 0)){
-	// 			set_total_disc_color(frm, total_disc, res)
-	// 		}
-	// 	}
-	// })
-	frm.refresh_field(o.parentfield)
+function get_over_hjm_flag(o, frm) {
+    if (o.hna1_ppn < o.hjm_fin) {
+        return 3; // Finance limit exceeded
+    } else if (o.hna1_ppn < o.hjm_gsm  && frm.doc.over_hjm < 2) {
+        return 2; // GSM limit exceeded
+    } else if (o.hna1_ppn < o.hjm_sm  && frm.doc.over_hjm < 1) {
+        return 1; // SM limit exceeded
+    }
+    return 0; // within limits
 }
 
-function paint_over_hjm(frm){
-	frm.doc.items.forEach(o=>{
-		if(frappe.user.has_role("SM") && o.hna1_ppn < o.hjm_1
-		|| frappe.user.has_role("GSM") && o.hna1_ppn < o.hjm_2
-		|| frappe.user.has_role("Accounts Manager") && o.hna1_ppn < o.hjm_1){
-			// $("[data-fieldname='total_disc']>div>.control-input-wrapper>.control-value").css({"background-color":"red","color":"white"})
-			// $(`[data-idx=${o.idx}] > .data-row > [data-fieldname=item_name]`).css('background-color', '#ffcccc');
-			// frm.fields_dict.items.grid.grid_rows[o.idx-1].columns.item_code.css("background-color","#ffcccc")
-			// frm.fields_dict.items.grid.grid_rows[o.idx-1].columns.item_name.css("background-color","#ffcccc")
-			// cur_frm.fields_dict.items.grid.grid_rows[o.idx-1].grid_form.fields_dict.hna1_ppn.$input_wrapper.css({'color':'#f00'})
-			cur_frm.fields_dict.items.grid.grid_rows[o.idx-1].row_index.css({"background-color":"#ffcccc"})
-		} else{
-			// $("[data-fieldname='total_disc']>div>.control-input-wrapper>.control-value").css({"background-color":"#f5f7fa","color":"black"})
-			// frm.fields_dict.items.grid.grid_rows[o.idx-1].columns.item_code.css("background-color","#fff")
-			// frm.fields_dict.items.grid.grid_rows[o.idx-1].columns.item_name.css("background-color","#ffcccc")
-			// cur_frm.fields_dict.items.grid.grid_rows[o.idx-1].grid_form.fields_dict.hna1_ppn.$input_wrapper.css({'color':'#36414c'})
-			cur_frm.fields_dict.items.grid.grid_rows[o.idx-1].row_index.css({"background-color":"#fff"})
-		}
-	})
+
+function calc_item(frm, o) {
+    let dc = frm.doc[o.parentfield][o.idx - 1];
+    let disc_rate = dc.dpl_disc ? dc.dpl_disc / 100 : 0;
+
+    if (dc.hna) {
+        disc_rate = 1 - dc.hna / dc.hna0;
+        dc.dpl_disc = disc_rate * 100;
+    } else {
+        dc.hna = dc.hna0 * (1 - disc_rate);
+    }
+
+    let extra_disc = dc.dpl_disc1 / 100;
+    let total_disc_rate = 1 - (1 - disc_rate) * (1 - extra_disc);
+
+    dc.hna1 = dc.hna0 * (1 - total_disc_rate);
+    dc.hna_ppn = flt((dc.hna0 * (1 - disc_rate) * ppn).toFixed(0));
+    dc.hna1_ppn = flt((dc.hna1 * ppn).toFixed(0));
+    dc.total_disc = flt(100 * total_disc_rate, 2);
+
+    // Uniform flagging using hna1_ppn	
+    frm.doc.over_hjm = get_over_hjm_flag(dc, frm);
+
+    try { paint_over_hjm(frm); } catch (error) { console.log(error); }
+    try { paint_over_hjm_item(frm, o); } catch (error) { console.log(error); }
+
+    frm.refresh_field(o.parentfield);
+	frm.refresh_field('over_hjm');
 }
 
-function paint_over_hjm_item(frm, o){
-	if(frappe.user.has_role("SM") && o.hna1_ppn < o.hjm_1
-	|| frappe.user.has_role("GSM") && o.hna1_ppn < o.hjm_2
-	|| frappe.user.has_role("Accounts Manager") && o.hna1_ppn < o.hjm_1){
-		frappe.ui.form.get_open_grid_form().grid_form.fields_dict.hna1_ppn.$input_wrapper.css({'color':'#f00'})
-	} else{
-		frappe.ui.form.get_open_grid_form().grid_form.fields_dict.hna1_ppn.$input_wrapper.css({'color':'#f00'}).css({'color':'#36414c'})
-	}
+function isOverHJM(o) {
+    return (
+        (frappe.user.has_role("SM") && o.hna1_ppn < o.hjm_sm) ||
+        (frappe.user.has_role("GSM") && o.hna1_ppn < o.hjm_gsm) ||
+        (frappe.user.has_role("Accounts Manager") && o.hna1_ppn < o.hjm_fin)
+    );
 }
+
+function paint_over_hjm(frm) {
+    frm.doc.items.forEach(o => {
+        let row = cur_frm.fields_dict.items.grid.grid_rows[o.idx - 1].row_index;
+        row.css({"background-color": isOverHJM(o) ? "#ffcccc" : "#fff"});
+    });
+}
+
+function paint_over_hjm_item(frm, o) {
+    let field = frappe.ui.form.get_open_grid_form().grid_form.fields_dict.hna1_ppn.$input_wrapper;
+    field.css({'color': isOverHJM(o) ? '#f00' : '#36414c'});
+}
+
+
+
+// function calc_item(frm, o){
+// 	let dc = frm.doc[o.parentfield][o.idx-1]
+// 	let dpl_disc = dc.dpl_disc?dc.dpl_disc/100:0
+// 	if (dc.hna){
+// 		dpl_disc = 1-dc.hna /dc.hna0
+// 		dc.dpl_disc = dpl_disc * 100
+// 	} else {
+// 		dc.hna =  dc.hna0 * (1-dpl_disc)
+// 	}
+
+// 	let dpl_disc1 = dc.dpl_disc1/100
+// 	var total_disc = 1 - (1-dpl_disc) * (1-dpl_disc1)
+// 	dc.hna1 =  dc.hna0 * (1-total_disc)
+
+// 	var nf = Intl.NumberFormat('id-ID'); //nf.format(
+// 	dc.hna_ppn = flt((dc.hna0 * (1-dpl_disc) * ppn).toFixed(0))
+// 	dc.hna1_ppn = flt((dc.hna1 * ppn).toFixed(0))
+// 	dc.total_disc = flt((100 * total_disc), 2)
+
+// 	let hjm_sm = dc.hjm_sm
+// 	let hjm_gsm = dc.hjm_gsm
+// 	let hjm_fin = dc.hjm_fin
+
+// 	if (dc.dpl_disc1 > hjm_fin){
+// 		frm.set_value("over_hjm", 3)
+// 	} else if(dc.dpl_disc1 < hjm_fin && dc.dpl_disc1 > hjm_gsm && frm.doc.over_hjm < 2){
+// 		frm.set_value("over_hjm", 2)
+// 	} else if(dc.dpl_disc1 < hjm_gsm && dc.dpl_disc1 > hjm_sm && frm.doc.over_hjm < 1){
+// 		frm.set_value("over_hjm", 1)
+// 	} else frm.set_value("over_hjm", 0)
+
+// 	try {
+// 		paint_over_hjm(frm)
+// 	}catch(error){console.log(error)}
+// 	try {
+// 		paint_over_hjm_item(frm, o)
+// 	}catch(error){console.log(error)}
+
+// 	frm.refresh_field(o.parentfield)
+// }
+
+// function paint_over_hjm(frm){
+// 	frm.doc.items.forEach(o=>{
+// 		if(frappe.user.has_role("SM") && o.hna1_ppn < o.hjm_sm * o.hna * ppn
+// 		|| frappe.user.has_role("GSM") && o.hna1_ppn < o.hjm_gsm * o.hna * ppn
+// 		|| frappe.user.has_role("Accounts Manager") && o.hna1_ppn < o.hjm_sm * o.hna * ppn){
+// 			cur_frm.fields_dict.items.grid.grid_rows[o.idx-1].row_index.css({"background-color":"#ffcccc"})
+// 		} else{
+// 			cur_frm.fields_dict.items.grid.grid_rows[o.idx-1].row_index.css({"background-color":"#fff"})
+// 		}
+// 	})
+// }
+
+// function paint_over_hjm_item(frm, o){	
+// 	if(frappe.user.has_role("SM") && o.hna1_ppn < o.hjm_sm * o.hna * ppn
+// 	|| frappe.user.has_role("GSM") && o.hna1_ppn < o.hjm_gsm * o.hna * ppn
+// 	|| frappe.user.has_role("Accounts Manager") && o.hna1_ppn < o.hjm_sm * o.hna * ppn){
+// 		frappe.ui.form.get_open_grid_form().grid_form.fields_dict.hna1_ppn.$input_wrapper.css({'color':'#f00'})
+// 	} else{
+// 		frappe.ui.form.get_open_grid_form().grid_form.fields_dict.hna1_ppn.$input_wrapper.css({'color':'#f00'}).css({'color':'#36414c'})
+// 	}
+// }
 
 
 function set_start_end_date(frm){
@@ -224,34 +227,72 @@ function set_start_end_date(frm){
 	}
 }
 
-// function set_filter_by_territory(frm, territory){
-//     for(var i=1;i<=10;i++){
-//         frm.set_query("d"+i, function(doc) {
-// 			return {
-// 				filters: {
-// 					'territory': territory
-// 				}
-// 			};
-// 		});
-//     }
-//     frm.set_query("outid", function(doc) {
-// 		return {
-// 			filters: {
-// 				'territory': territory
-// 			}
-// 		};
-// 	});
-// }
 
-// function set_filter_by_comid(frm, comid){
-//     frm.set_query("outid", function(doc) {
-// 		return {
-// 			filters: {
-// 				'comid': comid
-// 			}
-// 		};
-// 	});
-// }
+function set_download_xls_apl(frm){
+	if (!frm.is_new() && frm.doc.distributor) {
+		frm.add_custom_button('APL Excel', () => {
+			// Adjust the method path based on where you saved your python script
+			let method_path = 'bo.bo.doctype.dpl.generate_dpl_excel'; 
+			
+			let url = frappe.urllib.get_full_url(
+				`/api/method/${method_path}?docname=${encodeURIComponent(frm.doc.name)}`
+			);
+			window.open(url, '_blank');
+		}, 'Actions');
+	}
+}
+
+function set_show_hjm(frm){
+	// if (frappe.user.has_role('System Manager') || frappe.user.has_role('Account Manager')) {
+		frm.add_custom_button(__('Show HJM List'), function() {
+			// Build HTML table dynamically
+			let rows = frm.doc.items.map(item => {
+				return `
+					<tr>
+						<td>${item.item_code || ''}</td>
+						<td>${item.hjm_sm || ''}</td>
+						<td>${item.hjm_gsm || ''}</td>
+						<td>${item.hjm_fin || ''}</td>
+					</tr>
+				`;
+			}).join('');
+
+			let html = `
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>Item Code</th>
+							<th>HJM SM</th>
+							<th>HJM GSM</th>
+							<th>HJM FIN</th>
+						</tr>
+					</thead>
+					<tbody>
+						${rows}
+					</tbody>
+				</table>
+			`;
+
+			// Create dialog
+			let d = new frappe.ui.Dialog({
+				title: __('HJM Values for Items'),
+				fields: [
+					{
+						fieldtype: 'HTML',
+						fieldname: 'hjm_table',
+						options: html
+					}
+				],
+				primary_action_label: __('Close'),
+				primary_action: function() {
+					d.hide();
+				}
+			});
+
+			d.show();
+		});
+	// }
+}
 
 function set_parseXls_btn(frm){
     frm.add_custom_button(__('Get XLS'), function(){
@@ -368,9 +409,3 @@ function load_outid(frm, val){
 		}
 	});
 }
-
-
-// function set_readonly_fixed_price(frm){
-// 	let editable = cur_frm.doc.type.substr(-11) == 'Fixed Price' ? 0: 1
-// 	frm.fields_dict.items.grid.toggle_enable("dpl_disc", editable);
-// }

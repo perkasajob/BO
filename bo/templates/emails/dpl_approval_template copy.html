@@ -1,0 +1,47 @@
+<div style="font-family: Arial, sans-serif; color: #333;">
+    <p>Dear <b>Bapak/Ibu</b>,</p>
+    
+    <p>Berikut kami sampaikan Discount Proposal: <strong>{{ doc.name }}</strong> has been successfully submitted and approved.</p>
+    
+    <p><strong>Approved by:</strong> {{ approver_name }}</p>
+
+    <h3>DPL</h3>
+    
+    <table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; width: 100%; margin-bottom: 20px;">
+        <thead style="background-color: #f8f9fa;">
+            <tr>
+                <th style="text-align: left;">Item Code</th>
+                <th style="text-align: left;">Item Name</th>
+                <th style="text-align: right;">HNA</th>
+                <th style="text-align: right;">Discount (%)</th>
+                <th style="text-align: right;">HNA 1</th>
+                <th style="text-align: right;">HNA 1 + PPN</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Loop through the 'items' child table -->
+            {% for item in doc.items %}
+            <tr>
+                <td>{{ item.item_code }}</td>
+                <td>{{ item.item_name }}</td>
+                <td style="text-align: right;">{{ item.hna }}</td>
+                <td style="text-align: right;">
+                    {% if item.dpl_disc1 %}
+                    {{ item.dpl_disc1 }}%
+                    {% else %}
+                    0%
+                    {% endif %}
+                </td>
+                <td style="text-align: right;">{{ item.get_formatted("hna1") }}</td>
+                <td style="text-align: right;">{{ item.get_formatted("hna1_ppn") }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div style="margin-top: 30px;">
+        <a href="{{ doc_link }}" style="background-color: #3498db; color: white; padding: 10px 15px; text-decoration: none; border-radius: 4px;">
+            View Document in System
+        </a>
+    </div>
+</div>

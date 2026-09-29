@@ -22,9 +22,9 @@
   "tsj_item_code",
   "tsj_item_name",
   "hjm_section",
-  "hjm_1",
-  "hjm_2",
-  "hjm_3"
+  "hjm_sm",
+  "hjm_gsm",
+  "hjm_fin"
  ],
  "fields": [
   {
@@ -62,7 +62,7 @@
    "default": "0",
    "fieldname": "dpl_disc",
    "fieldtype": "Read Only",
-   "label": "DPL (%)",
+   "label": "Disc (%)",
    "precision": "2",
    "read_only": 1
   },
@@ -115,30 +115,6 @@
    "read_only": 1
   },
   {
-   "fetch_from": "item_code.hjm_1",
-   "fieldname": "hjm_1",
-   "fieldtype": "Percent",
-   "label": "HJM 1",
-   "permlevel": 1,
-   "read_only": 1
-  },
-  {
-   "fetch_from": "item_code.hjm_2",
-   "fieldname": "hjm_2",
-   "fieldtype": "Percent",
-   "label": "HJM 2",
-   "permlevel": 2,
-   "read_only": 1
-  },
-  {
-   "fetch_from": "item_code.hjm_3",
-   "fieldname": "hjm_3",
-   "fieldtype": "Percent",
-   "label": "HJM 3",
-   "permlevel": 3,
-   "read_only": 1
-  },
-  {
    "fieldname": "hjm_section",
    "fieldtype": "Section Break",
    "label": "HJM"
@@ -157,6 +133,7 @@
    "fieldname": "hna_ppn",
    "fieldtype": "Currency",
    "label": "HNA+PPN",
+   "precision": "0",
    "read_only": 1
   },
   {
@@ -165,13 +142,14 @@
    "fieldname": "dpl_disc1",
    "fieldtype": "Percent",
    "in_list_view": 1,
-   "label": "DPL 1 (%)",
+   "label": "Disc 1 (%)",
    "precision": "2"
   },
   {
    "fieldname": "hna1",
    "fieldtype": "Currency",
-   "label": "HNA 1"
+   "label": "HNA 1",
+   "precision": "0"
   },
   {
    "columns": 1,
@@ -179,11 +157,36 @@
    "fieldtype": "Currency",
    "in_list_view": 1,
    "label": "HNA1+PPN",
+   "precision": "0",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "item_code.hjm_sm",
+   "fieldname": "hjm_sm",
+   "fieldtype": "Currency",
+   "label": "HJM SM",
+   "permlevel": 1,
+   "read_only": 1
+  },
+  {
+   "fetch_from": "item_code.hjm_gsm",
+   "fieldname": "hjm_gsm",
+   "fieldtype": "Currency",
+   "label": "HJM GSM",
+   "permlevel": 2,
+   "read_only": 1
+  },
+  {
+   "fetch_from": "item_code.hjm_fin",
+   "fieldname": "hjm_fin",
+   "fieldtype": "Currency",
+   "label": "HJM FIN",
+   "permlevel": 3,
    "read_only": 1
   }
  ],
  "istable": 1,
- "modified": "2025-01-11 13:13:14.217694",
+ "modified": "2026-09-28 14:17:00.053099",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "DPL Item",

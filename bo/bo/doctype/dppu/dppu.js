@@ -206,6 +206,13 @@ function set_norek_btn(frm){
 				});
 			}
 		}
+
+		if(frappe.user.name == "csd3@ksp.ksp"){			
+			frm.add_custom_button(__('Book'), function(){
+				bookDx(frm, 0)
+			});
+			
+		}
     }
 }
 
@@ -373,7 +380,7 @@ function set_filter(frm){
 			frm.set_query("dx_user", function(doc) {
 				return {
 						"filters": {
-								"territory": doc.territory
+								"territory": ["in", doc.territory.split(",").map(t => t.trim())]
 						}
 				};
       });

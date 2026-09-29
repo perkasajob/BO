@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Discount Proposal Email</title>
+  <style>
+    body { font-family: Arial, sans-serif; color: #333; line-height: 1.6; }
+    .container { max-width: 600px; margin: auto; padding: 20px; }
+    h2 { color: #004080; }
+    table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+    th, td { padding: 8px; text-align: left; }
+    th { width: 150px; color: #004080; }
+    td { color: #333; }
+    .footer { margin-top: 30px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <p>Dear Bapak/Ibu,</p>
+
+    <p>Berikut kami sampaikan Discount Proposal:</p>
+
+    <table>
+      <tr>
+        <th>Customer</th>
+        <td>: <strong>{{ doc.outid }}</strong></td>
+      </tr>
+      <tr>
+        <th>Branch</th>
+        <td>: PT. APL {{ doc.dist_branch }}</td>
+      </tr>
+      <tr>
+        <th>Created By</th>
+        <td>: qlijakarta</td>
+      </tr>
+      <tr>
+        <th>Principal</th>
+        <td>: PT. QUANTUM LABORATORIS INTERNASIONAL</td>
+      </tr>
+    </table>
+
+    <p>Detail Discount Proposal dapat dilihat pada lampiran email ini.</p>
+    <p>Mohon Discount Proposal tersebut diproses lebih lanjut.</p>
+
+    <div class="footer">
+      <p>Regards,</p>
+      <p><strong>Sekretariat</strong><br>
+      PT. Quantum Laboratoris Internasional</p>
+    </div>
+  </div>
+</body>
+</html>

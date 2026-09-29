@@ -6,19 +6,16 @@ from __future__ import unicode_literals
 # import frappe
 from frappe.model.document import Document
 from frappe import _, scrub, ValidationError
-import frappe, json, os
+import frappe, json, os, re, openpyxl
 from six import iteritems, string_types
 from frappe.desk.form.load import get_attachments
-from frappe.utils import get_hook_method, get_files_path
+from frappe.utils import get_url_to_form, get_hook_method, get_files_path, formatdate
 # from bo.bo.doctype.lpd.exporter import Importer
 from bo.bo.utils.exporter import Exporter
 from bo.bo.bo_integration.tsj_integration import TSJConnect
 from frappe.utils.background_jobs import enqueue
 from frappe.utils.csvutils import validate_google_sheets_url
-from frappe import _
-import requests, textwrap
 from frappe.utils.user import get_user_fullname
-import re
 
 
 class DPL(Document):
@@ -65,6 +62,11 @@ class DPL(Document):
 		if self.distributor == "TSJ" and res["statusCode"] == "TTPM_CQL_000":
 			self.reference = res["data"]["spkNumber"]
 
+	# def on_submit(self):
+	def before_save(self):
+		if not self.is_new():
+			self.send_approval_email()
+
 
 	def parseXLS(self):
 		file_url = self.get_full_path() # file attachment only the first one attached
@@ -106,6 +108,40 @@ class DPL(Document):
 				frappe.throw(_("There is some problem with the file url: {0}").format(file_path))
 
 			return file_path
+	
+	def send_approval_email(self):
+		# 1. Determine the approver (usually the person submitting the document)
+		approver_name = frappe.get_cached_value('User', frappe.session.user, 'full_name')
+
+		# 2. Generate a direct link back to this specific document in Frappe
+		doc_link = get_url_to_form(self.doctype, self.name)
+
+		# 3. Define the email recipient (e.g., fetching an email field from the doc)
+		# Fallback to a default if the field is empty
+		recipient = frappe.get_single('D APL Settings').get('apl_email') or "perkasajob@gmail.com"
+
+		pdf_content = frappe.get_print(
+            doctype=self.doctype, 
+            name=self.name, 
+            print_format="DPL APL", 
+            as_pdf=True
+        )	
+
+		frappe.sendmail(
+            recipients=[recipient],
+            subject=f"Approved: {self.name}",
+            template="dpl_approval_template", 
+            args={
+                "doc": self,
+                "approver_name": approver_name,
+                "doc_link": doc_link
+            },
+            # header=["Document Approved", "green"],
+            attachments=[{
+                "fname": f"{self.name}.pdf",
+                "fcontent": pdf_content
+            }]
+        )
 
 	def validate_import_file(self):
 		if self.import_file:
@@ -432,3 +468,81 @@ def export_csv(doctype, path):
 	with open(path, "wb") as csvfile:
 		export_data(doctype=doctype, all_doctypes=True, template=True, with_data=True)
 		csvfile.write(frappe.response.result.encode("utf-8"))
+
+
+### APL Generate XLS
+
+@frappe.whitelist()
+def generate_dpl_excel(docname):
+    # Fetch the specific document
+    doc = frappe.get_doc("DPL_APL", docname)
+    
+    # Create a new workbook and select active sheet
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "DPL APL Data"
+    
+    # --- 1. Populate Parent Fields (Rows 1 to 7) ---
+    # Column A (1) for Labels, Column E (5) for Values
+    doc.sales_org = "1910               APL"
+    doc.distr_channel ="10                  Regular"
+    
+    ws.cell(row=1, column=1, value="Sales Org.")
+    ws.cell(row=1, column=5, value=doc.sales_org)
+    
+    ws.cell(row=2, column=1, value="Distr. Channel")
+    ws.cell(row=2, column=5, value=doc.distr_channel)
+    
+    ws.cell(row=3, column=1, value="Plant")
+    ws.cell(row=3, column=5, value=doc.plant)
+    
+    ws.cell(row=4, column=1, value="Region")
+    ws.cell(row=4, column=5, value=doc.region)
+    
+    ws.cell(row=5, column=1, value="Customer grp 1")
+    ws.cell(row=5, column=5, value=doc.customer_grp_1)
+    
+    ws.cell(row=6, column=1, value="Customer grp 2")
+    ws.cell(row=6, column=5, value=doc.customer_grp_2)
+    
+    ws.cell(row=7, column=1, value="Customer")
+    ws.cell(row=7, column=5, value=doc.customer)
+    # The reference file places the Customer Name in Column F (6)
+    ws.cell(row=7, column=6, value=doc.customer_name) 
+
+    # --- 2. Populate Child Table Headers (Row 10) ---
+    headers = [
+        "CnTy", "PH3", "Material", "Material", "HNA", 
+        "Diskon", "  Amount", "Valid From", "Valid to"
+    ]
+    # Starting at Column B (2) based on the reference file
+    for col_index, header in enumerate(headers, start=2):
+        ws.cell(row=10, column=col_index, value=header)
+        
+    # --- 3. Populate Child Table Items (Starting from Row 12) ---
+    current_row = 12
+    for item in doc.items:
+        ws.cell(row=current_row, column=2, value=item.cnty)
+        ws.cell(row=current_row, column=3, value=item.ph3)
+        ws.cell(row=current_row, column=4, value=item.material_code)
+        ws.cell(row=current_row, column=5, value=item.material_name)
+        ws.cell(row=current_row, column=6, value=item.hna)
+        ws.cell(row=current_row, column=7, value=item.diskon)
+        ws.cell(row=current_row, column=8, value=item.amount)
+        
+        # Format dates to match DD.MM.YYYY format
+        valid_from = formatdate(item.valid_from, "dd.MM.yyyy") if item.valid_from else ""
+        valid_to = formatdate(item.valid_to, "dd.MM.yyyy") if item.valid_to else ""
+        
+        ws.cell(row=current_row, column=9, value=valid_from)
+        ws.cell(row=current_row, column=10, value=valid_to)
+        
+        current_row += 1
+
+    # --- 4. Export and Attach to Response ---
+    file_stream = io.BytesIO()
+    wb.save(file_stream)
+    
+    frappe.response['filename'] = f"{docname}.xlsx"
+    frappe.response['filecontent'] = file_stream.getvalue()
+    frappe.response['type'] = 'download'		

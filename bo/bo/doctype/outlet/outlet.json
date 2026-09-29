@@ -1,5 +1,5 @@
 {
- "autoname": "format:{outlet_id}-{outlet_name}",
+ "autoname": "format:{outlet_id}-{outlet_name}-{outlet_addr}",
  "creation": "2020-07-27 16:21:53.560780",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -8,6 +8,7 @@
   "outlet_id",
   "outlet_name",
   "type",
+  "group",
   "comid",
   "tsj_outlet_id",
   "tsj_outlet_name",
@@ -18,7 +19,10 @@
   "apl_outid",
   "apl_outlet_name",
   "outlet_addr",
-  "note"
+  "note",
+  "zip_code",
+  "city",
+  "apl_district"
  ],
  "fields": [
   {
@@ -96,10 +100,30 @@
    "fieldname": "type",
    "fieldtype": "Select",
    "label": "Type",
-   "options": "Apt\nRS"
+   "options": "AP\nRS\nKL\nECAT\nPBF"
+  },
+  {
+   "fieldname": "group",
+   "fieldtype": "Int",
+   "label": "Group"
+  },
+  {
+   "fieldname": "zip_code",
+   "fieldtype": "Int",
+   "label": "Zip Code"
+  },
+  {
+   "fieldname": "city",
+   "fieldtype": "Data",
+   "label": "City"
+  },
+  {
+   "fieldname": "apl_district",
+   "fieldtype": "Data",
+   "label": "APL District"
   }
  ],
- "modified": "2023-03-07 17:19:58.681923",
+ "modified": "2026-09-15 10:10:46.309058",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "Outlet",

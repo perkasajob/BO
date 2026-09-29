@@ -1,5 +1,5 @@
 {
- "autoname": "format:DPL-{distributor}{outid}-{###}",
+ "autoname": "format:DPL-{distributor}-{outlet_name}-{###}",
  "creation": "2020-08-07 09:11:44.234354",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -10,6 +10,7 @@
   "line",
   "distributor",
   "org_code",
+  "dist_branch",
   "cb_01",
   "outid",
   "outlet_name",
@@ -44,8 +45,9 @@
  "fields": [
   {
    "fieldname": "outid",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "label": "Outid",
+   "options": "Outlet",
    "reqd": 1
   },
   {
@@ -59,6 +61,7 @@
    "label": "End Date"
   },
   {
+   "fetch_from": "outid.outlet_name",
    "fieldname": "outlet_name",
    "fieldtype": "Data",
    "in_list_view": 1,
@@ -129,7 +132,7 @@
    "fieldname": "year",
    "fieldtype": "Select",
    "label": "Year",
-   "options": "2025\n2026\n2027\n2028\n2029\n2030",
+   "options": "2026\n2027\n2028\n2029\n2030",
    "reqd": 1
   },
   {
@@ -163,11 +166,14 @@
    "default": "0",
    "fieldname": "over_hjm",
    "fieldtype": "Int",
-   "label": "over HJM"
+   "label": "over HJM",
+   "no_copy": 1,
+   "print_hide": 1
   },
   {
    "fieldname": "org_code",
    "fieldtype": "Select",
+   "hidden": 1,
    "label": "Org Code"
   },
   {
@@ -178,6 +184,7 @@
    "no_copy": 1
   },
   {
+   "fetch_from": "outid.outlet_addr",
    "fieldname": "outlet_address",
    "fieldtype": "Data",
    "label": "Outlet Address"
@@ -250,10 +257,16 @@
   {
    "fieldname": "sb_4",
    "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "dist_branch",
+   "fieldtype": "Select",
+   "label": "Branch",
+   "options": "BANDAR LAMPUNG\nBANDUNG\nBANJARMASIN\nDENPASAR\nJAKARTA 1\nJAMBI\nKUPANG\nMAKASSAR\nMANADO\nMEDAN\nNDC CIKARANG\nPADANG\nPALEMBANG\nPALU\nPEKANBARU\nPONTIANAK\nSAMARINDA\nSEMARANG\nSURABAYA\nTANGERANG\nYOGYAKARTA"
   }
  ],
  "is_submittable": 1,
- "modified": "2025-01-13 16:12:22.449678",
+ "modified": "2026-09-23 11:55:18.071056",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "DPL",
@@ -323,6 +336,34 @@
    "read": 1,
    "report": 1,
    "role": "Accounts Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales Master Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales Manager",
    "share": 1,
    "submit": 1,
    "write": 1

@@ -69,12 +69,14 @@
    "unique": 1
   },
   {
+   "fetch_from": "dm.territory",
+   "fetch_if_empty": 1,
    "fieldname": "territory",
-   "fieldtype": "Link",
+   "fieldtype": "Data",
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Territory",
-   "options": "Territory",
+   "read_only": 1,
    "reqd": 1
   },
   {
@@ -395,7 +397,7 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2025-03-19 11:58:29.036446",
+ "modified": "2026-05-22 14:28:57.824842",
  "modified_by": "Administrator",
  "module": "BO",
  "name": "DPPU",

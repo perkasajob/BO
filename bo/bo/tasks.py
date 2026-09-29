@@ -13,9 +13,9 @@ def all():
 
 def daily():
 	set_DPPU_overdue(14) # 14 days
-	expire_dx_adv()
-	tsj = TSJConnect()
-	tsj.get_dpf_status()
+	expire_dx_adv()	
+	# tsj = TSJConnect()
+	# tsj.get_dpf_status()
 
 def set_DPPU_overdue(period):
 	from frappe.desk.doctype.event.event import get_events
